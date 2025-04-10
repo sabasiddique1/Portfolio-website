@@ -50,7 +50,7 @@ const projects = [
     title: "Nexura - A Fintech Banking App",
     description:
         "A fintech banking app providing seamless financial services with user-friendly interfaces and secure transactions.",
-    category: "Mobile App",
+    category: "Web App",
     technologies: ["React 19", "Next.js 15", "Appwrite", "TailwindCSS", "ShadCN", "TypeScript"],
     githubUrl: "https://github.com/sabasiddique1/nexura",
     demoUrl: "https://nexura.example.com",
@@ -105,7 +105,26 @@ const projects = [
     githubUrl: "https://github.com/sabasiddique1/task-management-app",
     demoUrl: "https://task-management-app.example.com",
   },
-
+  {
+    id: 11,
+    title: "Digilott App",
+    description:
+        "A fun and engaging digital lottery application designed for interactive money-winning experiences.",
+    category: "Web App",
+    technologies: ["React JS", "AntDesign", "React Libraries"],
+    githubUrl: "https://github.com/sabasiddique1/task-management-app",
+    demoUrl: "https://task-management-app.example.com",
+  },
+  {
+    id: 12,
+    title: "Miniature App",
+    description:
+        "A collection of small, functional web apps built with JavaScript to demonstrate core logic and UI concepts in a lightweight format.",
+    category: "Web App",
+    technologies: ["JavaScript", "HTML", "CSS"],
+    githubUrl: "https://github.com/sabasiddique1/task-management-app",
+    demoUrl: "https://task-management-app.example.com",
+  },
 ];
 
 export function ProjectsSection() {
