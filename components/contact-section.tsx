@@ -1,0 +1,213 @@
+"use client"
+
+import type React from "react"
+
+import { useState, useRef } from "react"
+import { motion, useInView } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/hooks/use-toast"
+import { Mail, Send, Github, Linkedin, Twitter } from "lucide-react"
+
+export function ContactSection() {
+  const { toast } = useToast()
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: false, amount: 0.2 })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    // Simulate form submission
+    setTimeout(() => {
+      toast({
+        title: "Message sent!",
+        description: "Thank you for your message. I'll get back to you soon.",
+      })
+      setFormData({ name: "", email: "", message: "" })
+      setIsSubmitting(false)
+    }, 1500)
+  }
+
+  const formVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const inputVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12,
+      },
+    },
+  }
+
+  return (
+    <section id="contact" ref={sectionRef} className="py-20 md:py-28">
+      <div className="container px-4 md:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-2xl space-y-4 text-center"
+        >
+          <div className="inline-block">
+            <motion.h2
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl relative"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Let&apos;s Work Together
+              <motion.span
+                className="absolute -bottom-2 left-0 h-1 bg-primary rounded-full"
+                initial={{ width: 0 }}
+                animate={isInView ? { width: "100%" } : { width: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              />
+            </motion.h2>
+          </div>
+          <motion.p
+            className="text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Have a project in mind? Get in touch and let&apos;s create something amazing.
+          </motion.p>
+        </motion.div>
+
+        <div className="mx-auto mt-12 max-w-2xl">
+          <motion.form
+            variants={formVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            onSubmit={handleSubmit}
+            className="space-y-6"
+          >
+            <div className="space-y-4">
+              <motion.div variants={inputVariants}>
+                <Input
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+                />
+              </motion.div>
+              <motion.div variants={inputVariants}>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+                />
+              </motion.div>
+              <motion.div variants={inputVariants}>
+                <Textarea
+                  name="message"
+                  placeholder="Your Message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={5}
+                  required
+                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
+                />
+              </motion.div>
+            </div>
+            <motion.div variants={inputVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button type="submit" className="w-full relative overflow-hidden group" disabled={isSubmitting} size="lg">
+                <span className="relative z-10 flex items-center">
+                  {isSubmitting ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      Send Message
+                      <motion.span
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
+                        className="ml-2"
+                      >
+                        <Send className="h-4 w-4" />
+                      </motion.span>
+                    </>
+                  )}
+                </span>
+                <motion.span
+                  className="absolute inset-0 bg-primary/20 z-0"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "0%" }}
+                  transition={{ duration: 0.4 }}
+                />
+              </Button>
+            </motion.div>
+          </motion.form>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-12 flex flex-col items-center space-y-4"
+          >
+            <div className="flex items-center space-x-2">
+              <Mail className="h-5 w-5 text-muted-foreground" />
+              <span>hello@example.com</span>
+            </div>
+            <div className="flex space-x-4">
+              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Button variant="ghost" size="icon" asChild className="rounded-full">
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                    <Github className="h-5 w-5" />
+                    <span className="sr-only">GitHub</span>
+                  </a>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Button variant="ghost" size="icon" asChild className="rounded-full">
+                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="h-5 w-5" />
+                    <span className="sr-only">LinkedIn</span>
+                  </a>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Button variant="ghost" size="icon" asChild className="rounded-full">
+                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                    <Twitter className="h-5 w-5" />
+                    <span className="sr-only">Twitter</span>
+                  </a>
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
