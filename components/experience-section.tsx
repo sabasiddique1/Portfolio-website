@@ -9,43 +9,21 @@ import { CalendarDays, MapPin } from "lucide-react"
 const experiences = [
   {
     id: 1,
-    role: "Senior Product Designer",
-    company: "Design Studio X",
-    location: "San Francisco, CA",
-    period: "2021 - Present",
-    description:
-      "Led the design team in creating user-centered digital products for enterprise clients. Established design systems and workflows that improved team efficiency by 35%.",
-    skills: ["UI/UX Design", "Design Systems", "Team Leadership"],
+    role: "Front End Developer",
+    company: "Wanclouds",
+    location: "On-site",
+    period: "Aug 2023 - Apr 2025",
+    description: "At Wanclouds, I contributed to VPC+, SecMon, and the AI platform by implementing features, fixing bugs, and improving the overall user experience. I worked on testing VPC+ for stability, enhanced AI model recognition, and collaborated on code reviews with cross-functional teams.",
+    skills: ["React.js", "Next.js", "TailwindCSS", "Node.js", "AI Integration", "Agile"],
   },
   {
     id: 2,
-    role: "UI/UX Designer",
-    company: "Tech Innovations Inc.",
-    location: "New York, NY",
-    period: "2018 - 2021",
-    description:
-      "Designed interfaces for web and mobile applications, collaborating closely with developers and product managers. Conducted user research and usability testing to inform design decisions.",
-    skills: ["Wireframing", "Prototyping", "User Research"],
-  },
-  {
-    id: 3,
-    role: "Web Designer",
-    company: "Creative Agency",
-    location: "Chicago, IL",
-    period: "2016 - 2018",
-    description:
-      "Created responsive websites and digital marketing materials for clients across various industries. Managed multiple projects simultaneously while meeting tight deadlines.",
-    skills: ["Web Design", "Responsive Design", "Client Management"],
-  },
-  {
-    id: 4,
-    role: "Design Intern",
-    company: "StartUp Hub",
-    location: "Boston, MA",
-    period: "2015 - 2016",
-    description:
-      "Assisted the design team with creating visual assets and conducting competitive analysis. Gained hands-on experience with design tools and collaborative workflows.",
-    skills: ["Visual Design", "Research", "Collaboration"],
+    role: "Data Analyst",
+    company: "IIMCT - Pakistan",
+    location: "Rawalpindi",
+    period: "2023",
+    description: "As a Data Analyst, I leveraged data analysis, statistical techniques, programming, and DBMS to drive actionable insights and decision-making. These skills are now integrated into my front-end development work, particularly with AI-driven projects.",
+    skills: ["Data Analysis", "SQL", "Python", "Statistical Analysis"],
   },
 ]
 

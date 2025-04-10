@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Clock, Award, Briefcase } from "lucide-react"
+import { Clock, Award, Star } from "lucide-react"
 
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -12,18 +12,18 @@ export function AboutSection() {
   const stats = [
     {
       icon: <Clock className="h-5 w-5 text-primary" />,
-      value: "5+",
+      value: "2+",
       label: "Years Experience",
     },
     {
       icon: <Award className="h-5 w-5 text-primary" />,
-      value: "20+",
+      value: "30+",
       label: "Projects Completed",
     },
     {
-      icon: <Briefcase className="h-5 w-5 text-primary" />,
-      value: "10+",
-      label: "Happy Clients",
+      icon: <Star className="h-5 w-5 text-primary" />,
+      value: "45%",
+      label: "Improved User Experience",
     },
   ]
 
@@ -77,7 +77,7 @@ export function AboutSection() {
               </motion.h2>
             </div>
             <motion.p
-              className="text-muted-foreground"
+              className="pt-5 text-muted-foreground"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -93,13 +93,12 @@ export function AboutSection() {
             animate={isInView ? "visible" : "hidden"}
           >
             <motion.p variants={itemVariants} className="text-center">
-              With over 5 years of experience in the industry, I&apos;ve worked with clients ranging from startups to
-              enterprise companies. My approach combines strategic thinking with creative problem solving to deliver
-              results that exceed expectations.
+              Creative and results-driven Front-End Developer with 2+ years of experience in designing and implementing highly responsive, scalable, and user-focused web applications.
             </motion.p>
             <motion.p variants={itemVariants} className="text-center">
-              I specialize in user interface design, user experience, and front-end development. My goal is to create
-              digital products that are not only visually appealing but also intuitive and accessible.
+              Skilled in building modern, component-driven UIs with React, Next.js, Tailwind CSS, and leading design systems such as Material UI and Ant Design.
+              Experienced in full-stack development using Node.js and PostgreSQL, with a focus on integrating AI-powered features using Python libraries like NumPy and Pandas.
+              Proven ability to ship production-ready applications, collaborate effectively in Agile teams, and contribute meaningfully to open-source projects.
             </motion.p>
           </motion.div>
 

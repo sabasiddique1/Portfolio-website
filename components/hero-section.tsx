@@ -100,7 +100,7 @@ export function HeroSection() {
             </div>
 
             <motion.p
-              className="mx-auto max-w-[700px] text-muted-foreground md:text-xl"
+              className="pt-5 mx-auto max-w-[700px] text-muted-foreground md:text-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isTypingComplete ? 1 : 0, y: isTypingComplete ? 0 : 20 }}
               transition={{ duration: 0.5 }}
@@ -141,16 +141,16 @@ export function HeroSection() {
             </Button>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isTypingComplete ? 0.7 : 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          >
-            <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}>
-              <ArrowDown className="h-6 w-6 text-muted-foreground" />
-            </motion.div>
-          </motion.div>
+          {/*<motion.div*/}
+          {/*  initial={{ opacity: 0 }}*/}
+          {/*  animate={{ opacity: isTypingComplete ? 0.7 : 0 }}*/}
+          {/*  transition={{ delay: 0.5, duration: 1 }}*/}
+          {/*  className="absolute bottom-50 left-1/2 -translate-x-1/2"*/}
+          {/*>*/}
+          {/*  <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}>*/}
+          {/*    <ArrowDown className="h-6 w-6 text-muted-foreground" />*/}
+          {/*  </motion.div>*/}
+          {/*</motion.div>*/}
         </div>
       </motion.div>
     </motion.section>

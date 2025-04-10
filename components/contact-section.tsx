@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Mail, Send, Github, Linkedin, Twitter } from "lucide-react"
+import { Mail, Send, Github, Linkedin } from "lucide-react"
+import { FaDiscord } from "react-icons/fa";
 
 export function ContactSection() {
   const { toast } = useToast()
@@ -177,12 +178,12 @@ export function ContactSection() {
           >
             <div className="flex items-center space-x-2">
               <Mail className="h-5 w-5 text-muted-foreground" />
-              <span>hello@example.com</span>
+              <span>sabasiddique001@gmail.com</span>
             </div>
             <div className="flex space-x-4">
               <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/sabasiddique1" target="_blank" rel="noopener noreferrer">
                     <Github className="h-5 w-5" />
                     <span className="sr-only">GitHub</span>
                   </a>
@@ -190,7 +191,7 @@ export function ContactSection() {
               </motion.div>
               <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                  <a href="www.linkedin.com/in/sabaa-siddique-26b6a31a5" target="_blank" rel="noopener noreferrer">
                     <Linkedin className="h-5 w-5" />
                     <span className="sr-only">LinkedIn</span>
                   </a>
@@ -198,8 +199,8 @@ export function ContactSection() {
               </motion.div>
               <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                    <Twitter className="h-5 w-5" />
+                  <a href="https://discordapp.com/users" target="_blank" rel="noopener noreferrer">
+                    <FaDiscord className="h-5 w-5" />
                     <span className="sr-only">Twitter</span>
                   </a>
                 </Button>
