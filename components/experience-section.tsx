@@ -16,15 +16,15 @@ const experiences = [
     description: "At Wanclouds, I contributed to VPC+, SecMon, and the AI platform by implementing features, fixing bugs, and improving the overall user experience. I worked on testing VPC+ for stability, enhanced AI model recognition, and collaborated on code reviews with cross-functional teams.",
     skills: ["React.js", "Next.js", "TailwindCSS", "Node.js", "AI Integration", "Agile"],
   },
-  {
-    id: 2,
-    role: "Data Analyst",
-    company: "IIMCT - Pakistan",
-    location: "Rawalpindi",
-    period: "2023",
-    description: "As a Data Analyst, I leveraged data analysis, statistical techniques, programming, and DBMS to drive actionable insights and decision-making. These skills are now integrated into my front-end development work, particularly with AI-driven projects.",
-    skills: ["Data Analysis", "SQL", "Python", "Statistical Analysis"],
-  },
+  // {
+  //   id: 2,
+  //   role: "Data Analyst",
+  //   company: "IIMCT - Pakistan",
+  //   location: "Rawalpindi",
+  //   period: "2023",
+  //   description: "As a Data Analyst, I leveraged data analysis, statistical techniques, programming, and DBMS to drive actionable insights and decision-making. These skills are now integrated into my front-end development work, particularly with AI-driven projects.",
+  //   skills: ["Data Analysis", "SQL", "Python", "Statistical Analysis"],
+  // },
 ]
 
 export function ExperienceSection() {
