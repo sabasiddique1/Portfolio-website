@@ -1,6 +1,6 @@
 "use client"
 import { motion, AnimatePresence } from "framer-motion"
-import { Github, ExternalLink, ChevronDown } from "lucide-react"
+import { ExternalLink, ChevronDown } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface ProjectCardProps {
