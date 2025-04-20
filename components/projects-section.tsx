@@ -19,7 +19,7 @@ const projects = [
     category: "Cross-platform",
     projectType: "Personal Project",
     technologies: ["React 19", "Next.js 15", "Appwrite", "TailwindCSS", "ShadCN", "TypeScript"],
-    githubUrl: "https://github.com/sabasiddique1/Vaultix",
+    githubUrl: "https://github.com/sabasiddique1/Vaultix.git",
     demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
   },
 
@@ -31,7 +31,7 @@ const projects = [
     category: "Cross-platform",
     projectType: "Collaborative Project",
     technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
-    githubUrl: "https://github.com/sabasiddique1/task-management-app",
+    githubUrl: "https://github.com/sabasiddique1/Task_Management_App_MERN.git",
     demoUrl: "https://v0-mern-task-management-rho.vercel.app/login"
   },
   {
@@ -42,7 +42,7 @@ const projects = [
     category: "Cross-platform",
     projectType: "Collaborative Project",
     technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
-    githubUrl: "https://github.com/sabasiddique1/web-scraping-app",
+    githubUrl: "https://github.com/Aniketsy/Web_Scrapper_App.git",
     demoUrl: "https://web-scrapper-app-kappa.vercel.app/",
   },
 
@@ -54,8 +54,8 @@ const projects = [
     category: "Cross-platform",
     projectType: "Personal Project",
     technologies: ["React 19", "Next.js 15", "TailwindCSS", "ShadCN", "TypeScript", 'Framer Motion'],
-    githubUrl: "https://github.com/sabasiddique1/Vaultix",
-    demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
+    githubUrl: "https://github.com/sabasiddique1/Portfolio-website.git",
+    demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
   },
   {
     id: 4,
@@ -65,7 +65,7 @@ const projects = [
     category: "Web App",
     projectType: "Personal Project",
     technologies: ["Node.js", "React", "CSS"],
-    githubUrl: "https://github.com/sabasiddique1/pokedex",
+    githubUrl: "https://github.com/sabasiddique1/Pokedex_App.git",
     demoUrl: "https://pokedex-app-sigma-silk.vercel.app/pokemon",
   },
   {
@@ -76,7 +76,7 @@ const projects = [
     category: "Web App",
     projectType: "Personal Project",
     technologies: ["JavaScript", "HTML", "CSS"],
-    githubUrl: "https://github.com/sabasiddique1/task-management-app",
+    githubUrl: "https://github.com/sabasiddique1/miniatureapps.git",
     demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
   },
   {
@@ -87,7 +87,7 @@ const projects = [
     category: "Cross-platform",
     projectType: "Personal Project",
     technologies: ["Node.js", "Next.js", "TypeScript", "TailwindCSS", "Stripe", "Zod", "React Hook Form", "ShadCN", "uploadthing"],
-    githubUrl: "https://github.com/sabasiddique1/Event_Bazaar",
+    githubUrl: "https://github.com/sabasiddique1/Event_Bazaar.git",
     demoUrl: "https://event-bazaar-3fht.vercel.app/",
   },
   {
