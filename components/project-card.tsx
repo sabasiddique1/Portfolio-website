@@ -41,6 +41,7 @@ interface ProjectShowcaseProps {
 export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     const [selectedProject, setSelectedProject] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [hasInitialized, setHasInitialized] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -48,8 +49,9 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 const mobile = window.innerWidth < 1024;
                 setIsMobile(mobile);
 
-                if (!mobile && projects.length > 0 && !selectedProject) {
+                if (!hasInitialized && !mobile && projects.length > 0) {
                     setSelectedProject(projects[0]);
+                    setHasInitialized(true);
                 }
             }
         };
@@ -57,7 +59,8 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [projects, selectedProject]);
+    }, [projects, hasInitialized]);
+
 
 
     if (!projects || projects.length === 0) {
