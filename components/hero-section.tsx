@@ -10,7 +10,7 @@ export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [text, setText] = useState("")
   const [isTypingComplete, setIsTypingComplete] = useState(false)
-  const fullText = "Building Digital Interfaces"
+  const fullText = "Turning coffee ☕ into code </>"
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,

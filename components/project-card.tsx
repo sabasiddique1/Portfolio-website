@@ -1,107 +1,210 @@
 "use client"
-import { motion, AnimatePresence } from "framer-motion"
-import { ExternalLink, ChevronDown } from "lucide-react"
+
+import React, { useState } from 'react';
+import Link from "next/link"
+import { ExternalLink, Github, Tag, Code, Briefcase, Award, ChevronRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface ProjectCardProps {
     project: {
-        id: number
-        title: string
-        description: string
-        category: string
-        projectType: string
-        technologies: string[]
-        githubUrl: string
-        demoUrl: string
-    }
-    isExpanded: boolean
-    onExpand: () => void
+        id: number;
+        title: string;
+        description: string;
+        category: string;
+        projectType: string;
+        technologies: string[];
+        githubUrl?: string;
+        demoUrl: string;
+    };
+    isSelected: boolean;  // Add this line to define the isSelected prop
+    onClick: () => void;
 }
 
-export function ProjectCard({ project, isExpanded, onExpand }: ProjectCardProps) {
+
+interface ProjectShowcaseProps {
+    projects: Array<{
+        id: number;
+        title: string;
+        description: string;
+        category: string;
+        projectType: string;
+        technologies: string[];
+        githubUrl?: string;
+        demoUrl: string;
+    }>;
+}
+export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
+    const [selectedProject, setSelectedProject] = useState(projects?.length > 0 ? projects[0] : null);
+
+    if (!projects || projects.length === 0) {
+        return <p>No projects available.</p>; // Or any fallback message/component you'd prefer
+    }
+
     return (
-        <motion.div
-            layout="position"
-            className={`bg-card border rounded-lg overflow-hidden transition-all duration-300 ${
-                isExpanded ? "shadow-md" : "shadow-sm hover:shadow-md"
-            }`}
-            initial={{ borderRadius: 12 }}
-            whileHover={{ y: isExpanded ? 0 : -5 }}
-            onClick={onExpand}
+        <section>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Project Deck */}
+                <div className="h-[500px] bg-zinc-900 rounded-xl p-8 shadow-xl">
+                    <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
+                        <div className="space-y-4">
+                            {projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    isSelected={selectedProject?.id === project.id}
+                                    onClick={() => setSelectedProject(project)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Expanded Project View */}
+                <div className="h-[500px] bg-zinc-900 rounded-xl p-4 shadow-xl flex items-center justify-center">
+                    {selectedProject && <ExpandedProjectCard project={selectedProject} />}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) {
+    return (
+        <Card
+            className={cn(
+                "w-full transition-all duration-300 cursor-pointer hover:bg-zinc-800 bg-zinc-900 overflow-hidden",
+                isSelected
+                    ? "ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.3)] relative z-10"
+                    : "border border-zinc-800",
+            )}
+            onClick={onClick}
         >
-            <motion.div layout="position" className="p-5">
-                <motion.div layout="position" className="flex justify-between items-center">
-                    <div className="flex-1">
-                        <motion.h3 layout="position" className="text-lg font-medium">
-                            {project.title}
-                        </motion.h3>
-                        <motion.div layout="position" className="flex flex-wrap gap-2 mt-2">
-                            <Badge variant="outline" className="text-xs">
+            <CardHeader className="p-4">
+                <div className="flex items-center justify-between w-full">
+                    <CardTitle className="text-xl text-white">
+                        {project.title}
+                    </CardTitle>
+                    <div className="flex gap-2 ml-4 shrink-0">
+                        {project.githubUrl && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                asChild
+                            >
+                                <Link
+                                    href={project.githubUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Github className="h-4 w-4" />
+                                    <span className="sr-only">GitHub</span>
+                                </Link>
+                            </Button>
+                        )}
+                        {project.demoUrl && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                asChild
+                            >
+                                <Link
+                                    href={project.demoUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <ExternalLink className="h-4 w-4" />
+                                    <span className="sr-only">Demo</span>
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            </CardHeader>
+
+
+            <CardFooter className="p-4 pt-0 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tag) => (
+                        <Badge key={tag} variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                            {tag}
+                        </Badge>
+                    ))}
+                </div>
+
+            </CardFooter>
+        </Card>
+    )
+}
+
+function ExpandedProjectCard({ project }) {
+    return (
+        <div className="w-full max-w-md mx-auto h-full flex flex-col justify-center">
+            <div className="space-y-8">
+                <div>
+                    <h3 className="text-3xl font-bold text-white mb-4">{project.title}</h3>
+                    <p className="text-zinc-300 leading-relaxed">{project.description}</p>
+                </div>
+
+                <div>
+                    <h4 className="text-sm font-medium mb-3 text-zinc-300">Technologies</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                            <Badge key={tech} variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                                {tech}
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <h4 className="text-sm font-medium mb-3 text-zinc-300">Project Type</h4>
+                    <div className="flex flex-wrap gap-2">
+                            <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+
                                 {project.category}
                             </Badge>
-                            <Badge variant="outline" className="text-xs">
-                                {project.projectType}
-                            </Badge>
-                        </motion.div>
                     </div>
-
-                    <div className="flex items-center space-x-2">
-                        <motion.a
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 rounded-full hover:bg-muted transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                </div>
+                <div className="flex gap-4 pt-4">
+                    {project.githubUrl && (
+                        <Button
+                            variant="outline"
+                            className="bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700 hover:border-white transition-all flex-1"
+                            asChild
                         >
-                            <Github size={16} />
-                            <span className="sr-only">GitHub</span>
-                        </motion.a>
-                        <motion.a
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 rounded-full hover:bg-muted transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <ExternalLink size={16} />
-                            <span className="sr-only">Live Demo</span>
-                        </motion.a>
-                        <motion.div
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="text-muted-foreground ml-1"
-                        >
-                            <ChevronDown size={18} />
-                        </motion.div>
-                    </div>
-                </motion.div>
-
-                <AnimatePresence>
-                    {isExpanded && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="mt-4 space-y-4"
-                        >
-                            <p className="text-sm text-muted-foreground">{project.description}</p>
-
-                            <div className="flex flex-wrap gap-2">
-                                {project.technologies.map((tech, index) => (
-                                    <span key={index} className="text-xs bg-muted px-2 py-1 rounded-full">
-                    {tech}
-                  </span>
-                                ))}
-                            </div>
-                        </motion.div>
+                            <Link
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2"
+                            >
+                                <Github className="h-5 w-5" />
+                                View Code
+                            </Link>
+                        </Button>
                     )}
-                </AnimatePresence>
-            </motion.div>
-        </motion.div>
+
+                    {project.demoUrl && (
+                        <Button className="bg-white text-black hover:bg-zinc-200 transition-all flex-1" asChild>
+                            <Link
+                                href={project.demoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2"
+                            >
+                                <ExternalLink className="h-5 w-5" />
+                                Live Demo
+                            </Link>
+                        </Button>
+                    )}
+                </div>
+
+            </div>
+        </div>
     )
 }

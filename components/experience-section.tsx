@@ -5,6 +5,7 @@ import { useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CalendarDays, MapPin } from "lucide-react"
+import {SectionHeading} from "@/components/section-heading";
 
 const experiences = [
   {
@@ -38,32 +39,32 @@ export function ExperienceSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 space-y-4 text-center"
+          className=" space-y-4 text-center"
         >
           <div className="inline-block">
-            <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl relative"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              Work Experience
+            {/*<motion.h2*/}
+            {/*  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl relative"*/}
+            {/*  initial={{ opacity: 0 }}*/}
+            {/*  animate={isInView ? { opacity: 1 } : { opacity: 0 }}*/}
+            {/*  transition={{ duration: 0.6 }}*/}
+            {/*>*/}
+              <SectionHeading title="Work Experience"/>
               <motion.span
                 className="absolute -bottom-2 left-0 h-1 bg-primary rounded-full"
                 initial={{ width: 0 }}
                 animate={isInView ? { width: "100%" } : { width: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               />
-            </motion.h2>
+            {/*</motion.h2>*/}
           </div>
-          <motion.p
-            className="mx-auto max-w-[700px] text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            My professional journey and the companies I&apos;ve worked with
-          </motion.p>
+          {/*<motion.p*/}
+          {/*  className="mx-auto max-w-[700px] text-muted-foreground"*/}
+          {/*  initial={{ opacity: 0 }}*/}
+          {/*  animate={isInView ? { opacity: 1 } : { opacity: 0 }}*/}
+          {/*  transition={{ duration: 0.6, delay: 0.2 }}*/}
+          {/*>*/}
+          {/*  My professional journey and the companies I&apos;ve worked with*/}
+          {/*</motion.p>*/}
         </motion.div>
 
         <div className="space-y-8">

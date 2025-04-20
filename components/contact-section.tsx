@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Mail, Send, Github, Linkedin } from "lucide-react"
 import { FaDiscord } from "react-icons/fa";
+import emailjs from "@emailjs/browser"
 
 export function ContactSection() {
   const { toast } = useToast()
@@ -27,19 +28,37 @@ export function ContactSection() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const result = await emailjs.send(
+          "service_vdlakiq",     // Replace with your EmailJS service ID
+          "template_rifrg0i",    // Replace with your EmailJS template ID
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+          },
+          "p-NcX4hQ1c0erpCWd"      // Replace with your EmailJS public key
+      )
+
       toast({
         title: "Message sent!",
         description: "Thank you for your message. I'll get back to you soon.",
       })
       setFormData({ name: "", email: "", message: "" })
+    } catch (error) {
+      toast({
+        title: "Oops!",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      })
+    } finally {
       setIsSubmitting(false)
-    }, 1500)
+    }
   }
 
   const formVariants = {
