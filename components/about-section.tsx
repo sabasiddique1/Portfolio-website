@@ -114,7 +114,7 @@ export function AboutSection() {
                 <a href="/front-end_resumee.pdf" download>
                   <Button
                       variant="outline"
-                      className="w-full relative bg-primary/90 hover:bg-primary/80 overflow-hidden group"
+                      className="w-full relative text-primary-foreground hover:text-card bg-primary/90 hover:bg-primary/80 overflow-hidden group"
                   >
                     Download CV
                   </Button>

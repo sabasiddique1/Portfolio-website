@@ -189,7 +189,7 @@ function ExpandedProjectCard({ project }) {
                     )}
 
                     {project.demoUrl && (
-                        <Button className="w-full bg-primary-foreground border-amber-50 text-card-foreground hover:bg-zinc-200 transition-all" asChild>
+                        <Button variant="secondary" className="w-full border-amber-50 text-card-foreground hover:bg-zinc-200 transition-all" asChild>
                             <Link
                                 href={project.demoUrl}
                                 target="_blank"
