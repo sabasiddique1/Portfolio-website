@@ -132,7 +132,7 @@ export function AboutSection() {
           </div>
 
           {/* Stats Cards */}
-          <div className="lg:col-span-4 grid grid-cols-1 gap-1">
+          <div className="lg:col-span-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4">
             {/* Experience Card */}
             <StatCard icon={<Briefcase className="h-8 w-8 text-card" />} title="Experience" value="2+" unit="Years" />
 

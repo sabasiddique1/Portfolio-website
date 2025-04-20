@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from "next/link"
+import { motion, useInView } from "framer-motion"
 import { ExternalLink, Github, Tag, Code, Briefcase, Award, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { X } from "lucide-react"
 
 interface ProjectCardProps {
     project: {
@@ -37,7 +39,26 @@ interface ProjectShowcaseProps {
     }>;
 }
 export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
-    const [selectedProject, setSelectedProject] = useState(projects?.length > 0 ? projects[0] : null);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (typeof window !== "undefined") {
+                setIsMobile(window.innerWidth < 1024);
+            }
+            if (!isMobile && projects.length > 0 && !selectedProject) {
+                setSelectedProject(projects[0]);
+            }
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    if (!projects || projects.length === 0) {
+        return <p>No projects available.</p>;
+    }
 
     if (!projects || projects.length === 0) {
         return <p>No projects available.</p>;
@@ -62,11 +83,28 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                     </div>
                 </div>
 
-                {/* Expanded Project View */}
-                <div className="h-[500px] bg-primary-foreground rounded-xl p-4 shadow-xl flex items-center justify-center">
-                    {selectedProject && <ExpandedProjectCard project={selectedProject} />}
-                </div>
+                {/* Desktop Expanded View */}
+                {!isMobile && selectedProject && (
+                    <div className="h-[500px] bg-primary-foreground rounded-xl p-4 shadow-xl flex items-center justify-center">
+                        <ExpandedProjectCard project={selectedProject} />
+                    </div>
+                )}
             </div>
+
+            {/* 🪟 Modal for Mobile/Tablet */}
+            {isMobile && selectedProject && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fadeIn">
+                    <div className="relative w-full max-w-lg bg-background rounded-lg p-6 shadow-lg overflow-y-auto max-h-[90vh]">
+                        <button
+                            className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+                            onClick={() => setSelectedProject(null)}
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+                        <ExpandedProjectCard project={selectedProject} />
+                    </div>
+                </div>
+            )}
         </section>
     );
 }
