@@ -131,12 +131,15 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
         >
             <CardHeader className="p-4">
                 <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
+                    <div className="grid grid-cols-1 items-start">
                         <CardTitle className="text-xl">{project.title}</CardTitle>
-                        <span className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-xs font-medium">
+                        <div className="flex justify-between my-1">
+                            <span className="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-xs font-medium">
                             {project.category}
                         </span>
+                        </div>
                     </div>
+
 
                     <div className="flex gap-2 ml-4 shrink-0">
                         {project.githubUrl && (
