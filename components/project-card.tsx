@@ -47,7 +47,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Project Deck */}
-                <div className="h-[500px] bg-primary-foreground rounded-xl p-8 shadow-xl">
+                <div className="h-[500px] rounded-xl p-8 shadow-xl">
                     <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
                         <div className="space-y-4">
                             {projects.map((project) => (
@@ -151,7 +151,7 @@ function ExpandedProjectCard({ project }) {
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-medium mb-3 text-card-foreground">Technologies</h4>
+                    <h4 className="text-sm  mb-3 font-bold text-card-foreground">Technologies</h4>
                     <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech) => (
                             <Badge key={tech} variant="secondary">
@@ -162,7 +162,7 @@ function ExpandedProjectCard({ project }) {
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-medium mb-3 text-card-foreground">Project Type</h4>
+                    <h4 className="text-sm font-bold mb-3 text-card-foreground">Project Type</h4>
                     <div className="flex flex-wrap gap-2">
                             <Badge variant="secondary">
 
