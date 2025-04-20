@@ -66,13 +66,14 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
 
     return (
-        <section className="relative">
-            <p className="absolute top-2 right-10 flex items-center gap-1 text-xs text-muted-foreground z-10">
-                <Info className="w-3 h-3" />
-                Click the card to expand
-            </p>            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Project Deck */}
-                <div className="h-[500px] rounded-xl p-8 shadow-xl">
+                <div className="h-[500px] rounded-xl p-8 shadow-xl relative">
+                    <p className="absolute top-2 right-10 flex items-center gap-1 text-xs text-muted-foreground z-10">
+                        <Info className="w-3 h-3" />
+                        Click the card to expand
+                    </p>
                     <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
                         <div className="space-y-4">
                             {projects.map((project) => (
