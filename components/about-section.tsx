@@ -114,14 +114,14 @@ export function AboutSection() {
                 <a href="/front-end_resumee.pdf" download>
                   <Button
                       variant="outline"
-                      className="bg-transparent text-white border-zinc-700 hover:bg-zinc-800 hover:border-white transition-all"
+                      className="w-full relative bg-primary/90 hover:bg-primary/80 overflow-hidden group"
                   >
                     Download CV
                   </Button>
                 </a>
 
                 <a href="mailto:sabasiddique001@gmail.com?subject=Let's%20Work%20Together&body=Hi%20there%2C%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect...">
-                  <Button className="bg-white text-black hover:bg-zinc-200 transition-all">
+                  <Button variant="secondary" className=" w-full hover:bg-zinc-200 transition-all">
                     Contact Me
                   </Button>
                 </a>
@@ -130,15 +130,15 @@ export function AboutSection() {
           </div>
 
           {/* Stats Cards */}
-          <div className="lg:col-span-4 grid grid-cols-1 gap-4">
+          <div className="lg:col-span-4 grid grid-cols-1 gap-1">
             {/* Experience Card */}
-            <StatCard icon={<Briefcase className="h-8 w-8 text-white" />} title="Experience" value="2+" unit="Years" />
+            <StatCard icon={<Briefcase className="h-8 w-8 text-card" />} title="Experience" value="2+" unit="Years" />
 
             {/* Projects Card */}
-            <StatCard icon={<Code className="h-8 w-8 text-white" />} title="Projects" value="30+" unit="Completed" />
+            <StatCard icon={<Code className="h-8 w-8 text-card" />} title="Projects" value="30+" unit="Completed" />
 
             {/* Awards Card */}
-            <StatCard icon={<Award className="h-8 w-8 text-white" />} title="User Experience" value="45%" unit="Improved" />
+            <StatCard icon={<Award className="h-8 w-8 text-card" />} title="User Experience" value="45%" unit="Improved" />
           </div>
         </div>
         </div>
@@ -148,13 +148,13 @@ export function AboutSection() {
 
 function StatCard({ icon, title, value, unit }) {
   return (
-      <Card className="bg-card border-0 p-5 hover:bg-zinc-800 transition-all duration-300">
+      <Card className="bg-card border-0 p-5 transition-all duration-300">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-zinc-800 rounded-lg">{icon}</div>
+          <div className="p-3 bg-primary/70  rounded-lg">{icon}</div>
           <div>
-            <h4 className="font-bold text-lg text-white">{title}</h4>
+            <h4 className="font-bold text-lg text-card-foreground">{title}</h4>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-white">{value}</span>
+              <span className="text-2xl font-bold ">{value}</span>
               <span className="text-zinc-400 text-sm">{unit}</span>
             </div>
           </div>

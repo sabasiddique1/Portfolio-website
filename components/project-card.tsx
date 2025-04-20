@@ -47,7 +47,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Project Deck */}
-                <div className="h-[500px] bg-zinc-900 rounded-xl p-8 shadow-xl">
+                <div className="h-[500px] bg-card rounded-xl p-8 shadow-xl">
                     <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
                         <div className="space-y-4">
                             {projects.map((project) => (
@@ -63,7 +63,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 </div>
 
                 {/* Expanded Project View */}
-                <div className="h-[500px] bg-zinc-900 rounded-xl p-4 shadow-xl flex items-center justify-center">
+                <div className="h-[500px] bg-card rounded-xl p-4 shadow-xl flex items-center justify-center">
                     {selectedProject && <ExpandedProjectCard project={selectedProject} />}
                 </div>
             </div>
@@ -75,7 +75,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
     return (
         <Card
             className={cn(
-                "w-full transition-all duration-300 cursor-pointer hover:bg-zinc-800 bg-zinc-900 overflow-hidden",
+                "w-full transition-all bg-card text-card-foreground duration-300 cursor-pointer hover:bg-primary-foreground overflow-hidden",
                 isSelected
                     ? "ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.3)] relative z-10"
                     : "border border-zinc-800",
@@ -84,7 +84,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
         >
             <CardHeader className="p-4">
                 <div className="flex items-center justify-between w-full">
-                    <CardTitle className="text-xl text-white">
+                    <CardTitle className="text-xl ">
                         {project.title}
                     </CardTitle>
                     <div className="flex gap-2 ml-4 shrink-0">
@@ -92,7 +92,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                className="text-card-foreground hover:text-white hover:bg-zinc-800"
                                 asChild
                             >
                                 <Link
@@ -109,7 +109,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                className="text-card-foreground hover:text-white hover:bg-zinc-800"
                                 asChild
                             >
                                 <Link
@@ -130,7 +130,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
             <CardFooter className="p-4 pt-0 flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tag) => (
-                        <Badge key={tag} variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                        <Badge key={tag} variant="secondary" >
                             {tag}
                         </Badge>
                     ))}
@@ -146,15 +146,15 @@ function ExpandedProjectCard({ project }) {
         <div className="w-full max-w-md mx-auto h-full flex flex-col justify-center">
             <div className="space-y-8">
                 <div>
-                    <h3 className="text-3xl font-bold text-white mb-4">{project.title}</h3>
-                    <p className="text-zinc-300 leading-relaxed">{project.description}</p>
+                    <h3 className="text-3xl font-bold text-card-foreground mb-4">{project.title}</h3>
+                    <p className="text-card-foreground leading-relaxed">{project.description}</p>
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-medium mb-3 text-zinc-300">Technologies</h4>
+                    <h4 className="text-sm font-medium mb-3 text-card-foreground">Technologies</h4>
                     <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech) => (
-                            <Badge key={tech} variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                            <Badge key={tech} variant="secondary">
                                 {tech}
                             </Badge>
                         ))}
@@ -162,9 +162,9 @@ function ExpandedProjectCard({ project }) {
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-medium mb-3 text-zinc-300">Project Type</h4>
+                    <h4 className="text-sm font-medium mb-3 text-card-foreground">Project Type</h4>
                     <div className="flex flex-wrap gap-2">
-                            <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                            <Badge variant="secondary">
 
                                 {project.category}
                             </Badge>
@@ -173,8 +173,7 @@ function ExpandedProjectCard({ project }) {
                 <div className="flex gap-4 pt-4">
                     {project.githubUrl && (
                         <Button
-                            variant="outline"
-                            className="bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700 hover:border-white transition-all flex-1"
+                            className="w-full relative bg-primary/90 hover:bg-primary/80 overflow-hidden group"
                             asChild
                         >
                             <Link
@@ -190,7 +189,7 @@ function ExpandedProjectCard({ project }) {
                     )}
 
                     {project.demoUrl && (
-                        <Button className="bg-white text-black hover:bg-zinc-200 transition-all flex-1" asChild>
+                        <Button className="w-full bg-primary-foreground border-amber-50 text-card-foreground hover:bg-zinc-200 transition-all" asChild>
                             <Link
                                 href={project.demoUrl}
                                 target="_blank"
