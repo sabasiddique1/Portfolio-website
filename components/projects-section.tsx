@@ -16,9 +16,44 @@ const projects = [
     title: "Vaultix - Cloud Storage App",
     description:
         "A cloud storage app for easy file management with secure sharing options and high scalability.",
-    category: "Web App",
+    category: "Cross-platform",
     projectType: "Personal Project",
     technologies: ["React 19", "Next.js 15", "Appwrite", "TailwindCSS", "ShadCN", "TypeScript"],
+    githubUrl: "https://github.com/sabasiddique1/Vaultix",
+    demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
+  },
+
+  {
+    id: 8,
+    title: "Task Management App",
+    description:
+        "A simple yet effective task management tool to help users track and organize their daily tasks.",
+    category: "Cross-platform",
+    projectType: "Collaborative Project",
+    technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
+    githubUrl: "https://github.com/sabasiddique1/task-management-app",
+    demoUrl: "https://v0-mern-task-management-rho.vercel.app/login"
+  },
+  {
+    id: 7,
+    title: "Web Scraping App",
+    description:
+        "A web scraping app that extracts valuable data from websites for analysis and research.",
+    category: "Cross-platform",
+    projectType: "Collaborative Project",
+    technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
+    githubUrl: "https://github.com/sabasiddique1/web-scraping-app",
+    demoUrl: "https://web-scrapper-app-kappa.vercel.app/",
+  },
+
+  {
+    id: 13,
+    title: "Portfolio - Project Showcase App",
+    description:
+        "A project showcase website highlighting experience, skills, work history.",
+    category: "Cross-platform",
+    projectType: "Personal Project",
+    technologies: ["React 19", "Next.js 15", "TailwindCSS", "ShadCN", "TypeScript", 'Framer Motion'],
     githubUrl: "https://github.com/sabasiddique1/Vaultix",
     demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
   },
@@ -34,28 +69,6 @@ const projects = [
     demoUrl: "https://pokedex-app-sigma-silk.vercel.app/pokemon",
   },
   {
-    id: 8,
-    title: "Task Management App",
-    description:
-        "A simple yet effective task management tool to help users track and organize their daily tasks.",
-    category: "Web App",
-    projectType: "Collaborative Project",
-    technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
-    githubUrl: "https://github.com/sabasiddique1/task-management-app",
-    demoUrl: "https://v0-mern-task-management-rho.vercel.app/login"
-  },
-  {
-    id: 7,
-    title: "Web Scraping App",
-    description:
-        "A web scraping app that extracts valuable data from websites for analysis and research.",
-    category: "Web App",
-    projectType: "Collaborative Project",
-    technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN"],
-    githubUrl: "https://github.com/sabasiddique1/web-scraping-app",
-    demoUrl: "https://web-scrapper-app-kappa.vercel.app/",
-  },
-  {
     id: 12,
     title: "Miniature App",
     description:
@@ -64,25 +77,14 @@ const projects = [
     projectType: "Personal Project",
     technologies: ["JavaScript", "HTML", "CSS"],
     githubUrl: "https://github.com/sabasiddique1/task-management-app",
-    demoUrl: "https://miniatureapps.vercel.app/",
-  },
-  {
-    id: 13,
-    title: "Portfolio - Project Showcase App",
-    description:
-        "A project showcase website highlighting experience, skills, work history.",
-    category: "Web App",
-    projectType: "Personal Project",
-    technologies: ["React 19", "Next.js 15", "TailwindCSS", "ShadCN", "TypeScript", 'Framer Motion'],
-    githubUrl: "https://github.com/sabasiddique1/Vaultix",
-    demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
+    demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
   },
   {
     id: 2,
     title: "Event_Bazaar - Event Management App",
     description:
         "An event management app that allows users to organize, manage, and attend events easily.",
-    category: "Web App",
+    category: "Cross-platform",
     projectType: "Personal Project",
     technologies: ["Node.js", "Next.js", "TypeScript", "TailwindCSS", "Stripe", "Zod", "React Hook Form", "ShadCN", "uploadthing"],
     githubUrl: "https://github.com/sabasiddique1/Event_Bazaar",
@@ -119,17 +121,17 @@ const projects = [
   //   // demoUrl: "https://nexura.example.com",
   // },
 
-  {
-    id: 5,
-    title: "Synapse - Therapist Appointment App",
-    description:
-        "An appointment scheduling platform for therapists and patients, featuring easy booking and management options.",
-    category: "Web App",
-    projectType: "Collaborative Project",
-    technologies: ["Next.js", "AntD", "ShadCN", "TailwindCSS"],
-    githubUrl: "https://github.com/sabasiddique1/synapse",
-    demoUrl: "https://syna-pse.vercel.app/",
-  },
+  // {
+  //   id: 5,
+  //   title: "Synapse - Therapist Appointment App",
+  //   description:
+  //       "An appointment scheduling platform for therapists and patients, featuring easy booking and management options.",
+  //   category: "Web App",
+  //   projectType: "Collaborative Project",
+  //   technologies: ["Next.js", "AntD", "ShadCN", "TailwindCSS"],
+  //   githubUrl: "https://github.com/sabasiddique1/synapse",
+  //   demoUrl: "https://syna-pse.vercel.app/",
+  // },
   // {
   //   id: 6,
   //   title: "Stock Market Prediction",
