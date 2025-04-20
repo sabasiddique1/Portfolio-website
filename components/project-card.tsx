@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import Link from "next/link"
 import { motion, useInView } from "framer-motion"
-import { ExternalLink, Github, Tag, Code, Briefcase, Award, ChevronRight } from "lucide-react"
+import { ExternalLink, Github, Info, Tag, Code, Briefcase, Award, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -48,9 +48,9 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 const mobile = window.innerWidth < 1024;
                 setIsMobile(mobile);
 
-                // if (!mobile && projects.length > 0 && !selectedProject) {
-                //     setSelectedProject(projects[0]);
-                // }
+                if (!mobile && projects.length > 0 && !selectedProject) {
+                    setSelectedProject(projects[0]);
+                }
             }
         };
 
@@ -64,13 +64,13 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         return <p>No projects available.</p>;
     }
 
-    if (!projects || projects.length === 0) {
-        return <p>No projects available.</p>;
-    }
 
     return (
-        <section>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section className="relative">
+            <p className="absolute top-2 right-10 flex items-center gap-1 text-xs text-muted-foreground z-10">
+                <Info className="w-3 h-3" />
+                Click the card to expand
+            </p>            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Project Deck */}
                 <div className="h-[500px] rounded-xl p-8 shadow-xl">
                     <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
@@ -115,6 +115,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
 export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) {
     return (
+
         <Card
             className={cn(
                 "w-full transition-all bg-card text-card-foreground duration-300 cursor-pointer hover:bg-primary-foreground overflow-hidden",
