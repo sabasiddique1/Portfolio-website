@@ -45,16 +45,21 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     useEffect(() => {
         const handleResize = () => {
             if (typeof window !== "undefined") {
-                setIsMobile(window.innerWidth < 1024);
-            }
-            if (!isMobile && projects.length > 0 && !selectedProject) {
-                setSelectedProject(projects[0]);
+                const mobile = window.innerWidth < 1024;
+                setIsMobile(mobile);
+
+                // Only auto-select project on desktop
+                if (!mobile && projects.length > 0 && !selectedProject) {
+                    setSelectedProject(projects[0]);
+                }
             }
         };
+
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [projects, selectedProject]);
+
 
     if (!projects || projects.length === 0) {
         return <p>No projects available.</p>;
