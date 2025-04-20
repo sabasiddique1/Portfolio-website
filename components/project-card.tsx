@@ -48,10 +48,9 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 const mobile = window.innerWidth < 1024;
                 setIsMobile(mobile);
 
-                // Only auto-select project on desktop
-                if (!mobile && projects.length > 0 && !selectedProject) {
-                    setSelectedProject(projects[0]);
-                }
+                // if (!mobile && projects.length > 0 && !selectedProject) {
+                //     setSelectedProject(projects[0]);
+                // }
             }
         };
 
