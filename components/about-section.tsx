@@ -54,7 +54,7 @@ export function AboutSection() {
   }
 
   return (
-      <section id="about" ref={sectionRef}>
+      <section id="about" className="py-20 md:28" ref={sectionRef}>
 
         <div className="container px-4 md:px-6">
           <motion.div
@@ -84,9 +84,11 @@ export function AboutSection() {
           </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Profile Picture and Description */}
-          <div className="lg:col-span-8 bg-card  rounded-xl p-8 flex flex-col md:flex-row gap-8 items-center">
+          <div className="lg:col-span-8 bg-card  rounded-xl p-4 flex flex-col md:flex-row gap-8 items-center">
             <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white/80 shadow-xl flex-shrink-0">
-              <Image src="/aboutme.png?height=200&width=200" alt="Profile" fill className="object-cover" />
+              <Image
+                  // src="/aboutme.png?height=200&width=200"
+                  alt="Profile" fill className="object-cover" />
             </div>
 
             <div className="flex-1">

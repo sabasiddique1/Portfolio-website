@@ -67,6 +67,17 @@ const projects = [
     demoUrl: "https://miniatureapps.vercel.app/",
   },
   {
+    id: 13,
+    title: "Portfolio - Project Showcase App",
+    description:
+        "A project showcase website highlighting experience, skills, work history.",
+    category: "Web App",
+    projectType: "Personal Project",
+    technologies: ["React 19", "Next.js 15", "TailwindCSS", "ShadCN", "TypeScript", 'Framer Motion'],
+    githubUrl: "https://github.com/sabasiddique1/Vaultix",
+    demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
+  },
+  {
     id: 2,
     title: "Event_Bazaar - Event Management App",
     description:
@@ -164,7 +175,7 @@ export function ProjectsSection() {
   }
 
   return (
-      <section id="projects" className="py-20 md:py-28">
+      <section id="projects" className="py-24 md:py-28">
         <div className="container px-4 md:px-6">
           <SectionHeading title="Selected Work" subtitle="Explore my recent projects" />
 

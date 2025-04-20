@@ -47,7 +47,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         <section>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Project Deck */}
-                <div className="h-[500px] bg-card rounded-xl p-8 shadow-xl">
+                <div className="h-[500px] bg-primary-foreground rounded-xl p-8 shadow-xl">
                     <div className="h-full overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
                         <div className="space-y-4">
                             {projects.map((project) => (
@@ -63,7 +63,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 </div>
 
                 {/* Expanded Project View */}
-                <div className="h-[500px] bg-card rounded-xl p-4 shadow-xl flex items-center justify-center">
+                <div className="h-[500px] bg-primary-foreground rounded-xl p-4 shadow-xl flex items-center justify-center">
                     {selectedProject && <ExpandedProjectCard project={selectedProject} />}
                 </div>
             </div>
@@ -189,7 +189,7 @@ function ExpandedProjectCard({ project }) {
                     )}
 
                     {project.demoUrl && (
-                        <Button variant="secondary" className="w-full border-amber-50 text-card-foreground hover:bg-zinc-200 transition-all" asChild>
+                        <Button variant="secondary" className="w-full border-amber-50 text-card-foreground hover:bg-card-foreground transition-all" asChild>
                             <Link
                                 href={project.demoUrl}
                                 target="_blank"

@@ -10,7 +10,7 @@ export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [text, setText] = useState("")
   const [isTypingComplete, setIsTypingComplete] = useState(false)
-  const fullText = "Turning coffee ☕ into code </>"
+  const fullText = "Hey! I'm Sabaa."
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -105,7 +105,7 @@ export function HeroSection() {
               animate={{ opacity: isTypingComplete ? 1 : 0, y: isTypingComplete ? 0 : 20 }}
               transition={{ duration: 0.5 }}
             >
-              I&apos;m a Front-End Developer dedicated to building seamless, intuitive, and visually engaging user experiences.
+              A Front-End Developer dedicated to building seamless, intuitive, and visually engaging user experiences.
             </motion.p>
           </motion.div>
 
