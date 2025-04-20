@@ -204,14 +204,14 @@ function ExpandedProjectCard({ project }) {
                     <div className="flex flex-wrap gap-2">
                             <Badge variant="secondary">
 
-                                {project.category}
+                                {project.projectType}
                             </Badge>
                     </div>
                 </div>
                 <div className="flex gap-4 pt-4">
                     {project.githubUrl && (
                         <Button
-                            className="w-full relative bg-primary/90 hover:bg-primary/80 overflow-hidden group"
+                            className="w-full bg-primary/90 hover:bg-primary/80 overflow-hidden group"
                             asChild
                         >
                             <Link

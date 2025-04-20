@@ -28,10 +28,42 @@ export function ContactSection() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+  //
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setIsSubmitting(true)
+  //
+  //   try {
+  //     const result = await emailjs.send(
+  //         "service_vdlakiq",
+  //         "template_rifrg0i",
+  //         {
+  //           name: formData.name,
+  //           email: formData.email,
+  //           message: formData.message,
+  //         },
+  //         "p-NcX4hQ1c0erpCWd"
+  //     )
+  //
+  //     toast({
+  //       title: "Message sent!",
+  //       description: "Thank you for your message. I'll get back to you soon.",
+  //     })
+  //     setFormData({ name: "", email: "", message: "" })
+  //   } catch (error) {
+  //     toast({
+  //       title: "Oops!",
+  //       description: "Something went wrong. Please try again later.",
+  //       variant: "destructive",
+  //     })
+  //   } finally {
+  //     setIsSubmitting(false)
+  //   }
+  // }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const result = await emailjs.send(
@@ -43,23 +75,27 @@ export function ContactSection() {
             message: formData.message,
           },
           "p-NcX4hQ1c0erpCWd"
-      )
+      );
 
       toast({
         title: "Message sent!",
         description: "Thank you for your message. I'll get back to you soon.",
-      })
-      setFormData({ name: "", email: "", message: "" })
+      });
+
+      setFormData({ name: "", email: "", message: "" });
+      e.currentTarget.reset(); // Optional but helpful
+
     } catch (error) {
       toast({
         title: "Oops!",
         description: "Something went wrong. Please try again later.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
+
 
   const formVariants = {
     hidden: { opacity: 0 },
