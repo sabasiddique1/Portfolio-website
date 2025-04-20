@@ -12,7 +12,6 @@ export function ModeToggle() {
   const { setTheme, theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
-  // After mounting, we can safely show the UI that depends on the theme
   useEffect(() => {
     setMounted(true)
   }, [])

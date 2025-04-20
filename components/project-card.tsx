@@ -19,7 +19,7 @@ interface ProjectCardProps {
         githubUrl?: string;
         demoUrl: string;
     };
-    isSelected: boolean;  // Add this line to define the isSelected prop
+    isSelected: boolean;
     onClick: () => void;
 }
 
@@ -40,7 +40,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     const [selectedProject, setSelectedProject] = useState(projects?.length > 0 ? projects[0] : null);
 
     if (!projects || projects.length === 0) {
-        return <p>No projects available.</p>; // Or any fallback message/component you'd prefer
+        return <p>No projects available.</p>;
     }
 
     return (

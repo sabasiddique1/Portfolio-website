@@ -35,14 +35,14 @@ export function ContactSection() {
 
     try {
       const result = await emailjs.send(
-          "service_vdlakiq",     // Replace with your EmailJS service ID
-          "template_rifrg0i",    // Replace with your EmailJS template ID
+          "service_vdlakiq",
+          "template_rifrg0i",
           {
             name: formData.name,
             email: formData.email,
             message: formData.message,
           },
-          "p-NcX4hQ1c0erpCWd"      // Replace with your EmailJS public key
+          "p-NcX4hQ1c0erpCWd"
       )
 
       toast({
