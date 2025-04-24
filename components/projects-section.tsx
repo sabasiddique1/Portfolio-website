@@ -45,7 +45,17 @@ const projects = [
     githubUrl: "https://github.com/Aniketsy/Web_Scrapper_App.git",
     demoUrl: "https://web-scrapper-app-kappa.vercel.app/",
   },
-
+{
+    id: 5,
+    title: "Synapse - Therapist Appointment App",
+    description:
+        "An appointment scheduling platform for therapists and patients, featuring easy booking and management options.",
+    category: "Cross-Platform",
+    projectType: "Personal Project",
+    technologies: ["Next.js", "TailwindCSS", "React lucide"],
+    githubUrl: "https://github.com/sabasiddique1/nft-detail-screen.git",
+    demoUrl: "https://nft-detail-screen.vercel.app/",
+  },
   {
     id: 13,
     title: "Portfolio - Project Showcase App",
@@ -121,17 +131,7 @@ const projects = [
   //   // demoUrl: "https://nexura.example.com",
   // },
 
-  // {
-  //   id: 5,
-  //   title: "Synapse - Therapist Appointment App",
-  //   description:
-  //       "An appointment scheduling platform for therapists and patients, featuring easy booking and management options.",
-  //   category: "Web App",
-  //   projectType: "Collaborative Project",
-  //   technologies: ["Next.js", "AntD", "ShadCN", "TailwindCSS"],
-  //   githubUrl: "https://github.com/sabasiddique1/synapse",
-  //   demoUrl: "https://syna-pse.vercel.app/",
-  // },
+
   // {
   //   id: 6,
   //   title: "Stock Market Prediction",
