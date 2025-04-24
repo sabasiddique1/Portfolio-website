@@ -47,9 +47,9 @@ const projects = [
   },
 {
     id: 5,
-    title: "Synapse - Therapist Appointment App",
+    title: "NFT Detail Page – Web3 UI",
     description:
-        "An appointment scheduling platform for therapists and patients, featuring easy booking and management options.",
+        "Built NFT detail UI with Next.js & Tailwind, featuring timer and metadata display.",
     category: "Cross-Platform",
     projectType: "Personal Project",
     technologies: ["Next.js", "TailwindCSS", "React lucide"],
