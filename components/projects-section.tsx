@@ -87,7 +87,7 @@ const projects = [
     projectType: "Personal Project",
     technologies: ["JavaScript", "HTML", "CSS"],
     githubUrl: "https://github.com/sabasiddique1/miniatureapps.git",
-    demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
+    demoUrl: "https://miniatureapps.vercel.app/",
   },
   {
     id: 2,
