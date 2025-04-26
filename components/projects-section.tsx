@@ -117,7 +117,7 @@ const projects = [
         "AI-focused security platform offering real-time observability, access control, and automated vulnerability management for AI and LLM deployments.",
     category: "Web App",
     projectType: "Company Project",
-    technologies: ["React.js", "Next.js", "TailwindCSS", "Python", "ML Integration"],
+    technologies:  ["React.js", "Next.js", "TailwindCSS", "Python", "ML Integration"],
   },
   // {
   //   id: 3,
