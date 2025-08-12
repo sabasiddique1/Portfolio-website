@@ -10,12 +10,21 @@ import {SectionHeading} from "@/components/section-heading";
 const experiences = [
   {
     id: 1,
-    role: "Front End Developer",
+    role: "Software Engineer",
     company: "Wanclouds",
-    location: "On-site",
+    location: "Hybrid (Remote/On-site)",
     period: "Aug 2023 - Apr 2025",
-    description: "At Wanclouds, I contributed to VPC+, SecMon, and the AI platform by implementing features, fixing bugs, and improving the overall user experience. I worked on testing VPC+ for stability, enhanced AI model recognition, and collaborated on code reviews with cross-functional teams.",
+    description: "Developed features for VPC+, SecMon, and WhisperAI; resolved 100+ bugs and boosted dashboard speed by 28%. Improved UX, built reusable UI with MUI/Tailwind, maintained <2% API failure rate, and supported QA across scalable deployments.",
     skills: ["React.js", "Next.js", "TailwindCSS", "Node.js", "AI Integration", "Agile"],
+  },
+  {
+    id: 2,
+    role: "Software Engineer",
+    company: "Devsloop",
+    location: "Remote",
+    period: "May 2025 - Aug 2025",
+    description: "Built performant UIs using React, Next.js, and Tailwind; improved load speed by 40% and reduced Figma-to-code time by 30%. Integrated APIs with Axios, handled error states, optimized Redux/Zustand state, and led Git-based CI/CD with 15% fewer rollbacks.",
+    skills: ["React.js", "Next.js", "TailwindCSS", "TypeScript", "Axios", "Redux", "Zustand", "CI/CD", "Git"],
   },
   // {
   //   id: 2,

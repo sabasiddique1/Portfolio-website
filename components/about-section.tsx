@@ -113,7 +113,8 @@ export function AboutSection() {
                 </motion.div>
               </motion.p>
               <div className="flex gap-4 pt-10">
-                <a href="/front-end_resumee.pdf" download>
+                {/** Configure resume URL via env or fallback to local public file */}
+                <a href={process.env.NEXT_PUBLIC_RESUME_URL || "/resumee.pdf"} download>
                   <Button
                       variant="outline"
                       className="w-full relative text-primary-foreground hover:text-card bg-primary/90 hover:bg-primary/80 overflow-hidden group"
@@ -122,7 +123,7 @@ export function AboutSection() {
                   </Button>
                 </a>
 
-                <a href="mailto:sabasiddique001@gmail.com?subject=Let's%20Work%20Together&body=Hi%20there%2C%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect...">
+                <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's%20Work%20Together&body=Hi%20there%2C%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect...">
                   <Button variant="secondary" className=" w-full hover:bg-zinc-200 transition-all">
                     Contact Me
                   </Button>

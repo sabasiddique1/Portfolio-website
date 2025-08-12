@@ -1,47 +1,38 @@
 "use client"
 
-import React, {useEffect, useState} from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import Link from "next/link"
-import { motion, useInView } from "framer-motion"
-import { ExternalLink, Github, Info, Tag, Code, Briefcase, Award, ChevronRight } from "lucide-react"
+import { ExternalLink, Github, Info, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { X } from "lucide-react"
+
+type Project = {
+    id: number
+    title: string
+    description: string
+    category: string
+    projectType: string
+    technologies: string[]
+    githubUrl?: string
+    demoUrl: string
+}
 
 interface ProjectCardProps {
-    project: {
-        id: number;
-        title: string;
-        description: string;
-        category: string;
-        projectType: string;
-        technologies: string[];
-        githubUrl?: string;
-        demoUrl: string;
-    };
-    isSelected: boolean;
-    onClick: () => void;
+    project: Project
+    isSelected: boolean
+    onClick: () => void
 }
 
 
 interface ProjectShowcaseProps {
-    projects: Array<{
-        id: number;
-        title: string;
-        description: string;
-        category: string;
-        projectType: string;
-        technologies: string[];
-        githubUrl?: string;
-        demoUrl: string;
-    }>;
+    projects: Project[]
 }
 export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
-    const [selectedProject, setSelectedProject] = useState(null);
-    const [isMobile, setIsMobile] = useState(false);
-    const [hasInitialized, setHasInitialized] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+    const [isMobile, setIsMobile] = useState(false)
+    const [hasInitialized, setHasInitialized] = useState(false)
 
     useEffect(() => {
         const handleResize = () => {
@@ -61,7 +52,15 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         return () => window.removeEventListener("resize", handleResize);
     }, [projects, hasInitialized]);
 
+    const selectHandlers = useMemo(() => {
+        const map = new Map<number, () => void>()
+        for (const p of projects) {
+            map.set(p.id, () => setSelectedProject(p))
+        }
+        return map
+    }, [projects])
 
+    const handleClose = useCallback(() => setSelectedProject(null), [])
 
     if (!projects || projects.length === 0) {
         return <p>No projects available.</p>;
@@ -84,7 +83,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                                     key={project.id}
                                     project={project}
                                     isSelected={selectedProject?.id === project.id}
-                                    onClick={() => setSelectedProject(project)}
+                                    onClick={selectHandlers.get(project.id) as () => void}
                                 />
                             ))}
                         </div>
@@ -105,7 +104,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                     <div className="relative w-full max-w-lg bg-background rounded-lg p-6 shadow-lg overflow-y-auto max-h-[90vh]">
                         <button
                             className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
-                            onClick={() => setSelectedProject(null)}
+                            onClick={handleClose}
                         >
                             <X className="h-5 w-5" />
                         </button>
@@ -117,7 +116,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     );
 }
 
-export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) {
+export const ProjectCard = memo(function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) {
     return (
 
         <Card
@@ -193,9 +192,9 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
             </CardFooter>
         </Card>
     )
-}
+})
 
-function ExpandedProjectCard({ project }) {
+const ExpandedProjectCard = memo(function ExpandedProjectCard({ project }: { project: Project }) {
     return (
         <div className="w-full max-w-xl mx-auto h-full flex flex-col justify-center">
             <div className="space-y-8">
@@ -243,7 +242,7 @@ function ExpandedProjectCard({ project }) {
                     )}
 
                     {project.demoUrl && (
-                        <Button variant="secondary" className="w-full border-amber-50 text-card-foreground hover:bg-card-foreground transition-all" asChild>
+                        <Button variant="secondary" className="w-full text-card-foreground hover:bg-secondary/80 transition-all" asChild>
                             <Link
                                 href={project.demoUrl}
                                 target="_blank"
@@ -260,4 +259,4 @@ function ExpandedProjectCard({ project }) {
             </div>
         </div>
     )
-}
+})
