@@ -197,7 +197,7 @@ export function ProjectCard({ project, isSelected, onClick }: ProjectCardProps) 
 
 function ExpandedProjectCard({ project }) {
     return (
-        <div className="w-full max-w-md mx-auto h-full flex flex-col justify-center">
+        <div className="w-full max-w-xl mx-auto h-full flex flex-col justify-center">
             <div className="space-y-8">
                 <div>
                     <h3 className="text-3xl font-bold text-card-foreground mb-4">{project.title}</h3>

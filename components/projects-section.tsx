@@ -13,6 +13,16 @@ const projects = [
 
   {
     id: 1,
+    title: "Financial Dashboard – Supabase Integration",
+    description: "Responsive dashboard with Supabase (auth, realtime, storage) built using Next.js, TailwindCSS, and ShadCN.",
+    category: "Cross-platform",
+    projectType: "Personal Project",
+    technologies: ["React 19", "Next.js 15", "Supabase", "TailwindCSS", "ShadCN", "TypeScript"],
+    githubUrl: "https://github.com/sabasiddique1/financial-dashboard-supabase",
+    demoUrl: "https://financial-dashboard-supabase-r2su.vercel.app/",
+  },
+  {
+    id: 2,
     title: "Vaultix - Cloud Storage App",
     description:
         "A cloud storage app for easy file management with secure sharing options and high scalability.",
@@ -22,9 +32,9 @@ const projects = [
     githubUrl: "https://github.com/sabasiddique1/Vaultix.git",
     demoUrl: "https://vaultix-5ndl.vercel.app/sign-in",
   },
-
+  
   {
-    id: 8,
+    id: 3,
     title: "Task Management App",
     description:
         "A simple yet effective task management tool to help users track and organize their daily tasks.",
@@ -35,7 +45,17 @@ const projects = [
     demoUrl: "https://v0-mern-task-management-rho.vercel.app/login"
   },
   {
-    id: 7,
+    id: 4,
+    title: "Rapid API Hub Clone",
+    description: "RapidAPI Hub clone with API browsing and testing flows, built with Next.js, TypeScript, and TailwindCSS.",
+    category: "Cross-platform",
+    projectType: "Collaborative Project",
+    technologies: ["Vercel", "Next.js", "TailwindCSS", "ShadCN", "Axios"],
+    githubUrl: "https://github.com/sabasiddique1/rapid-api-hub",
+    demoUrl: "https://rapid-api-hub.vercel.app/"
+  },
+  {
+    id: 5,
     title: "Web Scraping App",
     description:
         "A web scraping app that extracts valuable data from websites for analysis and research.",
@@ -46,7 +66,7 @@ const projects = [
     demoUrl: "https://web-scrapper-app-kappa.vercel.app/",
   },
 {
-    id: 5,
+    id: 6,
     title: "NFT Detail Page – Web3 UI",
     description:
         "Built NFT detail UI with Next.js & Tailwind, featuring timer and metadata display.",
@@ -57,7 +77,7 @@ const projects = [
     demoUrl: "https://nft-detail-screen.vercel.app/",
   },
   {
-    id: 13,
+    id: 7,
     title: "Portfolio - Project Showcase App",
     description:
         "A project showcase website highlighting experience, skills, work history.",
@@ -68,7 +88,7 @@ const projects = [
     demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
   },
   {
-    id: 4,
+    id: 8,
     title: "Pokedex - Pokemon App",
     description:
         "A fun and interactive Pokedex app that allows users to explore and search through a collection of Pokemon.",
@@ -79,7 +99,7 @@ const projects = [
     demoUrl: "https://pokedex-app-sigma-silk.vercel.app/pokemon",
   },
   {
-    id: 12,
+    id: 9,
     title: "Miniature App",
     description:
         "A collection of small, functional web apps built with JavaScript to demonstrate core logic and UI concepts in a lightweight format.",
@@ -90,7 +110,7 @@ const projects = [
     demoUrl: "https://miniatureapps.vercel.app/",
   },
   {
-    id: 2,
+    id: 10,
     title: "Event_Bazaar - Event Management App",
     description:
         "An event management app that allows users to organize, manage, and attend events easily.",
@@ -101,7 +121,7 @@ const projects = [
     demoUrl: "https://event-bazaar-3fht.vercel.app/",
   },
   {
-    id: 9,
+    id: 11,
     title: "VPC+",
     description:
         "Cloud-based SaaS for end-to-end multi-cloud migrations, disaster recovery, cost optimization, and compliance tracking. Fixed key bugs and improved overall stability.",
@@ -111,7 +131,7 @@ const projects = [
     demoUrl: "https://www.wanclouds.net/vpc+",
   },
   {
-    id: 10,
+    id: 12,
     title: "SECMON AI",
     description:
         "AI-focused security platform offering real-time observability, access control, and automated vulnerability management for AI and LLM deployments.",
@@ -119,6 +139,27 @@ const projects = [
     projectType: "Company Project",
     technologies:  ["React.js", "Next.js", "TailwindCSS", "Python", "ML Integration"],
   },
+  {
+    id: 13,
+    title: "EasyLlama",
+    description:
+        "Compliance training platform interfaces built with a modern React stack.",
+    category: "Company Project",
+    projectType: "Company Project",
+    technologies: ["Next.js", "TailwindCSS", "ShadCN"],
+    demoUrl: "",
+  },
+  {
+    id: 14,
+    title: "SendScale",
+    description:
+        "Messaging and delivery platform with robust monitoring and UI tooling.",
+    category: "Company Project",
+    projectType: "Company Project",
+    technologies: ["Next.js", "NestJS", "Ant Design", "TailwindCSS", "Sentry"],
+    demoUrl: "",
+  },
+  
   // {
   //   id: 3,
   //   title: "Nexura - A Fintech Banking App",
