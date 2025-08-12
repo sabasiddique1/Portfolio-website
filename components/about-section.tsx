@@ -54,7 +54,7 @@ export function AboutSection() {
   }
 
   return (
-      <section id="about" className="py-20 md:28" ref={sectionRef}>
+      <section id="about" className="py-20 md:py-28" ref={sectionRef}>
 
         <div className="container px-4 md:px-6">
           <motion.div
@@ -149,7 +149,7 @@ export function AboutSection() {
   )
 }
 
-function StatCard({ icon, title, value, unit }) {
+function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: string; value: string; unit: string }) {
   return (
       <Card className="bg-card border-0 p-5 transition-all duration-300">
         <div className="flex items-center gap-4">

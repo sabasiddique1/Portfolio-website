@@ -9,7 +9,16 @@ import { Github, ExternalLink, Code, Layers } from "lucide-react"
 import ProjectShowCase from "@/components/project-card"
 import { SectionHeading } from "@/components/section-heading"
 import { useRef } from "react"
-const projects = [
+const projects: Array<{
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  projectType: string;
+  technologies: string[];
+  githubUrl?: string;
+  demoUrl: string;
+}> = [
 
   {
     id: 1,
@@ -138,6 +147,7 @@ const projects = [
     category: "Web App",
     projectType: "Company Project",
     technologies:  ["React.js", "Next.js", "TailwindCSS", "Python", "ML Integration"],
+    demoUrl: "#",
   },
   {
     id: 13,
@@ -147,7 +157,7 @@ const projects = [
     category: "Company Project",
     projectType: "Company Project",
     technologies: ["Next.js", "TailwindCSS", "ShadCN"],
-    demoUrl: "",
+    demoUrl: "#",
   },
   {
     id: 14,
@@ -157,7 +167,7 @@ const projects = [
     category: "Company Project",
     projectType: "Company Project",
     technologies: ["Next.js", "NestJS", "Ant Design", "TailwindCSS", "Sentry"],
-    demoUrl: "",
+    demoUrl: "#",
   },
   
   // {
