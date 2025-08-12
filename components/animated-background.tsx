@@ -5,7 +5,7 @@ import { useTheme } from "next-themes"
 
 export function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -31,9 +31,12 @@ export function AnimatedBackground() {
     const particlesArray: Particle[] = []
     const numberOfParticles = Math.min(width, height) / 8 // More particles
 
-    // Colors based on theme
+    // Colors based on effective theme (handles initial load correctly)
     const getColors = () => {
-      return theme === "dark"
+      const isDark =
+        resolvedTheme === "dark" ||
+        (resolvedTheme == null && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
+      return isDark
         ? ["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.2)"]
         : ["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.08)"]
     }
@@ -120,8 +123,12 @@ export function AnimatedBackground() {
 
           if (distance < maxDistance) {
             const opacity = 1 - distance / maxDistance
-            ctx.strokeStyle =
-              theme === "dark" ? `rgba(255, 255, 255, ${opacity * 0.15})` : `rgba(0, 0, 0, ${opacity * 0.1})`
+            const isDark =
+              resolvedTheme === "dark" ||
+              (resolvedTheme == null && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
+            ctx.strokeStyle = isDark
+              ? `rgba(255, 255, 255, ${opacity * 0.15})`
+              : `rgba(0, 0, 0, ${opacity * 0.1})`
             ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y)
@@ -150,7 +157,7 @@ export function AnimatedBackground() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [theme])
+  }, [resolvedTheme])
 
   return <canvas ref={canvasRef} className="absolute inset-0 -z-10" style={{ opacity: 0.6 }} />
 }
