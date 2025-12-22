@@ -1,15 +1,16 @@
 "use client"
 
-import { useState } from "react"
 import { motion, useInView } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Github, ExternalLink, Code, Layers } from "lucide-react"
-import ProjectShowCase from "@/components/project-card"
 import { SectionHeading } from "@/components/section-heading"
 import { useRef } from "react"
-const projects: Array<{
+import { projects } from "@/constants/projects"
+import { ProjectCarousel } from "@/components/project-carousel"
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+
+// Legacy projects array - keeping for reference but using constants/projects.ts instead
+const _legacyProjects: Array<{
   id: number;
   title: string;
   description: string;
@@ -221,24 +222,54 @@ const projects: Array<{
 ];
 
 export function ProjectsSection() {
-  const [expandedId, setExpandedId] = useState<number | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: false, amount: 0.1 })
 
-  const handleExpand = (id: number) => {
-    setExpandedId(expandedId === id ? null : id)
-  }
+  // Show only featured projects (first 6) on homepage
+  const featuredProjects = projects.slice(0, 6)
 
   return (
-      <section id="projects" className="py-24 md:py-28">
+      <section id="projects" ref={sectionRef} className="py-24 md:py-28">
         <div className="container px-4 md:px-6">
-          <SectionHeading title="Selected Work" subtitle="Explore my recent projects" />
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-10">
+              <div>
+                <motion.span
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  className="text-sm text-primary uppercase tracking-wider"
+                >
+                  Selected Work
+                </motion.span>
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.1 }}
+                  className="text-3xl md:text-4xl font-bold mt-3"
+                >
+                  Recent projects
+                </motion.h2>
+              </div>
+              <Link
+                href="/projects"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+              >
+                View all
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
 
-                <ProjectShowCase
-                    projects={projects}
-                    // key={project.id}
-                    // project={project}
-                    // isExpanded={expandedId === project.id}
-                    // onExpand={() => handleExpand(project.id)}
-                />
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-8"
+            >
+              <ProjectCarousel projects={featuredProjects} />
+            </motion.div>
+          </div>
         </div>
       </section>
   )

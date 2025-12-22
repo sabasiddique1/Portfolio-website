@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Mail, Send, Github, Linkedin } from "lucide-react"
-import { FaDiscord } from "react-icons/fa";
+import { Mail, Send, Github, Linkedin, ArrowUpRight } from "lucide-react"
+import { SiKaggle, SiDiscord, SiNotion, SiMedium } from "react-icons/si"
 import emailjs from "@emailjs/browser"
 
 export function ContactSection() {
@@ -229,37 +229,88 @@ export function ContactSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-12 flex flex-col items-center space-y-4"
+            className="mt-12 flex flex-col items-center space-y-6"
           >
             <div className="flex items-center space-x-2">
               <Mail className="h-5 w-5 text-muted-foreground" />
               <span>sabasiddique001@gmail.com</span>
             </div>
-            <div className="flex space-x-4">
-              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="https://github.com/sabasiddique1" target="_blank" rel="noopener noreferrer">
-                    <Github className="h-5 w-5" />
-                    <span className="sr-only">GitHub</span>
-                  </a>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="www.linkedin.com/in/sabaa-siddique-26b6a31a5" target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="h-5 w-5" />
-                    <span className="sr-only">LinkedIn</span>
-                  </a>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                <Button variant="ghost" size="icon" asChild className="rounded-full">
-                  <a href="https://discordapp.com/users" target="_blank" rel="noopener noreferrer">
-                    <FaDiscord className="h-5 w-5" />
-                    <span className="sr-only">Twitter</span>
-                  </a>
-                </Button>
-              </motion.div>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <motion.a
+                href="mailto:sabasiddique001@gmail.com"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Mail className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://github.com/sabasiddique1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://www.kaggle.com/sabasiddiquedev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SiKaggle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://discord.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SiDiscord className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://www.linkedin.com/in/sabaa-siddique-26b6a31a5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://probable-kite-c21.notion.site/WorkFolio-24535d194ff08006a22cd3113cf94263"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SiNotion className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
+              <motion.a
+                href="https://medium.com/@sabasiddique001"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SiMedium className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
             </div>
           </motion.div>
         </div>

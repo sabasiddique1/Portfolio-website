@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
@@ -11,6 +12,8 @@ import { motion } from "framer-motion"
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,9 +25,16 @@ export function Navbar() {
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false)
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+    
+    // If we're on the home page, scroll to the section
+    if (pathname === "/") {
+      const element = document.getElementById(id)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
+    } else {
+      // If we're on a different page, navigate to home with hash
+      router.push(`/#${id}`)
     }
   }
 
