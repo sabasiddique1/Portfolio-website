@@ -130,3 +130,4 @@ transition={{
 - Adjust `ANIMATION_DURATION` constant
 - Modify transition delays: `delay: index * 0.1`
 
+

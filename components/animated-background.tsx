@@ -11,11 +11,12 @@ export function AnimatedBackground() {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext("2d", { alpha: false })
     if (!ctx) return
 
     let width = window.innerWidth
     let height = window.innerHeight
+    let isAnimating = true
 
     const resizeCanvas = () => {
       width = window.innerWidth
@@ -139,8 +140,10 @@ export function AnimatedBackground() {
       }
     }
 
+    let animationFrameId: number | null = null
+    
     const animate = () => {
-      if (!ctx) return
+      if (!ctx || !isAnimating) return
       ctx.clearRect(0, 0, width, height)
 
       for (let i = 0; i < particlesArray.length; i++) {
@@ -148,16 +151,36 @@ export function AnimatedBackground() {
         particlesArray[i].draw()
       }
       connect()
-      requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     init()
     animate()
 
     return () => {
+      isAnimating = false
       window.removeEventListener("resize", resizeCanvas)
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId)
+      }
     }
   }, [resolvedTheme])
 
-  return <canvas ref={canvasRef} className="absolute inset-0 -z-10" style={{ opacity: 0.6 }} />
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="absolute inset-0 pointer-events-none" 
+      style={{ 
+        opacity: 0.6,
+        zIndex: 0,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%'
+      }} 
+    />
+  )
 }
