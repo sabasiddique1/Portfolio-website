@@ -3,10 +3,11 @@
 import { useInView, motion } from "framer-motion"
 import { useRef } from "react"
 import { Card } from "@/components/ui/card"
-import { Clock, Award, Star, Code, Briefcase,  } from "lucide-react"
+import { Clock, Award, Star, Code, Briefcase, FileText, Mail, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import {SectionHeading} from "@/components/section-heading";
+import {SectionHeading} from "@/components/section-heading"
+import { ResumePreview } from "@/components/resume-preview"
 
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -72,12 +73,6 @@ export function AboutSection() {
             {/*    transition={{ duration: 0.6 }}*/}
             {/*>*/}
               <SectionHeading title="About Me" />
-              <motion.span
-                  className="absolute -bottom-2 left-0 h-1 bg-primary rounded-full"
-                  initial={{ width: 0 }}
-                  animate={isInView ? { width: "100%" } : { width: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-              />
             {/*</motion.h2>*/}
           </div>
         </div>
@@ -92,7 +87,7 @@ export function AboutSection() {
             </div>
 
             <div className="flex-1">
-              <motion.p
+              <motion.div
                   className="pt-5 text-muted-foreground"
                   initial={{ opacity: 0 }}
                   animate={isInView ? { opacity: 1 } : { opacity: 0 }}
@@ -111,24 +106,46 @@ export function AboutSection() {
                     Proficient in React, Next.js, Tailwind CSS, MUI, and Ant Design. Experienced in full-stack development with Node.js, Express, PostgreSQL, and REST APIs. Familiar with AI integrations using Python, NumPy, and Pandas. Strong team player in Agile setups, focused on shipping clean, scalable, production-ready solutions.
                   </motion.p>
                 </motion.div>
-              </motion.p>
-              <div className="flex gap-4 pt-10">
-                {/** Configure resume URL via env or fallback to local public file */}
-                <a href={process.env.NEXT_PUBLIC_RESUME_URL || "/resumee.pdf"} download>
+              </motion.div>
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 pt-10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <ResumePreview>
                   <Button
-                      variant="outline"
-                      className="w-full relative text-primary-foreground hover:text-card bg-primary/90 hover:bg-primary/80 overflow-hidden group"
+                    variant="default"
+                    size="lg"
+                    className="w-full group relative overflow-hidden bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-primary/30"
                   >
-                    Download CV
+                    <FileText className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                    <span>View Resume</span>
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "100%" }}
+                      transition={{ duration: 0.6 }}
+                    />
                   </Button>
-                </a>
+                </ResumePreview>
 
-                <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's%20Work%20Together&body=Hi%20there%2C%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect...">
-                  <Button variant="secondary" className=" w-full hover:bg-zinc-200 transition-all">
-                    Contact Me
+                <a 
+                  href="mailto:sabasiddiqdev@gmail.com?subject=Let's%20Work%20Together&body=Hi%20there%2C%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect..."
+                  className="w-full"
+                >
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="w-full group relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:bg-accent/50"
+                  >
+                    <Mail className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+                    <span>Contact Me</span>
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </a>
-              </div>
+              </motion.div>
             </div>
           </div>
 

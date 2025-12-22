@@ -30,7 +30,7 @@ export function SectionHeading({ title, subtitle, className = "" }: SectionHeadi
                 >
                     {title}
                     <motion.span
-                        className="absolute -bottom-2 left-0 h-[2px] bg-gradient-to-r from-transparent via-gray-400/50 dark:via-gray-500/40 to-transparent rounded-full"
+                        className="absolute -bottom-2 left-0 h-[3px] bg-gradient-to-r from-transparent via-primary/80 to-transparent rounded-full"
                         initial={{ width: 0 }}
                         animate={isInView ? { width: "100%" } : { width: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}

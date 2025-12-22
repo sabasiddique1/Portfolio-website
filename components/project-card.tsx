@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import Link from "next/link"
-import { ExternalLink, Github, Info, X } from "lucide-react"
+import { ExternalLink, Github, Info, X, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,7 @@ type Project = {
     technologies: string[]
     githubUrl?: string
     demoUrl: string
+    slug?: string
 }
 
 interface ProjectCardProps {
@@ -223,37 +224,54 @@ const ExpandedProjectCard = memo(function ExpandedProjectCard({ project }: { pro
                             </Badge>
                     </div>
                 </div>
-                <div className="flex gap-4 pt-4">
-                    {project.githubUrl && (
+                <div className="flex flex-col gap-3 pt-4">
+                    {project.slug && (
                         <Button
                             className="w-full bg-primary/90 hover:bg-primary/80 overflow-hidden group"
                             asChild
                         >
                             <Link
-                                href={project.githubUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={`/projects/${project.slug}`}
                                 className="flex items-center justify-center gap-2"
                             >
-                                <Github className="h-5 w-5" />
-                                View Code
+                                View Details
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Link>
                         </Button>
                     )}
+                    <div className="flex gap-2">
+                        {project.githubUrl && (
+                            <Button
+                                variant="outline"
+                                className="flex-1"
+                                asChild
+                            >
+                                <Link
+                                    href={project.githubUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center gap-2"
+                                >
+                                    <Github className="h-4 w-4" />
+                                    Code
+                                </Link>
+                            </Button>
+                        )}
 
-                    {project.demoUrl && (
-                        <Button variant="secondary" className="w-full text-card-foreground hover:bg-secondary/80 transition-all" asChild>
-                            <Link
-                                href={project.demoUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2"
-                            >
-                                <ExternalLink className="h-5 w-5" />
-                                Live Demo
-                            </Link>
-                        </Button>
-                    )}
+                        {project.demoUrl && project.demoUrl !== "#" && (
+                            <Button variant="outline" className="flex-1" asChild>
+                                <Link
+                                    href={project.demoUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center gap-2"
+                                >
+                                    <ExternalLink className="h-4 w-4" />
+                                    Demo
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
             </div>

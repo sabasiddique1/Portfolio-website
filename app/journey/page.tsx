@@ -2,10 +2,12 @@
 
 import { useRef, useEffect, useState } from "react"
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion"
-import { CalendarDays, MapPin, Briefcase } from "lucide-react"
-import { SectionHeading } from "@/components/section-heading"
+import { ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 import { Badge } from "@/components/ui/badge"
+import { CalendarDays, MapPin } from "lucide-react"
 
 const experiences = [
   {
@@ -51,7 +53,6 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
   const titleY = useTransform(cardProgress, [0, 1], [50, -50])
   const opacity = useTransform(cardProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0.3])
   
-  // Background color based on card progress - creates a glow effect when card is in focus
   const backgroundColor = useTransform(
     cardProgress,
     [0, 0.5, 1],
@@ -62,27 +63,31 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
     ]
   )
 
+  // Calculate dot opacity and scale based on scroll progress
+  const dotProgress = useTransform(
+    scrollYProgress,
+    [(index + 0.5) / (total + 2), (index + 1.5) / (total + 2)],
+    [0, 1]
+  )
+  const dotScale = useTransform(dotProgress, [0, 0.5, 1], [0.5, 1, 1])
+  const dotOpacity = useTransform(dotProgress, [0, 0.3, 1], [0.3, 1, 1])
+
   return (
     <motion.div
       id={`experience-${experience.id}`}
       style={{ opacity, background: backgroundColor }}
       className="w-screen h-screen flex items-center px-6 md:px-12 shrink-0 relative transition-colors duration-500"
     >
-      {/* Glowing neon line - appears for all experiences */}
-      <div
-        className="absolute left-0 top-1/2 -translate-y-1/2 h-[50%] w-px"
+      {/* Dot - positioned on the continuous line */}
+      <motion.div
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-20"
         style={{
-          background: "linear-gradient(180deg, transparent, hsl(var(--primary)), hsl(var(--primary)), transparent)",
-          boxShadow: "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))",
-        }}
-      />
-
-      {/* Status indicator - appears for all experiences */}
-      <div
-        className="absolute left-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full"
-        style={{
-          background: "hsl(var(--primary))",
-          boxShadow: "0 0 20px hsl(var(--primary))",
+          background: isCurrent ? "hsl(var(--primary))" : "hsl(var(--primary))",
+          boxShadow: isCurrent 
+            ? "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))"
+            : "0 0 10px hsl(var(--primary))",
+          scale: dotScale,
+          opacity: dotOpacity,
         }}
       />
 
@@ -91,7 +96,6 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
           {experience.role}
         </motion.span>
 
-        {/* Company name as highlighted tag */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -110,7 +114,6 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
           </Badge>
         </motion.div>
 
-        {/* Period */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -122,19 +125,6 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
           <span>{experience.period}</span>
         </motion.div>
 
-        {/* Location */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="flex items-center gap-2 text-muted-foreground mb-6"
-        >
-          <MapPin className="w-4 h-4" />
-          <span>{experience.location}</span>
-        </motion.div>
-
-        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -145,7 +135,6 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
           {experience.description}
         </motion.p>
 
-        {/* Skills */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -189,14 +178,12 @@ function ProgressDot({
   )
 }
 
-export function ExperienceSection() {
+export default function JourneyPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
   const [scrollWidth, setScrollWidth] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: false, amount: 0.1 })
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -223,12 +210,19 @@ export function ExperienceSection() {
     return () => window.removeEventListener("resize", updateDimensions)
   }, [])
 
-  // For reduced motion, use vertical scroll instead
   if (prefersReducedMotion) {
     return (
-      <section id="experience" ref={sectionRef} className="py-20 md:py-28">
-        <div className="container px-4 md:px-6">
-          <div className="max-w-4xl mx-auto space-y-16">
+      <div className="min-h-screen pt-24 pb-20 px-4 md:px-6">
+        <div className="container max-w-4xl mx-auto">
+          <div className="mb-6">
+            <Link href="/#experience">
+              <Button variant="ghost">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+          <div className="space-y-16">
             {experiences.map((experience) => (
               <div key={experience.id} className="relative pl-8">
                 <div className="absolute left-0 top-0 bottom-0 w-px bg-primary/20" />
@@ -252,36 +246,49 @@ export function ExperienceSection() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
     )
   }
 
   return (
-    <section id="experience" ref={sectionRef} className="relative">
+    <div className="relative">
+      <div className="fixed top-6 left-6 z-50">
+        <Link href="/#experience">
+          <Button variant="ghost" className="bg-background/80 backdrop-blur-sm">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
+      </div>
 
       <div ref={containerRef} className="h-[400vh] relative">
-        {/* Background color changer based on scroll */}
-        <motion.div
-          className="fixed inset-0 -z-10"
-          style={{
-            background: useTransform(
-              scrollYProgress,
-              [0, 0.25, 0.5, 0.75, 1],
-              [
-                "radial-gradient(circle at 20% 50%, hsl(var(--primary))/5 0%, transparent 50%)",
-                "radial-gradient(circle at 50% 50%, hsl(var(--primary))/10 0%, transparent 50%)",
-                "radial-gradient(circle at 80% 50%, hsl(var(--secondary))/10 0%, transparent 50%)",
-                "radial-gradient(circle at 50% 50%, hsl(var(--primary))/5 0%, transparent 50%)",
-                "radial-gradient(circle at 20% 50%, hsl(var(--primary))/5 0%, transparent 50%)",
-              ]
-            ),
-          }}
-        />
+        {/* Continuous vertical timeline line */}
+        <div className="fixed left-0 top-0 bottom-0 w-px overflow-hidden z-0">
+          {/* Static background line */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/20 to-transparent" />
+          
+          {/* Animated shiny line that grows */}
+          <motion.div
+            className="absolute top-0 left-0 w-full"
+            style={{
+              height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary to-primary/50" />
+          </motion.div>
+          
+          {/* Glowing dot that travels down */}
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full"
+            style={{
+              top: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
+              boxShadow: "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))",
+            }}
+          />
+        </div>
 
-        {/* Sticky horizontal scroll container */}
         <div className="sticky top-0 h-screen overflow-hidden flex items-center pt-20">
           <motion.div ref={scrollRef} style={{ x }} className="flex gap-0">
-            {/* Intro section */}
             <div className="w-screen h-screen flex items-center justify-center px-6 md:px-12 shrink-0">
               <div className="max-w-2xl">
                 <motion.span
@@ -312,20 +319,9 @@ export function ExperienceSection() {
                 >
                   Scroll to explore my career journey and the companies I&apos;ve worked with.
                 </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                  className="mt-12 flex items-center gap-3 text-muted-foreground"
-                >
-                  <div className="w-12 h-px bg-white/20" />
-                  <span className="text-sm">Scroll to explore</span>
-                </motion.div>
               </div>
             </div>
 
-            {/* Experience cards */}
             {experiences.map((experience, index) => (
               <ExperienceCard
                 key={experience.id}
@@ -336,7 +332,6 @@ export function ExperienceSection() {
               />
             ))}
 
-            {/* End section */}
             <div className="w-screen h-screen flex items-center justify-center px-6 md:px-12 shrink-0">
               <div className="text-center max-w-xl">
                 <h2 className="text-3xl md:text-4xl mb-6 font-bold">The journey continues...</h2>
@@ -347,7 +342,6 @@ export function ExperienceSection() {
             </div>
           </motion.div>
 
-          {/* Progress indicator */}
           <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-50">
             {experiences.map((_, i) => (
               <ProgressDot key={i} index={i} total={experiences.length} scrollYProgress={scrollYProgress} />
@@ -355,6 +349,8 @@ export function ExperienceSection() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
+
+
