@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, useMemo } from "react"
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,10 +15,10 @@ const experiences = [
     role: "Full Stack Developer / UI UX Developer",
     company: "xNerds Solution",
     location: "Remote",
-    period: "Aug 2025 - Present",
+    period: "Aug 2025 - Dec 2025",
     description: "Developed reusable UI libraries and scalable dashboards using React, Next.js, and shadcn/UI. Improved frontend performance by 25% through optimized state management, lazy loading, and streamlined API/CI-CD collaboration.",
     skills: ["React.js", "Next.js", "ShadCN UI", "TypeScript", "State Management", "Lazy Loading", "CI/CD", "Performance Optimization"],
-    status: "current" as const,
+    status: "completed" as const,
   },
   {
     id: 2,
@@ -64,42 +64,9 @@ function ExperienceCard({ experience, index, total, scrollYProgress, activeDotIn
     ]
   )
 
-  // Calculate if line has reached this dot position
-  // Line reaches dot when scroll progress passes the start of this section
-  const lineProgress = useTransform(
-    scrollYProgress,
-    [(index + 1) / (total + 2), (index + 1.05) / (total + 2)],
-    [0, 1]
-  )
-  
-  // Dot should only glow if:
-  // 1. This is the active dot (based on scroll position)
-  // 2. Line has reached this position
-  const isDotActive = activeDotIndex === index
-  
-  const dotScale = useTransform(
-    lineProgress,
-    (progress) => {
-      if (!isDotActive || progress <= 0) return 0.8
-      return 1.2
-    }
-  )
-  
-  const dotOpacity = useTransform(
-    lineProgress,
-    (progress) => {
-      if (!isDotActive || progress <= 0) return 0.3
-      return 1
-    }
-  )
-  
-  const dotGlow = useTransform(
-    lineProgress,
-    (progress) => {
-      if (!isDotActive || progress <= 0) return "0 0 0px hsl(var(--primary))"
-      return "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))"
-    }
-  )
+  // Dot should only glow if this is the active dot (based on scroll position)
+  // Use useMemo to prevent unnecessary recalculations
+  const isDotActive = useMemo(() => activeDotIndex === index, [activeDotIndex, index])
 
   return (
     <motion.div
@@ -108,13 +75,9 @@ function ExperienceCard({ experience, index, total, scrollYProgress, activeDotIn
       className="w-screen h-screen flex items-center px-6 md:px-12 shrink-0 relative transition-colors duration-500"
     >
       {/* Dot - positioned on the continuous line */}
-      <motion.div
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-20 bg-primary"
-        style={{
-          scale: dotScale,
-          opacity: dotOpacity,
-          boxShadow: dotGlow,
-        }}
+      <div
+        className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 chronology-dot ${isDotActive ? 'chronology-dot-active' : ''}`}
+        aria-hidden="true"
       />
 
       <div className="max-w-xl ml-8 md:ml-16">
@@ -227,35 +190,78 @@ export default function JourneyPage() {
 
   // Determine which dot should be active based on scroll progress
   // Only one dot glows at a time, based on scroll position
+  // Use refs and stable thresholds to prevent flickering
+  const lastActiveIndexRef = useRef<number>(-1)
+  const rafIdRef = useRef<number | null>(null)
+
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
+    const updateActiveDot = (latest: number) => {
       const total = experiences.length
+      let newActiveIndex = -1
+
       // Calculate which section we're in based on scroll progress
       // Each experience takes up 1/(total+2) of the scroll
+      // Use wider thresholds to prevent rapid switching
+      const threshold = 0.03 // 3% threshold for stability
+      
       for (let i = 0; i < total; i++) {
         const sectionStart = (i + 1) / (total + 2)
         const sectionEnd = (i + 2) / (total + 2)
+        const sectionCenter = (sectionStart + sectionEnd) / 2
         
-        // Check if scroll has reached this section's dot position
-        // Dot is at the start of each section
-        if (latest >= sectionStart && latest < sectionEnd) {
-          setActiveDotIndex(i)
+        // Use center-based detection with threshold to prevent flickering
+        if (latest >= sectionCenter - threshold && latest <= sectionCenter + threshold) {
+          newActiveIndex = i
           break
+        }
+        // Fallback: if we're in the section range (with hysteresis)
+        if (latest >= sectionStart && latest < sectionEnd) {
+          // Only switch if we're past the center or if no dot is currently active
+          if (latest >= sectionCenter || lastActiveIndexRef.current === -1) {
+            newActiveIndex = i
+            break
+          }
         }
       }
       
       // If we've scrolled past all experiences, keep the last one active
-      if (latest >= total / (total + 2)) {
-        setActiveDotIndex(total - 1)
+      if (latest >= (total + 1) / (total + 2)) {
+        newActiveIndex = total - 1
       }
       
       // If we're before the first experience, no dot is active
       if (latest < 1 / (total + 2)) {
-        setActiveDotIndex(-1)
+        newActiveIndex = -1
       }
+
+      // Only update state if the active index actually changed
+      // Use ref to persist across renders and prevent unnecessary updates
+      if (newActiveIndex !== lastActiveIndexRef.current) {
+        lastActiveIndexRef.current = newActiveIndex
+        setActiveDotIndex(newActiveIndex)
+      }
+    }
+
+    // Use requestAnimationFrame for smooth updates, but batch them
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // Cancel any pending RAF
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
+      
+      // Batch updates using RAF
+      rafIdRef.current = requestAnimationFrame(() => {
+        updateActiveDot(latest)
+        rafIdRef.current = null
+      })
     })
 
-    return () => unsubscribe()
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
+      unsubscribe()
+    }
   }, [scrollYProgress, experiences.length])
 
   useEffect(() => {

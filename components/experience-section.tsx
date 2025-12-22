@@ -13,10 +13,10 @@ const experiences = [
     role: "Full Stack Developer / UI UX Developer",
     company: "xNerds Solution",
     location: "Remote",
-    period: "Aug 2025 - Present",
+    period: "Aug 2025 - Dec 2025",
     description: "Developed reusable UI libraries and scalable dashboards using React, Next.js, and shadcn/UI. Improved frontend performance by 25% through optimized state management, lazy loading, and streamlined API/CI-CD collaboration.",
     skills: ["React.js", "Next.js", "ShadCN UI", "TypeScript", "State Management", "Lazy Loading", "CI/CD", "Performance Optimization"],
-    status: "current" as const,
+    status: "completed" as const,
   },
   {
     id: 2,

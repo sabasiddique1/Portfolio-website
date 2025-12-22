@@ -72,3 +72,51 @@
     -webkit-backdrop-filter: blur(8px);
   }
 }
+
+@keyframes chronology-dot-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4),
+                0 0 0 0 hsl(var(--primary) / 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 4px hsl(var(--primary) / 0),
+                0 0 0 8px hsl(var(--primary) / 0);
+    transform: scale(1.1);
+  }
+}
+
+@layer components {
+  /* Base dot - inactive state - NO ANIMATION */
+  .chronology-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: hsl(var(--muted-foreground) / 0.4);
+    border: 2px solid hsl(var(--background));
+    box-shadow: none !important;
+    transform: scale(1) !important;
+    animation: none !important;
+    transition: background-color 0.3s ease, 
+                border-color 0.3s ease;
+  }
+
+  /* Active dot - ONLY ONE should have this class at a time */
+  .chronology-dot-active {
+    background-color: hsl(var(--primary)) !important;
+    border-color: hsl(var(--primary)) !important;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.6),
+                0 0 40px hsl(var(--primary) / 0.3) !important;
+    animation: chronology-dot-pulse 2s ease-in-out infinite !important;
+    animation-fill-mode: both !important;
+  }
+  
+  /* CRITICAL: Ensure inactive dots NEVER have animation */
+  .chronology-dot:not(.chronology-dot-active) {
+    animation: none !important;
+    box-shadow: none !important;
+    transform: scale(1) !important;
+    background-color: hsl(var(--muted-foreground) / 0.4) !important;
+    border-color: hsl(var(--background)) !important;
+  }
+}
