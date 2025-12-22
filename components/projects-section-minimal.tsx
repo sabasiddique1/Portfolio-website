@@ -63,7 +63,7 @@ export function ProjectsSectionMinimal() {
                         {project.projectType}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground line-clamp-1">
+                    <p className="text-xs text-muted-foreground">
                       {project.description}
                     </p>
                   </div>

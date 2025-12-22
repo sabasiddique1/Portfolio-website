@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Github, ExternalLink, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
+import { ProjectImageCarousel } from "@/components/project-image-carousel"
 
 export default function ProjectsPage() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -52,18 +52,22 @@ export default function ProjectsPage() {
               whileHover={{ y: -8 }}
               className="group"
             >
-              <Card className="h-full flex flex-col hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 border-border/50 hover:border-primary/50">
-                {/* Project Image */}
-                {project.image && (
-                  <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                )}
+              <Card className="h-full flex flex-col hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 border-border/50 hover:border-primary/50 overflow-hidden">
+                {/* Project Image Carousel */}
+                {project.images && project.images.length > 0 ? (
+                  <ProjectImageCarousel
+                    images={project.images}
+                    title={project.title}
+                    autoSwitchInterval={3000}
+                    className="rounded-t-lg"
+                  />
+                ) : project.image ? (
+                  <ProjectImageCarousel
+                    images={[project.image]}
+                    title={project.title}
+                    className="rounded-t-lg"
+                  />
+                ) : null}
 
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -71,7 +75,7 @@ export default function ProjectsPage() {
                       {project.title}
                     </CardTitle>
                   </div>
-                  <CardDescription className="line-clamp-2">
+                  <CardDescription>
                     {project.description}
                   </CardDescription>
                   <div className="flex items-center gap-2 mt-2">
@@ -85,20 +89,6 @@ export default function ProjectsPage() {
                 </CardHeader>
 
                 <CardContent className="flex-1">
-                  {/* Challenge & Solution */}
-                  {project.challenge && (
-                    <div className="mb-4">
-                      <h4 className="text-sm font-semibold mb-2 text-muted-foreground">Challenge</h4>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{project.challenge}</p>
-                    </div>
-                  )}
-                  {project.solution && (
-                    <div className="mb-4">
-                      <h4 className="text-sm font-semibold mb-2 text-muted-foreground">Solution</h4>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{project.solution}</p>
-                    </div>
-                  )}
-
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-2 mt-4">
                     {project.technologies.slice(0, 6).map((tech, i) => (

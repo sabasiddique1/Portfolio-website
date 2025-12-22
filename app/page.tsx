@@ -1,5 +1,5 @@
 import { HeroSection } from "@/components/hero-section"
-import { ProjectsSectionMinimal } from "@/components/projects-section-minimal"
+import { FeaturedProjectsSection } from "@/components/featured-projects-section"
 import { AboutSection } from "@/components/about-section"
 import { SkillsTicker } from "@/components/skills-ticker"
 import { ExperienceSectionMinimal } from "@/components/experience-section-minimal"
@@ -12,7 +12,7 @@ export default function Home() {
     <main className="min-h-screen">
       <HeroSection />
       <SkillsTicker />
-      <ProjectsSectionMinimal />
+      <FeaturedProjectsSection />
       <AboutSection />
       <ExperienceSectionMinimal />
       <OpenSourceSection />

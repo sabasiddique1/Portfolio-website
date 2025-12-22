@@ -89,7 +89,7 @@ export function ProjectCarousel({ projects, showAll = false }: ProjectCarouselPr
                     </CardHeader>
 
                     <CardContent className="flex-grow">
-                      <p className="text-sm text-muted-foreground line-clamp-3">
+                      <p className="text-sm text-muted-foreground">
                         {project.description}
                       </p>
                     </CardContent>

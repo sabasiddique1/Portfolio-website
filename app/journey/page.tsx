@@ -42,11 +42,12 @@ const experiences = [
   },
 ]
 
-function ExperienceCard({ experience, index, total, scrollYProgress }: {
+function ExperienceCard({ experience, index, total, scrollYProgress, activeDotIndex }: {
   experience: typeof experiences[0]
   index: number
   total: number
   scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"]
+  activeDotIndex: number
 }) {
   const isCurrent = experience.status === "current"
   const cardProgress = useTransform(scrollYProgress, [(index + 0.5) / (total + 2), (index + 1.5) / (total + 2)], [0, 1])
@@ -63,14 +64,42 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
     ]
   )
 
-  // Calculate dot opacity and scale based on scroll progress
-  const dotProgress = useTransform(
+  // Calculate if line has reached this dot position
+  // Line reaches dot when scroll progress passes the start of this section
+  const lineProgress = useTransform(
     scrollYProgress,
-    [(index + 0.5) / (total + 2), (index + 1.5) / (total + 2)],
+    [(index + 1) / (total + 2), (index + 1.05) / (total + 2)],
     [0, 1]
   )
-  const dotScale = useTransform(dotProgress, [0, 0.5, 1], [0.5, 1, 1])
-  const dotOpacity = useTransform(dotProgress, [0, 0.3, 1], [0.3, 1, 1])
+  
+  // Dot should only glow if:
+  // 1. This is the active dot (based on scroll position)
+  // 2. Line has reached this position
+  const isDotActive = activeDotIndex === index
+  
+  const dotScale = useTransform(
+    lineProgress,
+    (progress) => {
+      if (!isDotActive || progress <= 0) return 0.8
+      return 1.2
+    }
+  )
+  
+  const dotOpacity = useTransform(
+    lineProgress,
+    (progress) => {
+      if (!isDotActive || progress <= 0) return 0.3
+      return 1
+    }
+  )
+  
+  const dotGlow = useTransform(
+    lineProgress,
+    (progress) => {
+      if (!isDotActive || progress <= 0) return "0 0 0px hsl(var(--primary))"
+      return "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))"
+    }
+  )
 
   return (
     <motion.div
@@ -80,14 +109,11 @@ function ExperienceCard({ experience, index, total, scrollYProgress }: {
     >
       {/* Dot - positioned on the continuous line */}
       <motion.div
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-20"
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-20 bg-primary"
         style={{
-          background: isCurrent ? "hsl(var(--primary))" : "hsl(var(--primary))",
-          boxShadow: isCurrent 
-            ? "0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary))"
-            : "0 0 10px hsl(var(--primary))",
           scale: dotScale,
           opacity: dotOpacity,
+          boxShadow: dotGlow,
         }}
       />
 
@@ -184,6 +210,8 @@ export default function JourneyPage() {
   const prefersReducedMotion = useReducedMotion()
   const [scrollWidth, setScrollWidth] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
+  const [activeDotIndex, setActiveDotIndex] = useState<number>(-1)
+  const cardRefs = experiences.map(() => useRef<HTMLDivElement>(null))
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -196,6 +224,39 @@ export default function JourneyPage() {
   })
 
   const x = useTransform(smoothProgress, [0, 1], ["0%", `-${Math.max(0, scrollWidth - windowWidth)}px`])
+
+  // Determine which dot should be active based on scroll progress
+  // Only one dot glows at a time, based on scroll position
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      const total = experiences.length
+      // Calculate which section we're in based on scroll progress
+      // Each experience takes up 1/(total+2) of the scroll
+      for (let i = 0; i < total; i++) {
+        const sectionStart = (i + 1) / (total + 2)
+        const sectionEnd = (i + 2) / (total + 2)
+        
+        // Check if scroll has reached this section's dot position
+        // Dot is at the start of each section
+        if (latest >= sectionStart && latest < sectionEnd) {
+          setActiveDotIndex(i)
+          break
+        }
+      }
+      
+      // If we've scrolled past all experiences, keep the last one active
+      if (latest >= total / (total + 2)) {
+        setActiveDotIndex(total - 1)
+      }
+      
+      // If we're before the first experience, no dot is active
+      if (latest < 1 / (total + 2)) {
+        setActiveDotIndex(-1)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [scrollYProgress, experiences.length])
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -323,13 +384,15 @@ export default function JourneyPage() {
             </div>
 
             {experiences.map((experience, index) => (
-              <ExperienceCard
-                key={experience.id}
-                experience={experience}
-                index={index}
-                total={experiences.length}
-                scrollYProgress={scrollYProgress}
-              />
+              <div key={experience.id} ref={cardRefs[index]}>
+                <ExperienceCard
+                  experience={experience}
+                  index={index}
+                  total={experiences.length}
+                  scrollYProgress={scrollYProgress}
+                  activeDotIndex={activeDotIndex}
+                />
+              </div>
             ))}
 
             <div className="w-screen h-screen flex items-center justify-center px-6 md:px-12 shrink-0">
