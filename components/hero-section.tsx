@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowDown } from "lucide-react"
+import { ArrowDown, Sparkles } from "lucide-react"
 import { AnimatedBackground } from "@/components/animated-background"
 
 export function HeroSection() {
@@ -54,6 +54,19 @@ export function HeroSection() {
       <motion.div className="container px-4 md:px-6 relative z-10" style={{ opacity, scale, y }}>
         <div className="flex flex-col items-center justify-center space-y-6 text-center">
           <motion.div className="space-y-4">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6"
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-primary/80 bg-primary/5 rounded-full backdrop-blur-sm">
+                <Sparkles className="w-4 h-4" />
+                Available for projects in 2025
+              </span>
+            </motion.div>
+
             <div className="relative">
               <motion.h1
                 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-primary/80 dark:text-primary/90"
