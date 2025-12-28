@@ -20,8 +20,8 @@ interface ResumePreviewProps {
 
 export function ResumePreview({ resumeUrl, children }: ResumePreviewProps) {
   const [open, setOpen] = useState(false)
-  // Use sabasiddique_frontendresume.pdf from public folder
-  const resumePath = resumeUrl || process.env.NEXT_PUBLIC_RESUME_URL || "/sabasiddique_frontendresume.pdf"
+  // Use Sabasiddique_frontendresume.pdf from public folder
+  const resumePath = resumeUrl || process.env.NEXT_PUBLIC_RESUME_URL || "/Sabasiddique_frontendresume.pdf"
 
   const handleDownload = () => {
     const link = document.createElement("a")

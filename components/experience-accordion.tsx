@@ -5,9 +5,7 @@ import { useRef } from "react"
 import { 
   CalendarDays, 
   MapPin, 
-  ArrowRight, 
   ExternalLink, 
-  TrendingUp, 
   Zap, 
   Code, 
   Rocket,
@@ -121,15 +119,8 @@ export function ExperienceAccordion() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4">
             <SectionHeading title="The path so far" />
-            <Link
-              href="/journey"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 group px-3 py-1.5 rounded-lg hover:bg-muted/50"
-            >
-              Full story
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
           </div>
         </motion.div>
 
