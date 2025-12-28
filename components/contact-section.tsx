@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,10 @@ import { useToast } from "@/hooks/use-toast"
 import { Mail, Send, Github, Linkedin, ArrowUpRight } from "lucide-react"
 import { SiKaggle, SiDiscord, SiNotion, SiMedium } from "react-icons/si"
 import emailjs from "@emailjs/browser"
+
+const EMAILJS_SERVICE_ID = "service_fy30kuj"
+const EMAILJS_TEMPLATE_ID = "template_rifrg0i"
+const EMAILJS_PUBLIC_KEY = "p-NcX4hQ1c0erpCWd"
 
 export function ContactSection() {
   const { toast } = useToast()
@@ -21,7 +25,13 @@ export function ContactSection() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 })
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY)
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -67,28 +77,59 @@ export function ContactSection() {
 
     try {
       const result = await emailjs.send(
-          "service_vdlakiq",
-          "template_rifrg0i",
-          {
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-          },
-          "p-NcX4hQ1c0erpCWd"
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+        EMAILJS_PUBLIC_KEY
       );
 
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
-      });
+      if (result.status === 200 || result.text === "OK") {
+        toast({
+          title: "Email sent successfully!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        });
 
-      setFormData({ name: "", email: "", message: "" });
-      e.currentTarget.reset(); // Optional but helpful
+        setFormData({ name: "", email: "", message: "" });
+        if (formRef.current) {
+          formRef.current.reset();
+        }
+      }
+    } catch (error: any) {
+      console.error("EmailJS error:", error);
+      let errorTitle = "Failed to send email";
+      let errorMessage = "Something went wrong. Please try again later.";
+      
+      // Check for specific error messages from EmailJS
+      if (error?.text) {
+        const errorText = error.text;
+        // Handle Gmail API connection issues
+        if (errorText.includes("Gmail_API")) {
+          if (errorText.includes("Invalid grant")) {
+            errorTitle = "Email service needs reconnection";
+            errorMessage = "The Gmail account needs to be reconnected in EmailJS. Please contact the site administrator.";
+          } else if (errorText.includes("insufficient authentication scopes")) {
+            errorTitle = "Email service permissions issue";
+            errorMessage = "The Gmail account doesn't have sufficient permissions. Please reconnect with all required permissions in EmailJS dashboard.";
+          } else {
+            errorTitle = "Email service configuration issue";
+            errorMessage = "There's an issue with the email service configuration. Please contact the site administrator.";
+          }
+        } else {
+          errorMessage = errorText;
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.response?.text) {
+        errorMessage = error.response.text;
+      }
 
-    } catch (error) {
       toast({
-        title: "Oops!",
-        description: "Something went wrong. Please try again later.",
+        title: errorTitle,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -157,6 +198,7 @@ export function ContactSection() {
 
         <div className="mx-auto mt-12 max-w-2xl">
           <motion.form
+            ref={formRef}
             variants={formVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}

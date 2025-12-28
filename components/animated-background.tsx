@@ -1,17 +1,22 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
 
 export function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || !mounted) return
 
-    const ctx = canvas.getContext("2d", { alpha: false })
+    const ctx = canvas.getContext("2d", { alpha: true })
     if (!ctx) return
 
     let width = window.innerWidth
@@ -30,16 +35,40 @@ export function AnimatedBackground() {
 
     // Particles configuration
     const particlesArray: Particle[] = []
-    const numberOfParticles = Math.min(width, height) / 8 // More particles
+    // Fewer, more subtle particles in light mode
+    const getIsDark = () => {
+      if (resolvedTheme === "dark") return true
+      if (resolvedTheme === "light") return false
+      if (typeof document !== "undefined") {
+        return document.documentElement.classList.contains("dark")
+      }
+      return false
+    }
+    const numberOfParticles = getIsDark()
+      ? Math.floor(Math.min(width, height) / 7)
+      : Math.floor(Math.min(width, height) / 12) // Fewer particles in light mode
 
     // Colors based on effective theme (handles initial load correctly)
     const getColors = () => {
-      const isDark =
-        resolvedTheme === "dark" ||
-        (resolvedTheme == null && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
+      // Check theme reliably - prioritize resolvedTheme
+      let isDark = false
+      
+      if (resolvedTheme === "dark") {
+        isDark = true
+      } else if (resolvedTheme === "light") {
+        isDark = false
+      } else if (resolvedTheme === "system" || resolvedTheme == null) {
+        // Check system preference or DOM class
+        if (typeof document !== "undefined") {
+          isDark = document.documentElement.classList.contains("dark")
+        } else if (typeof window !== "undefined") {
+          isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+        }
+      }
+      
       return isDark
         ? ["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.2)"]
-        : ["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.08)"]
+        : ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.06)"]
     }
 
     class Particle {
@@ -48,7 +77,7 @@ export function AnimatedBackground() {
       size: number
       speedX: number
       speedY: number
-      color: string
+      color: string = ""
       angle: number
       spin: number
 
@@ -60,6 +89,11 @@ export function AnimatedBackground() {
         this.speedY = Math.random() * 1 - 0.5
         this.angle = Math.random() * 360
         this.spin = Math.random() * 0.2 - 0.1
+        const colors = getColors()
+        this.color = colors[Math.floor(Math.random() * colors.length)]
+      }
+
+      updateColor() {
         const colors = getColors()
         this.color = colors[Math.floor(Math.random() * colors.length)]
       }
@@ -116,6 +150,22 @@ export function AnimatedBackground() {
       if (!ctx) return
       const maxDistance = 120
 
+      // Get theme state reliably
+      let isDark = false
+      
+      if (resolvedTheme === "dark") {
+        isDark = true
+      } else if (resolvedTheme === "light") {
+        isDark = false
+      } else if (resolvedTheme === "system" || resolvedTheme == null) {
+        // Check system preference or DOM class
+        if (typeof document !== "undefined") {
+          isDark = document.documentElement.classList.contains("dark")
+        } else if (typeof window !== "undefined") {
+          isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+        }
+      }
+
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
           const dx = particlesArray[a].x - particlesArray[b].x
@@ -124,12 +174,9 @@ export function AnimatedBackground() {
 
           if (distance < maxDistance) {
             const opacity = 1 - distance / maxDistance
-            const isDark =
-              resolvedTheme === "dark" ||
-              (resolvedTheme == null && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
             ctx.strokeStyle = isDark
               ? `rgba(255, 255, 255, ${opacity * 0.15})`
-              : `rgba(0, 0, 0, ${opacity * 0.1})`
+              : `rgba(0, 0, 0, ${opacity * 0.08})`
             ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y)
@@ -144,6 +191,7 @@ export function AnimatedBackground() {
     
     const animate = () => {
       if (!ctx || !isAnimating) return
+      // Clear with transparent background
       ctx.clearRect(0, 0, width, height)
 
       for (let i = 0; i < particlesArray.length; i++) {
@@ -154,24 +202,42 @@ export function AnimatedBackground() {
       animationFrameId = requestAnimationFrame(animate)
     }
 
-    init()
-    animate()
+    // Small delay to ensure canvas is ready
+    const initTimeout = setTimeout(() => {
+      init()
+      animate()
+    }, 50)
 
     return () => {
       isAnimating = false
+      clearTimeout(initTimeout)
       window.removeEventListener("resize", resizeCanvas)
       if (animationFrameId !== null) {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [resolvedTheme])
+  }, [resolvedTheme, mounted])
+
+  // Don't render until mounted to avoid hydration issues
+  if (!mounted) {
+    return (
+      <div 
+        className="absolute inset-0 pointer-events-none" 
+        style={{ 
+          opacity: 1,
+          zIndex: 0,
+          backgroundColor: 'transparent'
+        }} 
+      />
+    )
+  }
 
   return (
     <canvas 
       ref={canvasRef} 
       className="absolute inset-0 pointer-events-none" 
       style={{ 
-        opacity: 0.6,
+        opacity: 1,
         zIndex: 0,
         position: 'absolute',
         top: 0,
@@ -179,7 +245,8 @@ export function AnimatedBackground() {
         right: 0,
         bottom: 0,
         width: '100%',
-        height: '100%'
+        height: '100%',
+        backgroundColor: 'transparent'
       }} 
     />
   )

@@ -89,6 +89,7 @@ export const projects: Project[] = [
       "/rapid.png",
       "/rapid2.png",
     ],
+    featured: true,
   },
   {
     id: 5,
@@ -106,7 +107,6 @@ export const projects: Project[] = [
       "/scrape.png",
       "/scrape2.png",
     ],
-    featured: true,
   },
   {
     id: 6,

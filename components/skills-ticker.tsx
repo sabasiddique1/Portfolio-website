@@ -22,22 +22,22 @@ import {
 
 export function SkillsTicker() {
   const skills = [
-    { icon: <Code className="h-5 w-5" />, name: "JavaScript" },
-    { icon: <Figma className="h-5 w-5" />, name: "Figma" },
-    { icon: <Layers className="h-5 w-5" />, name: "React" },
-    { icon: <PenTool className="h-5 w-5" />, name: "Illustrator" },
-    { icon: <Smartphone className="h-5 w-5" />, name: "Mobile Design" },
-    { icon: <Globe className="h-5 w-5" />, name: "Web Development" },
-    { icon: <Database className="h-5 w-5" />, name: "SQL" },
-    { icon: <Cpu className="h-5 w-5" />, name: "TypeScript" },
-    { icon: <Terminal className="h-5 w-5" />, name: "Node.js" },
-    { icon: <Layout className="h-5 w-5" />, name: "UI/UX" },
-    { icon: <Zap className="h-5 w-5" />, name: "Next.js" },
-    { icon: <Server className="h-5 w-5" />, name: "AWS" },
-    { icon: <Palette className="h-5 w-5" />, name: "Design Systems" },
-    { icon: <Monitor className="h-5 w-5" />, name: "Responsive Design" },
-    { icon: <GitBranch className="h-5 w-5" />, name: "Git" },
-    { icon: <Cloud className="h-5 w-5" />, name: "Cloud Services" },
+    { icon: Code, name: "JavaScript" },
+    { icon: Figma, name: "Figma" },
+    { icon: Layers, name: "React" },
+    { icon: PenTool, name: "Illustrator" },
+    { icon: Smartphone, name: "Mobile Design" },
+    { icon: Globe, name: "Web Development" },
+    { icon: Database, name: "SQL" },
+    { icon: Cpu, name: "TypeScript" },
+    { icon: Terminal, name: "Node.js" },
+    { icon: Layout, name: "UI/UX" },
+    { icon: Zap, name: "Next.js" },
+    { icon: Server, name: "AWS" },
+    { icon: Palette, name: "Design Systems" },
+    { icon: Monitor, name: "Responsive Design" },
+    { icon: GitBranch, name: "Git" },
+    { icon: Cloud, name: "Cloud Services" },
   ]
 
   // Duplicate the skills array to create a seamless loop
@@ -56,19 +56,22 @@ export function SkillsTicker() {
             ease: "linear",
           }}
         >
-          {duplicatedSkills.map((skill, index) => (
-            <motion.div
-              key={index}
-              className="flex items-center gap-2"
-              whileHover={{ scale: 1.1, color: "var(--primary)" }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background shadow-sm">
-                {skill.icon}
-              </div>
-              <span className="text-sm font-medium">{skill.name}</span>
-            </motion.div>
-          ))}
+          {duplicatedSkills.map((skill, index) => {
+            const IconComponent = skill.icon
+            return (
+              <motion.div
+                key={index}
+                className="flex items-center gap-2 group"
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background shadow-sm">
+                  <IconComponent className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{skill.name}</span>
+              </motion.div>
+            )
+          })}
         </motion.div>
       </div>
     </section>

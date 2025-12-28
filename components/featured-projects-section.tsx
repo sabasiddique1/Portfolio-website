@@ -61,65 +61,72 @@ export function FeaturedProjectsSection() {
                 transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
                 className="group"
               >
-                <div className="h-full p-6 border border-border/50 rounded-lg hover:border-primary/30 transition-colors duration-300 bg-background/50">
-                  {/* Project Image Carousel */}
-                  {(project.images && project.images.length > 0) && (
-                    <ProjectImageCarousel
-                      images={project.images}
-                      title={project.title}
-                      autoSwitchInterval={3000}
-                      className="mb-4 rounded-lg"
-                    />
-                  )}
-
-                  {/* Project Title */}
-                  <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {project.description}
-                  </p>
-
-                  {/* Tech tags (max 4) */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.slice(0, 4).map((tech, i) => (
-                      <span
-                        key={i}
-                        className="text-xs px-2 py-1 rounded-md bg-primary/10 text-primary/80 border border-primary/20"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Actions - GitHub + Live (aligned right) */}
-                  <div className="flex items-center justify-end gap-2 pt-4 border-t border-border/30">
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-md hover:bg-accent transition-colors"
-                        aria-label={`View ${project.title} on GitHub`}
-                      >
-                        <Github className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
-                      </a>
+                <Link href={`/projects/${project.slug}`} className="block h-full">
+                  <div className="h-full p-6 border border-border/50 rounded-lg hover:border-primary/30 transition-all duration-300 bg-background/50 hover:shadow-lg cursor-pointer">
+                    {/* Project Image Carousel */}
+                    {(project.images && project.images.length > 0) && (
+                      <ProjectImageCarousel
+                        images={project.images}
+                        title={project.title}
+                        autoSwitchInterval={3000}
+                        className="mb-4 rounded-lg"
+                      />
                     )}
-                    {project.demoUrl && project.demoUrl !== "#" && (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-md hover:bg-accent transition-colors"
-                        aria-label={`View ${project.title} live demo`}
-                      >
-                        <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
-                      </a>
-                    )}
+
+                    {/* Project Title */}
+                    <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Tech tags (max 4) */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.slice(0, 4).map((tech, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2 py-1 rounded-md bg-primary/10 text-primary/80 border border-primary/20"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Actions - GitHub + Live (aligned right) */}
+                    <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                      <span className="text-xs text-muted-foreground">View case study →</span>
+                      <div className="flex items-center gap-2">
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            onClick={(e) => e.stopPropagation()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-md hover:bg-accent transition-colors"
+                            aria-label={`View ${project.title} on GitHub`}
+                          >
+                            <Github className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
+                          </a>
+                        )}
+                        {project.demoUrl && project.demoUrl !== "#" && (
+                          <a
+                            href={project.demoUrl}
+                            onClick={(e) => e.stopPropagation()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-md hover:bg-accent transition-colors"
+                            aria-label={`View ${project.title} live demo`}
+                          >
+                            <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
