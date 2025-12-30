@@ -21,7 +21,7 @@ export default function Home() {
           if (element) {
             const navbarHeight = 64 // h-16 = 64px
             // Add extra offset for experience section to show the heading
-            const extraOffset = hash === "experience" ? 40 : 0
+            const extraOffset = hash === "experience" ? 80 : 0
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
             const offsetPosition = elementPosition - navbarHeight - extraOffset
             
