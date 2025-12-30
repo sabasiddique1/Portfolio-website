@@ -36,8 +36,8 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <HeroSection />
-      <SkillsTicker />
       <FeaturedProjectsSection />
+      <SkillsTicker />
       <AboutSection />
       <ExperienceAccordion />
       <OpenSourceSection />
