@@ -31,8 +31,10 @@ export function Navbar() {
       const element = document.getElementById(id)
       if (element) {
         const navbarHeight = 64 // h-16 = 64px
+        // Add extra offset for experience section to show the heading
+        const extraOffset = id === "experience" ? 40 : 0
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-        const offsetPosition = elementPosition - navbarHeight
+        const offsetPosition = elementPosition - navbarHeight - extraOffset
         
         window.scrollTo({
           top: offsetPosition,
