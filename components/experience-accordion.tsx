@@ -111,7 +111,7 @@ export function ExperienceAccordion() {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 })
 
   return (
-    <section id="experience" ref={sectionRef} className="px-6 py-24 bg-gradient-to-b from-background via-background to-secondary/5" style={{ scrollMarginTop: '144px' }}>
+    <section id="experience" ref={sectionRef} className="px-6 pt-16 pb-24 bg-gradient-to-b from-background via-background to-secondary/5">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
