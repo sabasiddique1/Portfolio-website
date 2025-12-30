@@ -82,7 +82,7 @@ export function AboutSection() {
           <div className="lg:col-span-8 bg-card  rounded-xl p-4 flex flex-col md:flex-row gap-8 items-center">
             <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white/80 shadow-xl flex-shrink-0">
               <Image
-                  src="/profile.png?height=200&width=200"
+                  src="/ChatGPT Image Dec 23, 2025, 02_41_59 PM.png?height=200&width=200"
                   alt="Profile" fill className="object-cover" />
             </div>
 

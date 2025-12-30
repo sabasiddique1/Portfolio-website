@@ -67,8 +67,8 @@ export function AnimatedBackground() {
       }
       
       return isDark
-        ? ["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.2)"]
-        : ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.06)"]
+        ? ["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.3)"]
+        : ["rgba(0, 0, 0, 0.15)", "rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.12)"]
     }
 
     class Particle {
@@ -175,8 +175,8 @@ export function AnimatedBackground() {
           if (distance < maxDistance) {
             const opacity = 1 - distance / maxDistance
             ctx.strokeStyle = isDark
-              ? `rgba(255, 255, 255, ${opacity * 0.15})`
-              : `rgba(0, 0, 0, ${opacity * 0.08})`
+              ? `rgba(255, 255, 255, ${opacity * 0.25})`
+              : `rgba(0, 0, 0, ${opacity * 0.15})`
             ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y)
