@@ -55,7 +55,7 @@ export function AboutSection() {
   }
 
   return (
-      <section id="about" className="py-20 md:py-28" ref={sectionRef}>
+      <section className="py-20 md:py-28" ref={sectionRef}>
 
         <div className="container px-4 md:px-6">
           <motion.div
