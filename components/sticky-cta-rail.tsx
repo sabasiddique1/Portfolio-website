@@ -62,7 +62,7 @@ export function StickyCtaRail() {
           aria-label="Send Email"
           title="Email"
         >
-          <a href="mailto:sabasiddique001@gmail.com?subject=Let's Connect">
+          <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's Connect">
             <Mail className="h-5 w-5" />
           </a>
         </Button>

@@ -31,8 +31,8 @@ export function Navbar() {
       const element = document.getElementById(id)
       if (element) {
         const navbarHeight = 64 // h-16 = 64px
-        // Add extra offset for experience section to show the heading
-        const extraOffset = id === "experience" ? 80 : 0
+        // Minimal offset for experience section to show all cards
+        const extraOffset = id === "experience" ? 0 : 0
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
         const offsetPosition = elementPosition - navbarHeight - extraOffset
         

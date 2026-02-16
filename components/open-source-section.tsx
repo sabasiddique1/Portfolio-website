@@ -1,23 +1,61 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
-import { Github, ExternalLink } from "lucide-react"
+import { useRef, useState } from "react"
+import { ExternalLink, Code2 } from "lucide-react"
 import { SectionHeading } from "@/components/section-heading"
 import Link from "next/link"
 
-const openSourceContributions = [
+type OpenSourceContribution = {
+  id: number
+  name: string
+  url: string
+  iconPath?: string
+}
+
+const openSourceContributions: OpenSourceContribution[] = [
   {
     id: 1,
-    name: "NumPy",
+    name: "numpy",
     url: "https://github.com/numpy/numpy",
+    iconPath: "/open-source-icons/NumPy.png",
   },
   {
     id: 2,
-    name: "PyMPy",
+    name: "pgmpy",
     url: "https://github.com/pgmpy/pgmpy",
+    iconPath: "/open-source-icons/pgmpy.png",
+  },
+  {
+    id: 3,
+    name: "skrub",
+    url: "https://github.com/skrub-data/skrub",
+    iconPath: "/open-source-icons/skrub.svg",
+  },
+  {
+    id: 4,
+    name: "sktime",
+    url: "https://github.com/sktime/sktime",
+    iconPath: "/open-source-icons/sktime.svg",
   },
 ]
+
+function ContributionIcon({ repo }: { repo: OpenSourceContribution }) {
+  const [assetMissing, setAssetMissing] = useState(false)
+
+  if (repo.iconPath && !assetMissing) {
+    return (
+      <img
+        src={repo.iconPath || "/placeholder.svg"}
+        alt={`${repo.name} logo`}
+        className="block w-full h-full object-contain object-center"
+        onError={() => setAssetMissing(true)}
+      />
+    )
+  }
+
+  return <Code2 className="w-5 h-5" />
+}
 
 export function OpenSourceSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -47,8 +85,8 @@ export function OpenSourceSection() {
               <Link href={repo.url} target="_blank" rel="noopener noreferrer">
                 <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex items-center justify-between gap-4 min-w-[200px]">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Github className="w-5 h-5" />
+                    <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                      <ContributionIcon repo={repo} />
                     </div>
                     <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
                       {repo.name}
@@ -64,4 +102,3 @@ export function OpenSourceSection() {
     </section>
   )
 }
-

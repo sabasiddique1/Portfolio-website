@@ -285,7 +285,7 @@ export function HeroSection() {
                 asChild
                 className="rounded-full relative overflow-hidden group border-2 hover:border-foreground/50 dark:hover:border-primary/50 bg-background/50 dark:bg-background/10 backdrop-blur-sm shadow-lg dark:shadow-none"
               >
-                <a href="mailto:sabasiddique001@gmail.com?subject=Let's Connect&body=Hi there,%0AI'd love to connect with you...">
+                <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's Connect&body=Hi there,%0AI'd love to connect with you...">
                   <span className="relative z-10 flex items-center">
                     <Mail className="mr-2 h-4 w-4" />
                     Connect with Me

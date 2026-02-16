@@ -16,7 +16,7 @@ export function StructuredData() {
       "https://github.com/sabasiddique1", // TODO: Verify GitHub URL
       "https://www.linkedin.com/in/your-profile", // TODO: Add LinkedIn URL
     ],
-    email: "sabasiddique001@gmail.com",
+    email: "sabasiddiqdev@gmail.com",
     knowsAbout: [
       "React",
       "Next.js",

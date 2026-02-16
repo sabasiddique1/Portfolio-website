@@ -275,11 +275,11 @@ export function ContactSection() {
           >
             <div className="flex items-center space-x-2">
               <Mail className="h-5 w-5 text-muted-foreground" />
-              <span>sabasiddique001@gmail.com</span>
+              <span>sabasiddiqdev@gmail.com</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <motion.a
-                href="mailto:sabasiddique001@gmail.com"
+                href="mailto:sabasiddiqdev@gmail.com"
                 className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}
