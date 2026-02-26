@@ -10,7 +10,7 @@ const experiences = [
     id: "1",
     period: "Aug 2025 - Dec 2025",
     company: "xNerds Solution",
-    role: "Full Stack Developer / UI UX Developer",
+    role: "Full Stack Engineer",
     location: "Remote",
     status: "completed" as const,
   },

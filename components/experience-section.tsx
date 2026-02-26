@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 const experiences = [
   {
     id: 1,
-    role: "Full Stack Developer / UI UX Developer",
+    role: "Full Stack Engineer",
     company: "xNerds Solution",
     location: "Remote",
     period: "Aug 2025 - Dec 2025",
@@ -30,7 +30,7 @@ const experiences = [
   },
   {
     id: 3,
-    role: "Front End Developer",
+    role: "Software Engineer",
     company: "Wanclouds",
     location: "Hybrid (Remote/On-site)",
     period: "Aug 2023 - Apr 2025",

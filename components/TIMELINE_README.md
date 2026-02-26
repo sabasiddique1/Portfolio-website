@@ -27,7 +27,7 @@ const timelineData: TimelineItem[] = [
     id: "1",
     period: "Aug 2025 - Present",
     title: "xNerds Solution",
-    description: "Full Stack Developer / UI UX Developer",
+    description: "Full Stack Engineer",
   },
   {
     id: "2",

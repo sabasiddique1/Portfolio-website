@@ -6,7 +6,7 @@ import { FeaturedProjectsSection } from "@/components/featured-projects-section"
 import { AboutSection } from "@/components/about-section"
 import { SkillsTicker } from "@/components/skills-ticker"
 import { ExperienceAccordion } from "@/components/experience-accordion"
-import { OpenSourceSection } from "@/components/open-source-section"
+// import { OpenSourceSection } from "@/components/open-source-section"
 import { ContactSection } from "@/components/contact-section"
 import { StickyCtaRail } from "@/components/sticky-cta-rail"
 
@@ -51,7 +51,7 @@ export default function Home() {
         <AboutSection />
       </section>
       <ExperienceAccordion />
-      <OpenSourceSection />
+      {/* <OpenSourceSection /> */}
       <ContactSection />
       <StickyCtaRail />
     </main>

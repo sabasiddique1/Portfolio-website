@@ -217,7 +217,7 @@ export function HeroSection() {
             </div>
 
             <motion.p
-              className="pt-5 mx-auto max-w-[700px] text-muted-foreground md:text-xl"
+              className="pt-5 mx-auto max-w-[700px] text-muted-foreground md:text-xl leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isTypingComplete ? 1 : 0, y: isTypingComplete ? 0 : 20 }}
               transition={{ 
@@ -226,7 +226,18 @@ export function HeroSection() {
                 ease: [0.16, 1, 0.3, 1]
               }}
             >
-              A Front-End Developer dedicated to building seamless, intuitive, and visually engaging user experiences.
+              <span className="font-semibold text-foreground tracking-tight">
+                AI-enabled full-stack engineer
+              </span>{" "}
+              who turns{" "}
+              <span className="font-mono text-sm md:text-base px-1.5 py-0.5 rounded bg-muted/80 dark:bg-primary/10 text-foreground dark:text-primary border border-border/50 dark:border-primary/20">
+                ambitious ideas
+              </span>{" "}
+              into{" "}
+              <span className="font-mono text-sm md:text-base px-1.5 py-0.5 rounded bg-muted/80 dark:bg-primary/10 text-foreground dark:text-primary border border-border/50 dark:border-primary/20">
+                scalable digital products
+              </span>{" "}
+              — blending thoughtful design, solid engineering, and a bit of creative problem-solving along the way.
             </motion.p>
           </motion.div>
 

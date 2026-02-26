@@ -2,7 +2,6 @@
 
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -16,39 +15,32 @@ export function ModeToggle() {
     setMounted(true)
   }, [])
 
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="icon" className="h-9 w-9 opacity-0">
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-    )
-  }
+  const isDark = mounted && (theme === "system" ? resolvedTheme === "dark" : theme === "dark")
 
-  const currentTheme = theme === "system" ? resolvedTheme : theme
+  const triggerButton = (
+    <Button
+      variant="secondary"
+      size="icon"
+      className="h-10 w-10 shrink-0 rounded-lg border border-border bg-secondary text-foreground hover:bg-secondary/80 [&_svg]:size-5"
+      aria-label="Toggle theme (light/dark)"
+    >
+      {!mounted ? (
+        <Sun strokeWidth={2} />
+      ) : isDark ? (
+        <Moon strokeWidth={2} />
+      ) : (
+        <Sun strokeWidth={2} />
+      )}
+    </Button>
+  )
+
+  if (!mounted) {
+    return triggerButton
+  }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 relative">
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: currentTheme === "dark" ? 45 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Sun
-              className={`h-[1.2rem] w-[1.2rem] transition-all ${
-                currentTheme === "dark" ? "opacity-0 scale-0 rotate-90" : "opacity-100 scale-100 rotate-0"
-              }`}
-            />
-            <Moon
-              className={`absolute h-[1.2rem] w-[1.2rem] top-0 left-0 transition-all ${
-                currentTheme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-0 rotate-90"
-              }`}
-            />
-          </motion.div>
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{triggerButton}</DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
           <Sun className="mr-2 h-4 w-4" />

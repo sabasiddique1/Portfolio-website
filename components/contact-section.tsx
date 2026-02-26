@@ -343,7 +343,7 @@ export function ContactSection() {
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
               <motion.a
-                href="https://medium.com/@sabasiddique001"
+                href="https://medium.com/@sabasiddique"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"

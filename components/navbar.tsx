@@ -57,7 +57,7 @@ export function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between gap-4">
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -110,15 +110,17 @@ export function Navbar() {
           >
             Contact
           </motion.button>
-          <ModeToggle />
         </nav>
 
-        {/* Mobile Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
-          <ModeToggle />
+        {/* Theme toggle + mobile menu — always on the right, visible */}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="relative z-10 block">
+            <ModeToggle />
+          </span>
           <Button
             variant="ghost"
             size="icon"
+            className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -177,6 +179,10 @@ export function Navbar() {
             >
               Contact
             </motion.button>
+            <div className="pt-2 border-t border-border flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">Theme</span>
+              <ModeToggle />
+            </div>
           </div>
         </motion.div>
       )}
