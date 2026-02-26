@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Mail, Send, Github, Linkedin, ArrowUpRight } from "lucide-react"
-import { SiKaggle, SiDiscord, SiNotion, SiMedium } from "react-icons/si"
+import { SiKaggle, SiDiscord, SiNotion, SiMedium, SiX } from "react-icons/si"
 import emailjs from "@emailjs/browser"
 
 const EMAILJS_SERVICE_ID = "service_fy30kuj"
@@ -309,7 +309,7 @@ export function ContactSection() {
                 <SiKaggle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
-              <motion.a
+              {/* <motion.a
                 href="https://discord.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -319,7 +319,7 @@ export function ContactSection() {
               >
                 <SiDiscord className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
+              </motion.a> */}
               <motion.a
                 href="https://www.linkedin.com/in/sabaa-siddique-26b6a31a5"
                 target="_blank"
@@ -331,7 +331,7 @@ export function ContactSection() {
                 <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
-              <motion.a
+              {/* <motion.a
                 href="https://probable-kite-c21.notion.site/WorkFolio-24535d194ff08006a22cd3113cf94263"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -341,8 +341,8 @@ export function ContactSection() {
               >
                 <SiNotion className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
-              <motion.a
+              </motion.a> */}
+              {/* <motion.a
                 href="https://medium.com/@sabasiddique"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -351,6 +351,17 @@ export function ContactSection() {
                 whileTap={{ scale: 0.98 }}
               >
                 <SiMedium className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.a> */}
+              <motion.a
+                href="https://x.com/SSiddique97401"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <SiX className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
             </div>
