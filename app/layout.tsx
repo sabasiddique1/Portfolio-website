@@ -1,8 +1,7 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import "@/app/globals.css"
 import { Plus_Jakarta_Sans } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
 import { MotionProvider } from "@/components/motion-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -12,10 +11,11 @@ import { site } from "@/constants/site"
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-sans",
 })
+// TODO: when public/fonts/Gordita-*.woff2 exist, load them with next/font/local as --font-heading; until then headings use Plus Jakarta Sans 600/700 (see --font-heading in globals.css).
 
 // The share image comes from app/opengraph-image.tsx; social card tags are derived from Open Graph.
 export const metadata: Metadata = {
@@ -50,23 +50,26 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  themeColor: "#04080a",
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.variable} font-sans antialiased`}>
+    <html lang="en" className={plusJakartaSans.variable}>
+      <body className="font-sans antialiased">
         <StructuredData />
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <MotionProvider>
-            <Navbar />
-            {children}
-            <Footer />
-            <Toaster />
-          </MotionProvider>
-        </ThemeProvider>
+        <MotionProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <Toaster />
+        </MotionProvider>
       </body>
     </html>
   )

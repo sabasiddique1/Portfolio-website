@@ -1,16 +1,15 @@
 "use client"
 
 import type React from "react"
-import type { ComponentType } from "react"
 
 import { useState, useRef, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { SectionTitle } from "@/components/section-title"
 import { useToast } from "@/hooks/use-toast"
-import { Mail, Send, Github, Linkedin, ArrowUpRight } from "lucide-react"
-import { SiKaggle } from "react-icons/si"
+import { Mail, Send, Github, Linkedin, type LucideIcon } from "lucide-react"
 import emailjs from "@emailjs/browser"
 import { mailto, site } from "@/constants/site"
 
@@ -21,15 +20,15 @@ const EMAILJS_PUBLIC_KEY = "p-NcX4hQ1c0erpCWd"
 type ProfileLink = {
   label: string
   href: string
-  icon: ComponentType<{ className?: string }>
-  external: boolean
+  /** Lucide icon when one exists; otherwise `text` is shown instead. */
+  icon?: LucideIcon
+  text?: string
 }
 
 const profileLinks: ProfileLink[] = [
-  { label: "Email", href: mailto, icon: Mail, external: false },
-  { label: "GitHub profile", href: site.links.github, icon: Github, external: true },
-  { label: "Kaggle profile", href: site.links.kaggle, icon: SiKaggle, external: true },
-  { label: "LinkedIn profile", href: site.links.linkedin, icon: Linkedin, external: true },
+  { label: "GitHub profile", href: site.links.github, icon: Github },
+  { label: "Kaggle profile", href: site.links.kaggle, text: "Kaggle" },
+  { label: "LinkedIn profile", href: site.links.linkedin, icon: Linkedin },
 ]
 
 export function ContactSection() {
@@ -42,7 +41,7 @@ export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
-  const isInView = useInView(sectionRef, { once: false, amount: 0.2 })
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 })
 
   // Initialize EmailJS
   useEffect(() => {
@@ -145,144 +144,92 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" ref={sectionRef} className="py-20 md:py-28">
-      <div className="container px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-2xl space-y-4 text-center"
-        >
-          <div className="inline-block">
-            <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl relative"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {site.contact.heading}
-              <motion.span
-                className="absolute -bottom-2 left-0 h-1 bg-primary rounded-full"
-                initial={{ width: 0 }}
-                animate={isInView ? { width: "100%" } : { width: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              />
-            </motion.h2>
-          </div>
-          <motion.p
-            className="text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {site.contact.line}
-          </motion.p>
+    <section id="contact" ref={sectionRef} className="container py-16 md:py-24">
+      <SectionTitle
+        title={site.contact.heading}
+        icon={Mail}
+        iconClassName="text-cat-voice"
+        subtitle={site.contact.line}
+      />
+
+      <motion.form
+        ref={formRef}
+        variants={formVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        onSubmit={handleSubmit}
+        className="max-w-2xl space-y-4 rounded-lg border border-border bg-card p-6"
+      >
+        <motion.div variants={inputVariants} className="space-y-1.5">
+          <label htmlFor="contact-name" className="block text-xs text-muted-foreground">
+            Your Name
+          </label>
+          <Input id="contact-name" name="name" autoComplete="name" value={formData.name} onChange={handleChange} required />
         </motion.div>
+        <motion.div variants={inputVariants} className="space-y-1.5">
+          <label htmlFor="contact-email" className="block text-xs text-muted-foreground">
+            Your Email
+          </label>
+          <Input
+            id="contact-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </motion.div>
+        <motion.div variants={inputVariants} className="space-y-1.5">
+          <label htmlFor="contact-message" className="block text-xs text-muted-foreground">
+            Your Message
+          </label>
+          <Textarea
+            id="contact-message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            rows={5}
+            required
+          />
+        </motion.div>
+        <motion.div variants={inputVariants}>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              "Sending..."
+            ) : (
+              <>
+                Send Message
+                <Send aria-hidden="true" />
+              </>
+            )}
+          </Button>
+        </motion.div>
+      </motion.form>
 
-        <div className="mx-auto mt-12 max-w-2xl">
-          <motion.form
-            ref={formRef}
-            variants={formVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            onSubmit={handleSubmit}
-            className="space-y-6"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="mt-6 flex max-w-2xl flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+      >
+        <a href={mailto} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+          <Mail className="h-4 w-4" aria-hidden="true" />
+          {site.email}
+        </a>
+        {profileLinks.map(({ label, href, icon: Icon, text }) => (
+          <a
+            key={label}
+            href={href}
+            aria-label={label}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center transition-colors hover:text-foreground"
           >
-            <div className="space-y-4">
-              <motion.div variants={inputVariants}>
-                <Input
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-                />
-              </motion.div>
-              <motion.div variants={inputVariants}>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-                />
-              </motion.div>
-              <motion.div variants={inputVariants}>
-                <Textarea
-                  name="message"
-                  placeholder="Your Message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={5}
-                  required
-                  className="transition-all duration-300 focus:ring-2 focus:ring-primary/50"
-                />
-              </motion.div>
-            </div>
-            <motion.div variants={inputVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button type="submit" className="w-full relative overflow-hidden group" disabled={isSubmitting} size="lg">
-                <span className="relative z-10 flex items-center">
-                  {isSubmitting ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      Send Message
-                      <motion.span
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-                        className="ml-2"
-                      >
-                        <Send className="h-4 w-4" />
-                      </motion.span>
-                    </>
-                  )}
-                </span>
-                <motion.span
-                  className="absolute inset-0 bg-primary/20 z-0"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "0%" }}
-                  transition={{ duration: 0.4 }}
-                />
-              </Button>
-            </motion.div>
-          </motion.form>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-12 flex flex-col items-center space-y-6"
-          >
-            <div className="flex items-center space-x-2">
-              <Mail className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-              <span>{site.email}</span>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {profileLinks.map(({ label, href, icon: Icon, external }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                  whileHover={{ y: -4 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <ArrowUpRight
-                    className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-hidden="true"
-                  />
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
+            {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : text}
+          </a>
+        ))}
+      </motion.div>
     </section>
   )
 }

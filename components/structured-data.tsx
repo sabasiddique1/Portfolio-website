@@ -11,7 +11,7 @@ const person = {
   url: site.url,
   email: site.email,
   address: { "@type": "PostalAddress", addressLocality: "Rawalpindi", addressCountry: "PK" },
-  sameAs: [site.links.linkedin, site.links.github, site.links.kaggle],
+  sameAs: [site.links.linkedin, site.links.github, site.links.kaggle, site.links.orcid],
   knowsAbout: [...site.seo.keywords],
   worksFor: { "@type": "Organization", name: site.employer.name },
   alumniOf: [

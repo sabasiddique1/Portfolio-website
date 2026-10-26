@@ -3,18 +3,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+// Chips: 6px radius, 1px border, 12px text. `active` is the only variant that uses lime.
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium leading-5 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default: "border-border bg-surface text-text-2",
+        secondary: "border-border bg-surface text-text-2",
+        outline: "border-border bg-transparent text-muted-foreground",
+        active: "border-transparent bg-lime-dim text-lime",
+        tag: "border-transparent bg-tag text-foreground",
+        destructive: "border-transparent bg-destructive text-destructive-foreground",
       },
     },
     defaultVariants: {

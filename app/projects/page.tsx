@@ -1,15 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Bot, List } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
-import { SectionHeading } from "@/components/section-heading"
+import { SectionTitle } from "@/components/section-title"
 import { SectionReveal } from "@/components/section-reveal"
 import { ProjectCardGroup } from "@/components/project-card-group"
-import { EarlierWorkList } from "@/components/earlier-work-list"
-import { aiProjects, earlierProjects } from "@/constants/projects"
+import { ProjectsList } from "@/components/projects-list"
+import { aiProjects, cardProjects, rowProjects } from "@/constants/projects"
 import { site } from "@/constants/site"
 import { getAvailableProjectImages } from "@/lib/project-images"
-import { cn } from "@/lib/utils"
 
 const subtitle = "AI work first, earlier web work below."
 
@@ -29,38 +28,35 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   const availableImages = getAvailableProjectImages()
+  // Static page: this is the build date, like OpenRouter's "last run" line.
+  const lastUpdated = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(new Date())
 
   return (
-    <main className="min-h-screen px-4 pb-20 pt-24 md:px-6">
-      <div className="container mx-auto max-w-6xl">
-        <div className="mb-16">
-          <div className="mb-6">
-            <Link href="/#projects" className={cn(buttonVariants({ variant: "ghost" }), "mb-4")}>
-              <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-              Back to Home
-            </Link>
-          </div>
-          <SectionHeading as="h1" title="All projects" subtitle={subtitle} />
-        </div>
+    <main className="container pt-24 pb-16 md:pb-24">
+      <Link href="/" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+        <ArrowLeft aria-hidden="true" />
+        Back to Home
+      </Link>
 
-        <section aria-labelledby="ai-work" className="mb-16">
-          <SectionReveal>
-            <h2 id="ai-work" className="mb-6 text-2xl font-bold md:text-3xl">
-              AI work
-            </h2>
-          </SectionReveal>
-          <ProjectCardGroup projects={aiProjects} availableImages={availableImages} columns={2} />
-        </section>
+      <header className="mt-6">
+        <h1 className="text-[32px] font-semibold">All projects</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>
+        <p className="mt-3 text-xs text-muted-foreground">
+          {aiProjects.length} projects <span aria-hidden="true">·</span> last updated {lastUpdated}
+        </p>
+      </header>
 
-        <section aria-labelledby="earlier-work">
-          <SectionReveal>
-            <h2 id="earlier-work" className="mb-6 text-2xl font-bold md:text-3xl">
-              Earlier work
-            </h2>
-          </SectionReveal>
-          <EarlierWorkList projects={earlierProjects} />
-        </section>
-      </div>
+      <section aria-labelledby="ai-work" className="mt-12">
+        <SectionTitle id="ai-work" as="h2" title="AI work" icon={Bot} iconClassName="text-cat-agents" />
+        <ProjectCardGroup projects={cardProjects} availableImages={availableImages} columns={2} />
+      </section>
+
+      <section className="mt-16">
+        <SectionTitle as="h2" title="More projects" icon={List} iconClassName="text-cat-fullstack" />
+        <SectionReveal>
+          <ProjectsList projects={rowProjects} />
+        </SectionReveal>
+      </section>
     </main>
   )
 }

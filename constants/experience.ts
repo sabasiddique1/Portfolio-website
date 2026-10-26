@@ -8,6 +8,8 @@ export type ExperienceRole = {
   current?: boolean
   /** Shown on the collapsed row. */
   highlight: string
+  /** 2–3 chips for the table row; only words that already appear in the role's own text. */
+  chips: string[]
   /** Shown when expanded. */
   bullets: string[]
 }
@@ -21,6 +23,7 @@ export const experience: ExperienceRole[] = [
     location: "Rawalpindi, On-site",
     current: true,
     highlight: "Leading development of an AI interview assistant desktop app.",
+    chips: ["Whisper", "FastAPI", "OpenTelemetry"],
     bullets: [
       "Lead a small engineering team building an AI interview assistant desktop app: real-time speech-to-text (Whisper, Speechmatics) feeding LLM response workflows; Electron + React + FastAPI; OpenTelemetry, Grafana Tempo, Prometheus.",
       "Agentic customer-service system: multi-agent workflow with tool use, approval gates and tracing.",
@@ -35,6 +38,7 @@ export const experience: ExperienceRole[] = [
     period: "Aug 2025 – Jan 2026",
     location: "Lahore, Hybrid",
     highlight: "~25% frontend performance improvement; 40%+ less manual work through automation.",
+    chips: ["Next.js", "RAG/LLM", "Node.js"],
     bullets: [
       "AI-enabled fintech/crypto dashboards with React, Next.js, Node.js, REST APIs, Tailwind CSS, shadcn/ui.",
       "RAG/LLM-based market trend analysis and personalized trading insights.",
@@ -48,6 +52,7 @@ export const experience: ExperienceRole[] = [
     period: "May 2025 – Aug 2025",
     location: "Remote",
     highlight: "40% faster load speed on React/Next.js apps.",
+    chips: ["React/Next.js", "AI-assisted content", "Figma-to-code"],
     bullets: [
       "AI-assisted content and writing workflows, cutting content creation time by 30–35%.",
       "Lead-generation automation that increased qualified leads by 20%+.",
@@ -61,6 +66,7 @@ export const experience: ExperienceRole[] = [
     period: "Mar 2023 – May 2025",
     location: "Islamabad, Hybrid",
     highlight: "28% dashboard performance improvement; 100+ product bugs resolved.",
+    chips: ["React", "TypeScript", "Ant Design"],
     bullets: [
       "Cloud, security and AI-powered SaaS products: VPC+, SecMon, WhisperAI, Wanclouds Bot.",
       "React, Next.js, TypeScript, Ant Design, Tailwind CSS, Node.js, REST APIs.",
@@ -74,6 +80,7 @@ export const experience: ExperienceRole[] = [
     period: "Dec 2022 – Mar 2023",
     location: "Islamabad, On-site",
     highlight: "Frontend screens, bug fixing and API integration for cloud SaaS dashboards.",
+    chips: ["Frontend", "API integration"],
     bullets: [],
   },
 ]

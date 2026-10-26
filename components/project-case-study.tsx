@@ -1,15 +1,17 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { ArrowLeft, Check, ExternalLink, Github } from "lucide-react"
+import { motion, useReducedMotion } from "framer-motion"
+import { ArrowLeft, ExternalLink, Github } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import type { ReactNode } from "react"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { CategoryIcon } from "@/components/category-icon"
+import { Chip } from "@/components/chip"
 import { ProjectImageCarousel } from "@/components/project-image-carousel"
-import { getProjectLinks, type Project } from "@/constants/projects"
+import { getProjectKind, getProjectLinks, type Project } from "@/constants/projects"
 
 interface ProjectCaseStudyProps {
   project: Project
@@ -20,18 +22,26 @@ interface ProjectCaseStudyProps {
 type Section = { key: string; title: string; body: ReactNode }
 
 export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyProps) {
+  const reduceMotion = useReducedMotion()
   const links = getProjectLinks(project)
   const screenshots = project.images ?? []
   const meta = [project.label, project.period].filter(Boolean).join(" · ")
   const built = project.built ?? []
 
-  // Only sections with data render, so the entrance delay follows the rendered order.
+  // Entrance is a plain fade; the delay follows the rendered order.
+  const fade = (delay: number) => ({
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: reduceMotion ? { duration: 0 } : { duration: 0.3, delay },
+  })
+
+  // Only sections with data render.
   const sections: Section[] = []
   if (project.problem) {
     sections.push({
       key: "problem",
       title: "Problem",
-      body: <p className="text-muted-foreground leading-relaxed">{project.problem}</p>,
+      body: <p className="text-text-2">{project.problem}</p>,
     })
   }
   if (built.length > 0) {
@@ -39,12 +49,9 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
       key: "built",
       title: "What I built",
       body: (
-        <ul className="space-y-3">
+        <ul className="list-disc space-y-2 pl-5 text-text-2 marker:text-muted-foreground">
           {built.map((item) => (
-            <li key={item} className="flex items-start gap-3">
-              <Check className="mt-1 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-              <span className="text-muted-foreground">{item}</span>
-            </li>
+            <li key={item}>{item}</li>
           ))}
         </ul>
       ),
@@ -55,11 +62,9 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
       key: "stack",
       title: "Stack",
       body: (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {project.technologies.map((tech) => (
-            <Badge key={tech} variant="secondary" className="text-sm">
-              {tech}
-            </Badge>
+            <Chip key={tech}>{tech}</Chip>
           ))}
         </div>
       ),
@@ -67,95 +72,73 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
   }
 
   return (
-    <main className="min-h-screen pt-24 pb-20">
-      <div className="container px-4 md:px-6 max-w-5xl mx-auto">
-        {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <Button asChild variant="ghost" className="mb-4">
-            <Link href="/projects">
-              <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-              Back to Projects
-            </Link>
-          </Button>
-        </motion.div>
+    <main className="container max-w-5xl pt-24 pb-16 md:pb-24">
+      <motion.div {...fade(0)}>
+        <Link href="/projects" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+          <ArrowLeft aria-hidden="true" />
+          Back to Projects
+        </Link>
+      </motion.div>
 
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <Badge variant="outline">{project.category}</Badge>
-            <Badge variant="secondary">{project.projectType}</Badge>
-          </div>
-          {meta && <p className="text-sm text-muted-foreground mb-3">{meta}</p>}
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{project.title}</h1>
-          <p className="text-xl text-muted-foreground mb-6">{project.description}</p>
+      <motion.div {...fade(0.05)} className="mt-6 mb-10">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <CategoryIcon kind={getProjectKind(project)} />
+          <Badge variant="outline">{project.category}</Badge>
+          <Badge variant="outline">{project.projectType}</Badge>
+        </div>
+        {meta && <p className="mb-2 text-xs text-muted-foreground">{meta}</p>}
+        <h1 className="text-[32px] leading-tight">{project.title}</h1>
+        <p className="mt-3 max-w-2xl text-base text-muted-foreground">{project.description}</p>
 
-          {/* Project Image */}
-          {screenshots.length > 0 ? (
-            <ProjectImageCarousel
-              images={screenshots}
-              title={project.title}
-              autoSwitchInterval={4000}
-              className="rounded-lg mb-8"
+        {screenshots.length > 0 ? (
+          <ProjectImageCarousel
+            images={screenshots}
+            title={project.title}
+            autoSwitchInterval={4000}
+            className="mt-8 rounded-lg border border-border"
+          />
+        ) : project.image && imageAvailable ? (
+          <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-lg border border-border bg-card-2">
+            <Image
+              src={project.image}
+              alt={project.imageAlt ?? project.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+              priority
             />
-          ) : project.image && imageAvailable ? (
-            <div className="relative w-full h-96 mb-8 rounded-lg overflow-hidden">
-              <Image
-                src={project.image}
-                alt={project.imageAlt ?? project.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          ) : null}
+          </div>
+        ) : null}
 
-          {/* Links */}
-          {links.length > 0 && (
-            <div className="flex flex-wrap gap-4">
-              {links.map((link) => {
-                const Icon = link.label === "Repo" ? Github : ExternalLink
-                return (
-                  <Button key={link.url} asChild variant={link.label === "Live" ? "default" : "outline"}>
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
-                      {link.label}
-                    </a>
-                  </Button>
-                )
-              })}
-            </div>
-          )}
-        </motion.div>
-
-        {/* Case Study Sections */}
-        {sections.length > 0 && (
-          <div className="space-y-12">
-            {sections.map((section, index) => (
-              <motion.section
-                key={section.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
-              >
-                <Card className="p-6 md:p-8">
-                  <h2 className="text-2xl font-bold mb-4">{section.title}</h2>
-                  {section.body}
-                </Card>
-              </motion.section>
-            ))}
+        {links.length > 0 && (
+          <div className="mt-8 flex flex-wrap gap-3">
+            {links.map((link) => {
+              const Icon = link.label === "Repo" ? Github : ExternalLink
+              return (
+                <Button key={link.url} asChild variant={link.label === "Live" ? "default" : "outline"}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    <Icon aria-hidden="true" />
+                    {link.label}
+                  </a>
+                </Button>
+              )
+            })}
           </div>
         )}
-      </div>
+      </motion.div>
+
+      {sections.length > 0 && (
+        <div className="space-y-4">
+          {sections.map((section, index) => (
+            <motion.section key={section.key} {...fade(0.1 + 0.05 * index)}>
+              <Card className="p-6">
+                <h2 className="mb-4 text-lg font-semibold">{section.title}</h2>
+                {section.body}
+              </Card>
+            </motion.section>
+          ))}
+        </div>
+      )}
     </main>
   )
 }

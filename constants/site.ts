@@ -18,7 +18,24 @@ export const site = {
     linkedin: "https://www.linkedin.com/in/sabasiddiq",
     github: "https://github.com/sabasiddique1",
     kaggle: "https://www.kaggle.com/sabasiddiquedev",
+    orcid: "https://orcid.org/0009-0005-4851-5200",
   },
+
+  /** Top nav. "Projects" is its own page; the rest are home-page sections. */
+  nav: [
+    { label: "Projects", href: "/projects" },
+    { label: "Journey", href: "/#journey" },
+    { label: "Experience", href: "/#experience" },
+    { label: "Contact", href: "/#contact" },
+  ],
+
+  /** Footer profile links, in order. */
+  footerLinks: [
+    { label: "GitHub", href: "https://github.com/sabasiddique1" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/sabasiddiq" },
+    { label: "Kaggle", href: "https://www.kaggle.com/sabasiddiquedev" },
+    { label: "ORCID", href: "https://orcid.org/0009-0005-4851-5200" },
+  ],
 
   seo: {
     title: "Saba Siddique | AI Engineer — Agentic AI, ML & AI Security",
@@ -48,6 +65,20 @@ export const site = {
     subline:
       "Four years of engineering, three years building and evaluating LLM systems. I build agentic AI and test how it fails.",
     chips: ["4 yrs engineering", "3 yrs AI/LLM", "Project Lead at Volmatica"],
+
+    /** Round 2 layout: muted kicker above a two-line H1, underlined phrases, two CTAs, four stats. */
+    kicker: "Saba Siddique",
+    h1Lines: ["AI Engineer — agentic AI, ML,", "and AI security for high-trust systems."],
+    /** Phrases to lime-underline wherever they occur in the subline. */
+    underline: ["agentic AI", "AI security"],
+    primaryCta: { label: "View projects", href: "/projects" },
+    secondaryCta: { label: "Get in touch", href: "#contact" },
+    stats: [
+      { value: "4 yrs", label: "Engineering" },
+      { value: "3 yrs", label: "AI / LLM systems" },
+      { value: "Project Lead", label: "Volmatica" },
+      { value: "6", label: "Open-source libraries" },
+    ],
   },
 
   about: {

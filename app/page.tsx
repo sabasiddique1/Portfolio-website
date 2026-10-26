@@ -1,13 +1,9 @@
 import { HeroSection } from "@/components/hero-section"
 import { FeaturedWork } from "@/components/featured-work"
-import { ProofStrip } from "@/components/proof-strip"
-import { JourneyTimeline } from "@/components/journey-timeline"
-import { ExperienceAccordion } from "@/components/experience-accordion"
-import { SkillsTicker } from "@/components/skills-ticker"
-import { AboutSection } from "@/components/about-section"
+import { AlsoBuilding } from "@/components/also-building"
+import { JourneyTable } from "@/components/journey-table"
+import { ExperienceTable } from "@/components/experience-table"
 import { ContactSection } from "@/components/contact-section"
-import { StickyCtaRail } from "@/components/sticky-cta-rail"
-import { HashScroll } from "@/components/hash-scroll"
 import { getAvailableProjectImages } from "@/lib/project-images"
 
 export default function Home() {
@@ -15,19 +11,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <HashScroll />
       <HeroSection />
       <FeaturedWork availableImages={availableImages} />
-      {/* DEMO — remove by deleting <ProofStrip /> in page.tsx */}
-      <ProofStrip />
-      <JourneyTimeline />
-      <ExperienceAccordion />
-      <section id="about">
-        <SkillsTicker />
-        <AboutSection />
-      </section>
+      {/* DEMO — remove by deleting <AlsoBuilding /> in page.tsx */}
+      <AlsoBuilding />
+      <JourneyTable />
+      <ExperienceTable />
       <ContactSection />
-      <StickyCtaRail />
     </main>
   )
 }

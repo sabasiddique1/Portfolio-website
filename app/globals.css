@@ -3,49 +3,63 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Design tokens, sampled from openrouter.ai. Dark only: there is no light theme.
+   * The hex values are the source of truth; the --hsl-* twins exist so Tailwind
+   * utilities (bg-card, text-muted, border-border …) can take opacity modifiers.
+   */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-  }
+    --bg: #04080a;
+    --surface: #0e1214;
+    --card: #101416;
+    --card-2: #090d0f;
+    --border: #1c2022;
+    --border-strong: #262b2e;
+    --text: #fcfcfe;
+    --text-2: #a5a7a9;
+    --muted: #828486;
+    --accent: #d1fb50;
+    --accent-dim: #43531f;
+    --accent-soft: #141b0f;
+    --pos: #488d71;
+    --tag: #375495;
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    /* Category icon colours */
+    --cat-agents: #7ee787;
+    --cat-health: #ff9f5a;
+    --cat-ml: #58a6ff;
+    --cat-research: #d2a8ff;
+    --cat-voice: #39d3c3;
+    --cat-fullstack: #c9d1d9;
+
+    --hsl-bg: 200.0 42.9% 2.7%;
+    --hsl-surface: 200.0 17.6% 6.7%;
+    --hsl-card: 200.0 15.8% 7.5%;
+    --hsl-card-2: 200.0 25.0% 4.7%;
+    --hsl-border: 200.0 9.7% 12.2%;
+    --hsl-border-strong: 202.5 9.5% 16.5%;
+    --hsl-text: 240.0 50.0% 99.2%;
+    --hsl-text-2: 210.0 2.3% 65.5%;
+    --hsl-muted: 210.0 1.6% 51.8%;
+    --hsl-accent: 74.7 95.5% 64.9%;
+    --hsl-accent-dim: 78.5 45.6% 22.4%;
+    --hsl-accent-soft: 95.0 28.6% 8.2%;
+    --hsl-pos: 155.7 32.4% 41.8%;
+    --hsl-tag: 221.5 46.1% 40.0%;
+    --hsl-cat-agents: 125.1 68.6% 70.0%;
+    --hsl-cat-health: 25.1 100.0% 67.6%;
+    --hsl-cat-ml: 212.0 100.0% 67.3%;
+    --hsl-cat-research: 269.0 100.0% 82.9%;
+    --hsl-cat-voice: 173.8 63.6% 52.5%;
+    --hsl-cat-fullstack: 210.0 17.4% 82.0%;
+    --hsl-destructive: 0 63% 31%;
+
+    --radius: 10px;
+    /* Headings fall back to the body font until Gordita is available (see app/layout.tsx). */
+    --font-heading: var(--font-sans);
+
+    /* Browser chrome (scrollbars, form controls, autofill) renders dark too. */
+    color-scheme: dark;
   }
 }
 
@@ -53,71 +67,27 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+    /* Keeps anchor targets and focused elements clear of the 56px sticky nav. */
+    scroll-padding-top: 3.5rem;
+  }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-@layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-}
-
-@keyframes chronology-dot-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4),
-                0 0 0 0 hsl(var(--primary) / 0.2);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 0 4px hsl(var(--primary) / 0),
-                0 0 0 8px hsl(var(--primary) / 0);
-    transform: scale(1.1);
-  }
-}
-
-@layer components {
-  /* Base dot - inactive state - NO ANIMATION */
-  .chronology-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: hsl(var(--muted-foreground) / 0.4);
-    border: 2px solid hsl(var(--background));
-    box-shadow: none !important;
-    transform: scale(1) !important;
-    animation: none !important;
-    transition: background-color 0.3s ease, 
-                border-color 0.3s ease;
-  }
-
-  /* Active dot - ONLY ONE should have this class at a time */
-  .chronology-dot-active {
-    background-color: hsl(var(--primary)) !important;
-    border-color: hsl(var(--primary)) !important;
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.6),
-                0 0 40px hsl(var(--primary) / 0.3) !important;
-    animation: chronology-dot-pulse 2s ease-in-out infinite !important;
-    animation-fill-mode: both !important;
-  }
-  
-  /* CRITICAL: Ensure inactive dots NEVER have animation */
-  .chronology-dot:not(.chronology-dot-active) {
-    animation: none !important;
-    box-shadow: none !important;
-    transform: scale(1) !important;
-    background-color: hsl(var(--muted-foreground) / 0.4) !important;
-    border-color: hsl(var(--background)) !important;
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 }
 

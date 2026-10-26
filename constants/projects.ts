@@ -2,8 +2,14 @@ import { generateSlug } from "@/lib/utils"
 
 export type ProjectLink = { label: string; url: string }
 
-/** "ai" projects get the expandable card; "earlier" ones are listed as one line each. */
+/** "ai" = the AI work; "earlier" = earlier web work. */
 export type ProjectGroup = "ai" | "earlier"
+
+/** Category for the coloured lucide icon (see components/category-icon.tsx). */
+export type ProjectKind = "agents" | "healthcare" | "ml" | "research" | "voice" | "fullstack"
+
+/** "card" = feature card (home + /projects "AI work"); "row" = table row in /projects "More projects". */
+export type ProjectDisplay = "card" | "row"
 
 export type Project = {
   id: number
@@ -12,6 +18,10 @@ export type Project = {
   /** One line, shown on the collapsed card and in listings. */
   description: string
   group: ProjectGroup
+  /** Defaults to "fullstack" (see getProjectKind). */
+  kind?: ProjectKind
+  /** Defaults to "card" for AI work and "row" for earlier work (see getProjectDisplay). */
+  display?: ProjectDisplay
   /** Shown on the home page. Exactly two projects carry this. */
   featured?: boolean
   /** Small label above the title, e.g. "Volmatica · Project Lead". */
@@ -39,6 +49,14 @@ export type Project = {
   color?: string
 }
 
+export function getProjectKind(project: Project): ProjectKind {
+  return project.kind ?? "fullstack"
+}
+
+export function getProjectDisplay(project: Project): ProjectDisplay {
+  return project.display ?? (project.group === "ai" ? "card" : "row")
+}
+
 /** Repo / live / extra links in display order. */
 export function getProjectLinks(project: Project): ProjectLink[] {
   const links: ProjectLink[] = []
@@ -56,6 +74,8 @@ export const projects: Project[] = [
     title: "TraceGuard AI",
     description: "Open-source red-team harness for RAG and agentic AI systems.",
     group: "ai",
+    kind: "agents",
+    display: "card",
     featured: true,
     highlight: "LLM red-teaming",
     category: "AI security",
@@ -81,6 +101,8 @@ export const projects: Project[] = [
     title: "RediSense",
     description: "AI clinical copilot: report analysis, symptom triage, evidence search, patient timeline and copilot chat.",
     group: "ai",
+    kind: "healthcare",
+    display: "card",
     featured: true,
     highlight: "Healthcare AI",
     category: "Healthcare AI",
@@ -107,6 +129,8 @@ export const projects: Project[] = [
     title: "ServiceFlow VoiceOps",
     description: "AI voice receptionist for HVAC and plumbing that triages emergencies and books real appointments.",
     group: "ai",
+    kind: "voice",
+    display: "row",
     highlight: "AI voice agent",
     category: "AI voice agent",
     projectType: "Portfolio project",
@@ -130,6 +154,8 @@ export const projects: Project[] = [
     title: "EmergencyCare Navigator",
     description: "Multi-agent emergency triage that routes to the best facility and produces a clinician-ready SBAR handoff.",
     group: "ai",
+    kind: "agents",
+    display: "card",
     highlight: "Multi-agent system",
     period: "Dec 2025",
     category: "Healthcare AI · agents",
@@ -156,6 +182,8 @@ export const projects: Project[] = [
     title: "CuePilot",
     description: "AI interview assistant desktop app with real-time transcription and LLM-driven responses.",
     group: "ai",
+    kind: "fullstack",
+    display: "card",
     label: "Volmatica · Project Lead",
     highlight: "Project Lead",
     period: "Jan 2026 – Present",
@@ -416,3 +444,7 @@ export const projects: Project[] = [
 export const featuredProjects = projects.filter((p) => p.featured)
 export const aiProjects = projects.filter((p) => p.group === "ai")
 export const earlierProjects = projects.filter((p) => p.group === "earlier")
+/** /projects "AI work" cards, in data order. */
+export const cardProjects = projects.filter((p) => getProjectDisplay(p) === "card")
+/** /projects "More projects" table rows, in data order (ServiceFlow VoiceOps first, then earlier work). */
+export const rowProjects = projects.filter((p) => getProjectDisplay(p) === "row")

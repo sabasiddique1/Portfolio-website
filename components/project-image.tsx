@@ -1,22 +1,24 @@
 import Image from "next/image"
-import type { Project } from "@/constants/projects"
+import type { Project, ProjectKind } from "@/constants/projects"
+import { CategoryIcon } from "@/components/category-icon"
 import { cn } from "@/lib/utils"
 
 interface ProjectImageProps {
   project: Pick<Project, "title" | "image" | "imageAlt">
+  kind: ProjectKind
   /** Whether `project.image` exists under public/ (checked on the server). */
   available: boolean
   className?: string
 }
 
 /**
- * Project screenshot, or a neutral placeholder until the PNG lands in public/.
- * Never emits an <img> for a file that is not there.
+ * Fixed 160px visual at the top of a feature card: the screenshot when it exists,
+ * otherwise a darker block with the category icon. Never emits an <img> for a missing file.
  */
-export function ProjectImage({ project, available, className }: ProjectImageProps) {
+export function ProjectImage({ project, kind, available, className }: ProjectImageProps) {
   if (project.image && available) {
     return (
-      <div className={cn("relative w-full aspect-[3/2] overflow-hidden rounded-lg bg-muted", className)}>
+      <div className={cn("relative h-40 w-full overflow-hidden bg-card-2", className)}>
         <Image
           src={project.image}
           alt={project.imageAlt ?? project.title}
@@ -29,14 +31,8 @@ export function ProjectImage({ project, available, className }: ProjectImageProp
   }
 
   return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "flex w-full aspect-[3/2] items-center justify-center rounded-lg border border-border/50 bg-muted/40",
-        className
-      )}
-    >
-      <span className="px-4 text-center text-xs text-muted-foreground">{project.title}</span>
+    <div aria-hidden="true" className={cn("flex h-40 w-full items-center justify-center bg-card-2", className)}>
+      <CategoryIcon kind={kind} className="h-6 w-6" />
     </div>
   )
 }

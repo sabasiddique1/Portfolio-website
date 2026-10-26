@@ -1,191 +1,103 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { ModeToggle } from "@/components/mode-toggle"
+import { usePathname } from "next/navigation"
+import { ArrowUpRight, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { mailto, site } from "@/constants/site"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+
+function EmailButton({ className }: { className?: string }) {
+  return (
+    <Button asChild className={className}>
+      <a href={mailto}>
+        Email
+        <ArrowUpRight className="size-3.5" aria-hidden="true" />
+      </a>
+    </Button>
+  )
+}
 
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    setOpen(false)
+  }, [pathname])
 
-  const scrollToSection = (id: string) => {
-    setMobileMenuOpen(false)
-    
-    // If we're on the home page, scroll to the section
-    if (pathname === "/") {
-      const element = document.getElementById(id)
-      if (element) {
-        const navbarHeight = 64 // h-16 = 64px
-        // Minimal offset for experience section to show all cards
-        const extraOffset = id === "experience" ? 0 : 0
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-        const offsetPosition = elementPosition - navbarHeight - extraOffset
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        })
+  // Hash links point at home-page sections, so only real routes can be current.
+  const isActive = (href: string) =>
+    !href.includes("#") && (pathname === href || pathname.startsWith(`${href}/`))
+
+  const renderLinks = (className: string) =>
+    site.nav.map(({ label, href }) => {
+      const active = isActive(href)
+      const hashIndex = href.indexOf("#")
+      const classes = cn(
+        "text-sm transition-colors hover:text-foreground",
+        active ? "text-foreground" : "text-text-2",
+        className
+      )
+
+      // On the home page, section links stay native anchors: the browser does the smooth scroll
+      // (scroll-padding-top in globals.css keeps the target clear of this bar) and moves the
+      // keyboard focus starting point to the section, which a scripted scroll would not.
+      if (hashIndex !== -1 && pathname === "/") {
+        return (
+          <a key={href} href={href.slice(hashIndex)} onClick={() => setOpen(false)} className={classes}>
+            {label}
+          </a>
+        )
       }
-    } else {
-      // If we're on a different page, navigate to home with hash
-      router.push(`/#${id}`)
-    }
-  }
+
+      return (
+        <Link
+          key={href}
+          href={href}
+          onClick={() => setOpen(false)}
+          aria-current={active ? "page" : undefined}
+          className={classes}
+        >
+          {label}
+        </Link>
+      )
+    })
 
   return (
-    <motion.header
-      className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300",
-        isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent",
-      )}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container flex h-16 items-center justify-between gap-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-        >
-          <Link href="/" className="text-xl font-bold tracking-tighter transition-colors hover:text-primary">
-            portfolio.
+    <header className="sticky top-0 z-50 bg-background">
+      <div className="border-b border-border">
+        <div className="container flex h-14 items-center justify-between gap-4">
+          <Link href="/" className="text-[15px] font-semibold text-foreground">
+            saba.
           </Link>
-        </motion.div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          <motion.button
-            onClick={() => scrollToSection("home")}
-            className="text-sm font-medium hover:text-primary transition-colors relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Home
-          </motion.button>
-          <motion.button
-            onClick={() => scrollToSection("projects")}
-            className="text-sm font-medium hover:text-primary transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Work
-          </motion.button>
-          <motion.button
-            onClick={() => scrollToSection("about")}
-            className="text-sm font-medium hover:text-primary transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            About
-          </motion.button>
-          <motion.button
-            onClick={() => scrollToSection("experience")}
-            className="text-sm font-medium hover:text-primary transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Experience
-          </motion.button>
-          <motion.button
-            onClick={() => scrollToSection("contact")}
-            className="text-sm font-medium hover:text-primary transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Contact
-          </motion.button>
-        </nav>
+          <div className="hidden items-center gap-6 md:flex">
+            <nav className="flex items-center gap-6">{renderLinks("")}</nav>
+            <EmailButton />
+          </div>
 
-        {/* Theme toggle + mobile menu — always on the right, visible */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="relative z-10 block">
-            <ModeToggle />
-          </span>
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <motion.div
-          className="md:hidden bg-background/95 backdrop-blur-md shadow-md"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="container py-4 flex flex-col gap-4">
-            <motion.button
-              onClick={() => scrollToSection("home")}
-              className="py-2 text-sm font-medium hover:text-primary transition-colors"
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Home
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection("projects")}
-              className="py-2 text-sm font-medium hover:text-primary transition-colors"
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Work
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection("about")}
-              className="py-2 text-sm font-medium hover:text-primary transition-colors"
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              About
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection("experience")}
-              className="py-2 text-sm font-medium hover:text-primary transition-colors"
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Experience
-            </motion.button>
-            <motion.button
-              onClick={() => scrollToSection("contact")}
-              className="py-2 text-sm font-medium hover:text-primary transition-colors"
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Contact
-            </motion.button>
-            <div className="pt-2 border-t border-border flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground">Theme</span>
-              <ModeToggle />
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </motion.header>
+      <div id="mobile-nav" hidden={!open} className="border-b border-border bg-background md:hidden">
+        <nav className="container flex flex-col py-3">
+          {renderLinks("py-2")}
+          <EmailButton className="mt-3 w-full" />
+        </nav>
+      </div>
+    </header>
   )
 }
