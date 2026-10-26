@@ -1,10 +1,10 @@
 "use client"
 
-import { FileText, Github, Linkedin, Mail } from "lucide-react"
+import { Github, Linkedin, Mail } from "lucide-react"
+import { SiKaggle } from "react-icons/si"
 import { motion } from "framer-motion"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ResumePreview } from "@/components/resume-preview"
+import { mailto, site } from "@/constants/site"
 
 export function StickyCtaRail() {
   return (
@@ -15,27 +15,15 @@ export function StickyCtaRail() {
       className="fixed right-6 bottom-6 z-50 hidden lg:block"
     >
       <div className="flex flex-col gap-3 p-3 bg-background/80 backdrop-blur-md border border-border/50 rounded-lg shadow-lg">
-        <ResumePreview>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-10 w-10"
-            aria-label="View Resume"
-            title="View Resume"
-          >
-            <FileText className="h-5 w-5" />
-          </Button>
-        </ResumePreview>
-
         <Button
           size="icon"
           variant="ghost"
           className="h-10 w-10"
           asChild
-          aria-label="GitHub Profile"
+          aria-label="GitHub profile"
           title="GitHub"
         >
-          <a href="https://github.com/sabasiddique1" target="_blank" rel="noopener noreferrer">
+          <a href={site.links.github} target="_blank" rel="noopener noreferrer">
             <Github className="h-5 w-5" />
           </a>
         </Button>
@@ -45,11 +33,10 @@ export function StickyCtaRail() {
           variant="ghost"
           className="h-10 w-10"
           asChild
-          aria-label="LinkedIn Profile"
+          aria-label="LinkedIn profile"
           title="LinkedIn"
         >
-          <a href="https://www.linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer">
-            {/* TODO: Replace with actual LinkedIn URL */}
+          <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer">
             <Linkedin className="h-5 w-5" />
           </a>
         </Button>
@@ -59,10 +46,23 @@ export function StickyCtaRail() {
           variant="ghost"
           className="h-10 w-10"
           asChild
-          aria-label="Send Email"
+          aria-label="Kaggle profile"
+          title="Kaggle"
+        >
+          <a href={site.links.kaggle} target="_blank" rel="noopener noreferrer">
+            <SiKaggle className="h-5 w-5" />
+          </a>
+        </Button>
+
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-10 w-10"
+          asChild
+          aria-label="Send email"
           title="Email"
         >
-          <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's Connect">
+          <a href={mailto}>
             <Mail className="h-5 w-5" />
           </a>
         </Button>
@@ -70,4 +70,3 @@ export function StickyCtaRail() {
     </motion.div>
   )
 }
-

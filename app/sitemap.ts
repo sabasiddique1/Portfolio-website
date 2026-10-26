@@ -1,28 +1,21 @@
-import { MetadataRoute } from 'next'
-import { projects } from '@/constants/projects'
+import type { MetadataRoute } from "next"
+import { projects } from "@/constants/projects"
+import { site } from "@/constants/site"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://your-portfolio-domain.com' // TODO: Replace with actual domain
+  const lastModified = new Date()
 
-  // Static routes
-  const routes = [
-    '',
-    '/projects',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: route === '' ? 1 : 0.8,
-  }))
+  const routes: MetadataRoute.Sitemap = [
+    { url: site.url, lastModified, changeFrequency: "monthly", priority: 1 },
+    { url: `${site.url}/projects`, lastModified, changeFrequency: "monthly", priority: 0.8 },
+  ]
 
-  // Dynamic project routes
-  const projectRoutes = projects.map((project) => ({
-    url: `${baseUrl}/projects/${project.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${site.url}/projects/${project.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
     priority: project.featured ? 0.9 : 0.7,
   }))
 
   return [...routes, ...projectRoutes]
 }
-

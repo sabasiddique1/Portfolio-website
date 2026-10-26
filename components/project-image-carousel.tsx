@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import Image from "next/image"
 
 interface ProjectImageCarouselProps {
@@ -22,17 +22,18 @@ export function ProjectImageCarousel({
   className = "",
 }: ProjectImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const reduceMotion = useReducedMotion()
 
-  // Auto-switch images
+  // Auto-switch images; the dots remain as the manual control when motion is reduced.
   useEffect(() => {
-    if (images.length <= 1) return
+    if (images.length <= 1 || reduceMotion) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length)
     }, autoSwitchInterval)
 
     return () => clearInterval(interval)
-  }, [images.length, autoSwitchInterval])
+  }, [images.length, autoSwitchInterval, reduceMotion])
 
   // Images are 1536x1024 (3:2 aspect ratio)
   const aspectRatio = "aspect-[3/2]"

@@ -8,6 +8,7 @@ import { ProjectCarousel } from "@/components/project-carousel"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { site } from "@/constants/site"
 
 // Legacy projects array - keeping for reference but using constants/projects.ts instead
 const _legacyProjects: Array<{
@@ -95,7 +96,7 @@ const _legacyProjects: Array<{
     projectType: "Personal Project",
     technologies: ["React 19", "Next.js 15", "TailwindCSS", "ShadCN", "TypeScript", 'Framer Motion'],
     githubUrl: "https://github.com/sabasiddique1/Portfolio-website.git",
-    demoUrl: "https://portfolio-website-phi-ten-96.vercel.app/",
+    demoUrl: site.url,
   },
   {
     id: 8,

@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import type { ComponentType } from "react"
 
 import { useState, useRef, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
@@ -9,12 +10,27 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Mail, Send, Github, Linkedin, ArrowUpRight } from "lucide-react"
-import { SiKaggle, SiDiscord, SiNotion, SiMedium, SiX } from "react-icons/si"
+import { SiKaggle } from "react-icons/si"
 import emailjs from "@emailjs/browser"
+import { mailto, site } from "@/constants/site"
 
 const EMAILJS_SERVICE_ID = "service_fy30kuj"
 const EMAILJS_TEMPLATE_ID = "template_rifrg0i"
 const EMAILJS_PUBLIC_KEY = "p-NcX4hQ1c0erpCWd"
+
+type ProfileLink = {
+  label: string
+  href: string
+  icon: ComponentType<{ className?: string }>
+  external: boolean
+}
+
+const profileLinks: ProfileLink[] = [
+  { label: "Email", href: mailto, icon: Mail, external: false },
+  { label: "GitHub profile", href: site.links.github, icon: Github, external: true },
+  { label: "Kaggle profile", href: site.links.kaggle, icon: SiKaggle, external: true },
+  { label: "LinkedIn profile", href: site.links.linkedin, icon: Linkedin, external: true },
+]
 
 export function ContactSection() {
   const { toast } = useToast()
@@ -37,39 +53,6 @@ export function ContactSection() {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
-
-  //
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   setIsSubmitting(true)
-  //
-  //   try {
-  //     const result = await emailjs.send(
-  //         "service_vdlakiq",
-  //         "template_rifrg0i",
-  //         {
-  //           name: formData.name,
-  //           email: formData.email,
-  //           message: formData.message,
-  //         },
-  //         "p-NcX4hQ1c0erpCWd"
-  //     )
-  //
-  //     toast({
-  //       title: "Message sent!",
-  //       description: "Thank you for your message. I'll get back to you soon.",
-  //     })
-  //     setFormData({ name: "", email: "", message: "" })
-  //   } catch (error) {
-  //     toast({
-  //       title: "Oops!",
-  //       description: "Something went wrong. Please try again later.",
-  //       variant: "destructive",
-  //     })
-  //   } finally {
-  //     setIsSubmitting(false)
-  //   }
-  // }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -102,7 +85,7 @@ export function ContactSection() {
       console.error("EmailJS error:", error);
       let errorTitle = "Failed to send email";
       let errorMessage = "Something went wrong. Please try again later.";
-      
+
       // Check for specific error messages from EmailJS
       if (error?.text) {
         const errorText = error.text;
@@ -177,7 +160,7 @@ export function ContactSection() {
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Let&apos;s Work Together
+              {site.contact.heading}
               <motion.span
                 className="absolute -bottom-2 left-0 h-1 bg-primary rounded-full"
                 initial={{ width: 0 }}
@@ -192,7 +175,7 @@ export function ContactSection() {
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Have a project in mind? Get in touch and let&apos;s create something amazing.
+            {site.contact.line}
           </motion.p>
         </motion.div>
 
@@ -274,96 +257,28 @@ export function ContactSection() {
             className="mt-12 flex flex-col items-center space-y-6"
           >
             <div className="flex items-center space-x-2">
-              <Mail className="h-5 w-5 text-muted-foreground" />
-              <span>sabasiddiqdev@gmail.com</span>
+              <Mail className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+              <span>{site.email}</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <motion.a
-                href="mailto:sabasiddiqdev@gmail.com"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Mail className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
-              <motion.a
-                href="https://github.com/sabasiddique1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
-              <motion.a
-                href="https://www.kaggle.com/sabasiddiquedev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <SiKaggle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
-              {/* <motion.a
-                href="https://discord.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <SiDiscord className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a> */}
-              <motion.a
-                href="https://www.linkedin.com/in/sabaa-siddique-26b6a31a5"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
-              {/* <motion.a
-                href="https://probable-kite-c21.notion.site/WorkFolio-24535d194ff08006a22cd3113cf94263"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <SiNotion className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a> */}
-              {/* <motion.a
-                href="https://medium.com/@sabasiddique"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <SiMedium className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a> */}
-              <motion.a
-                href="https://x.com/SSiddique97401"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <SiX className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
+              {profileLinks.map(({ label, href, icon: Icon, external }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="group flex items-center gap-2 px-4 py-4 rounded-2xl hover:bg-muted/50 transition-colors"
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <ArrowUpRight
+                    className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-hidden="true"
+                  />
+                </motion.a>
+              ))}
             </div>
           </motion.div>
         </div>

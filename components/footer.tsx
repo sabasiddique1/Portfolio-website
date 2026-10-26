@@ -1,7 +1,15 @@
 "use client"
 
+import { Fragment } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { site } from "@/constants/site"
+
+const profileLinks = [
+  { label: "LinkedIn", href: site.links.linkedin },
+  { label: "GitHub", href: site.links.github },
+  { label: "Kaggle", href: site.links.kaggle },
+]
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -22,6 +30,23 @@ export function Footer() {
             &copy; {currentYear} All rights reserved.
           </p>
         </motion.div>
+
+        <nav aria-label="Profiles" className="flex items-center gap-2 text-sm text-muted-foreground">
+          {profileLinks.map((link, i) => (
+            <Fragment key={link.label}>
+              {i > 0 && <span aria-hidden="true">·</span>}
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+              >
+                {link.label}
+              </a>
+            </Fragment>
+          ))}
+        </nav>
+
         <motion.p
           className="text-center text-xs text-muted-foreground md:text-right"
           initial={{ opacity: 0 }}

@@ -7,11 +7,14 @@ interface SectionHeadingProps {
     title: string
     subtitle?: string
     className?: string
+    /** Heading level; pages use "h1" for their title. */
+    as?: "h1" | "h2"
 }
 
-export function SectionHeading({ title, subtitle, className = "" }: SectionHeadingProps) {
+export function SectionHeading({ title, subtitle, className = "", as = "h2" }: SectionHeadingProps) {
     const headingRef = useRef<HTMLDivElement>(null)
     const isInView = useInView(headingRef, { once: false, amount: 0.5 })
+    const Heading = as === "h1" ? motion.h1 : motion.h2
 
     return (
         <motion.div
@@ -22,7 +25,7 @@ export function SectionHeading({ title, subtitle, className = "" }: SectionHeadi
             className={`mb-12 space-y-4 text-center ${className}`}
         >
             <div className="inline-block">
-                <motion.h2
+                <Heading
                     className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl relative"
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : { opacity: 0 }}
@@ -35,7 +38,7 @@ export function SectionHeading({ title, subtitle, className = "" }: SectionHeadi
                         animate={isInView ? { width: "100%" } : { width: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                     />
-                </motion.h2>
+                </Heading>
             </div>
             {subtitle && (
                 <motion.p

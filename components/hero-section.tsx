@@ -1,17 +1,34 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { Fragment, useRef, useState } from "react"
+import { motion, steps, useReducedMotion, useScroll, useTransform, type Variants } from "framer-motion"
+import { ArrowDown, Mail, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ArrowDown, Sparkles, Mail } from "lucide-react"
 import { AnimatedBackground } from "@/components/animated-background"
+import { mailto, site } from "@/constants/site"
+
+/** Headline reveal: one clip-path step per character. */
+const CHAR_SECONDS = 0.06
+const HEADLINE_DELAY = 0.4
+const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
+
+// Each word is revealed on its own so the effect still reads left-to-right when the headline wraps.
+const headlineWords = site.hero.h1.split(" ").map((word, i, words) => {
+  const charsBefore = words.slice(0, i).reduce((sum, w) => sum + w.length + 1, 0)
+  return {
+    word,
+    delay: HEADLINE_DELAY + charsBefore * CHAR_SECONDS,
+    duration: word.length * CHAR_SECONDS,
+    ease: steps(word.length, "end"),
+  }
+})
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [text, setText] = useState("")
-  const [isTypingComplete, setIsTypingComplete] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const fullText = "Hey! I'm Sabaa."
+  const reduceMotion = useReducedMotion()
+  const [typingDone, setTypingDone] = useState(false)
+  // With reduced motion everything is shown at once instead of waiting for the headline.
+  const revealed = typingDone || !!reduceMotion
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -19,62 +36,30 @@ export function HeroSection() {
   })
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 100])
-  
-  // Keep background opacity constant (don't fade it out)
-  const bgOpacity = useTransform(scrollYProgress, [0, 1], [1, 1])
+  const scale = useTransform(scrollYProgress, [0, 0.5], reduceMotion ? [1, 1] : [1, 0.9])
+  const y = useTransform(scrollYProgress, [0, 0.5], reduceMotion ? [0, 0] : [0, 100])
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const chipList: Variants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.08,
+        delayChildren: reduceMotion ? 0 : 0.15,
+      },
+    },
+  }
 
-  // Smooth, natural typewriter effect with variable timing
-  useEffect(() => {
-    if (!mounted) return
-    
-    if (text.length < fullText.length) {
-      const currentChar = fullText[text.length]
-      const nextChar = text.length + 1 < fullText.length ? fullText[text.length + 1] : null
-      
-      // Variable delays for natural typing rhythm
-      let delay = 100 // Base delay for letters
-      
-      // Faster for spaces
-      if (currentChar === ' ') {
-        delay = 50
-      }
-      // Slightly longer pause after punctuation
-      else if (currentChar === '!' || currentChar === '.' || currentChar === '?' || currentChar === ',') {
-        delay = 200
-      }
-      // Slightly longer for apostrophes
-      else if (currentChar === "'") {
-        delay = 80
-      }
-      // Natural pause between words (space coming next)
-      else if (nextChar === ' ') {
-        delay = 120
-      }
-      // Slightly faster for common letters
-      else if ('aeiou'.includes(currentChar.toLowerCase())) {
-        delay = 90
-      }
-      
-      const timeout = setTimeout(() => {
-        setText(fullText.slice(0, text.length + 1))
-      }, delay)
-      return () => clearTimeout(timeout)
-    } else {
-      setTimeout(() => setIsTypingComplete(true), 300)
-    }
-  }, [text, fullText, mounted])
+  const chipItem: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: reduceMotion ? 0 : 0.35, ease: EASE_OUT },
+    },
+  }
 
   const scrollToProjects = () => {
-    const projectsSection = document.getElementById("projects")
-    if (projectsSection) {
-      projectsSection.scrollIntoView({ behavior: "smooth" })
-    }
+    document.getElementById("projects")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" })
   }
 
   return (
@@ -84,7 +69,7 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-secondary/20 dark:from-background dark:via-background dark:to-background"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: reduceMotion ? 0 : 0.8 }}
     >
       <div className="absolute inset-0 z-0">
         <AnimatedBackground />
@@ -92,175 +77,141 @@ export function HeroSection() {
 
       <motion.div className="container px-4 md:px-6 relative z-10" style={{ opacity, scale, y }}>
         <div className="flex flex-col items-center justify-center space-y-6 text-center">
-          <motion.div className="space-y-4">
+          <div className="space-y-4">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: -20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: 0.2,
-                type: "spring",
-                stiffness: 100,
-                damping: 12
-              }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.6, delay: 0.2, type: "spring", stiffness: 100, damping: 12 }
+              }
               className="mb-6"
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 text-sm text-foreground/70 dark:text-primary/80 bg-secondary/50 dark:bg-primary/5 border border-border/50 dark:border-transparent rounded-full backdrop-blur-sm shadow-sm dark:shadow-none">
                 <motion.span
+                  aria-hidden="true"
                   animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ 
-                    repeat: Number.POSITIVE_INFINITY, 
-                    duration: 2,
-                    ease: "easeInOut"
-                  }}
+                  transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2, ease: "easeInOut" }}
                 >
                   <Sparkles className="w-4 h-4" />
                 </motion.span>
-                Available for projects in 2026
+                {site.hero.badge}
               </span>
             </motion.div>
 
             <div className="relative inline-block">
-              <motion.h1
+              {/* The full headline is in the DOM from the first render; the clip-path only hides it until typed. */}
+              <h1
                 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-foreground dark:text-primary/90"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ 
-                  duration: 0.5,
-                  delay: 0.1,
-                }}
-                style={{ 
-                  lineHeight: '1.2',
-                  minHeight: '1.2em'
-                }}
+                style={{ lineHeight: 1.2 }}
               >
-                <span className="inline-block relative" style={{ position: 'relative' }}>
-                  {/* Reserve space with invisible full text - prevents layout shift */}
-                  <span 
-                    className="inline-block opacity-0 pointer-events-none select-none"
-                    aria-hidden="true"
-                    style={{ 
-                      whiteSpace: 'pre',
-                      display: 'inline-block',
-                      visibility: 'hidden'
-                    }}
-                  >
-                    {fullText}
-                  </span>
-                  {/* Visible typing text - absolutely positioned to prevent shift */}
-                  <span 
-                    className="absolute top-0 left-0 inline-block whitespace-pre"
-                    style={{ 
-                      whiteSpace: 'pre',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0
-                    }}
-                  >
+                {headlineWords.map(({ word, delay, duration, ease }, i) => (
+                  <Fragment key={`${i}-${word}`}>
+                    {i > 0 && " "}
                     <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
+                      className="inline-block"
+                      initial={{ clipPath: "inset(0% 100% 0% 0%)" }}
+                      animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                      transition={reduceMotion ? { duration: 0 } : { delay, duration, ease }}
+                      onAnimationComplete={i === headlineWords.length - 1 ? () => setTypingDone(true) : undefined}
                     >
-                      {text}
+                      {word}
                     </motion.span>
-                    {!isTypingComplete && (
-                      <motion.span
-                        className="inline-block w-[2px] h-[1em] bg-foreground/60 dark:bg-primary/70 ml-0.5"
-                        animate={{ opacity: [1, 0.3, 1] }}
-                        transition={{ 
-                          repeat: Number.POSITIVE_INFINITY, 
-                          duration: 0.7,
-                          ease: "easeInOut"
-                        }}
-                        style={{ 
-                          verticalAlign: 'middle',
-                          display: 'inline-block'
-                        }}
-                      />
-                    )}
-                  </span>
-                </span>
-              </motion.h1>
+                  </Fragment>
+                ))}
+              </h1>
 
-              {isTypingComplete && (
-                <motion.div
-                  className="absolute -z-10 inset-0 blur-xl"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{
-                    opacity: [0.05, 0.1, 0.05],
-                    scale: [1, 1.05, 1],
-                  }}
-                  transition={{
-                    repeat: Number.POSITIVE_INFINITY,
-                    duration: 4,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <div className="h-full w-full bg-foreground/5 dark:bg-primary/10 rounded-full" />
-                </motion.div>
-              )}
+              <motion.div
+                aria-hidden="true"
+                className="absolute -z-10 inset-0 blur-xl"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={
+                  revealed
+                    ? reduceMotion
+                      ? { opacity: 0.08, scale: 1 }
+                      : { opacity: [0.05, 0.1, 0.05], scale: [1, 1.05, 1] }
+                    : { opacity: 0, scale: 0.8 }
+                }
+                transition={
+                  revealed && !reduceMotion
+                    ? { repeat: Number.POSITIVE_INFINITY, duration: 4, ease: "easeInOut" }
+                    : { duration: 0 }
+                }
+              >
+                <div className="h-full w-full bg-foreground/5 dark:bg-primary/10 rounded-full" />
+              </motion.div>
 
-              {isTypingComplete && (
-                <motion.div
-                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-foreground/20 dark:via-primary/40 to-transparent rounded-full"
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "80%", opacity: 1 }}
-                  transition={{ 
-                    delay: 0.3, 
-                    duration: 1,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
-                />
-              )}
+              <motion.div
+                aria-hidden="true"
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-foreground/20 dark:via-primary/40 to-transparent rounded-full"
+                initial={{ width: 0, opacity: 0 }}
+                animate={revealed ? { width: "80%", opacity: 1 } : { width: 0, opacity: 0 }}
+                transition={{
+                  delay: revealed && !reduceMotion ? 0.3 : 0,
+                  duration: reduceMotion ? 0 : 1,
+                  ease: EASE_OUT,
+                }}
+              />
             </div>
 
             <motion.p
-              className="pt-5 mx-auto max-w-[700px] text-muted-foreground md:text-xl leading-relaxed"
+              className="pt-5 mx-auto max-w-[700px] text-lg md:text-xl font-semibold tracking-tight text-foreground leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isTypingComplete ? 1 : 0, y: isTypingComplete ? 0 : 20 }}
-              transition={{ 
-                duration: 0.6,
-                delay: 0.2,
-                ease: [0.16, 1, 0.3, 1]
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.6,
+                delay: revealed && !reduceMotion ? 0.2 : 0,
+                ease: EASE_OUT,
               }}
             >
-              <span className="font-semibold text-foreground tracking-tight">
-                AI-enabled full-stack engineer
-              </span>{" "}
-              who turns{" "}
-              <span className="font-mono text-sm md:text-base px-1.5 py-0.5 rounded bg-muted/80 dark:bg-primary/10 text-foreground dark:text-primary border border-border/50 dark:border-primary/20">
-                ambitious ideas
-              </span>{" "}
-              into{" "}
-              <span className="font-mono text-sm md:text-base px-1.5 py-0.5 rounded bg-muted/80 dark:bg-primary/10 text-foreground dark:text-primary border border-border/50 dark:border-primary/20">
-                scalable digital products
-              </span>{" "}
-              — blending thoughtful design, solid engineering, and a bit of creative problem-solving along the way.
+              {site.hero.line}
             </motion.p>
-          </motion.div>
+
+            <motion.p
+              className="mx-auto max-w-[640px] text-muted-foreground md:text-lg leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.6,
+                delay: revealed && !reduceMotion ? 0.3 : 0,
+                ease: EASE_OUT,
+              }}
+            >
+              {site.hero.subline}
+            </motion.p>
+
+            {/* Proof chips stagger in once the headline has finished. */}
+            <motion.div
+              className="flex flex-wrap items-center justify-center gap-2 pt-2"
+              variants={chipList}
+              initial="hidden"
+              animate={revealed ? "visible" : "hidden"}
+            >
+              {site.hero.chips.map((chip) => (
+                <motion.span
+                  key={chip}
+                  variants={chipItem}
+                  className="rounded-full border border-border/50 bg-muted/30 px-3 py-1.5 text-xs md:text-sm text-muted-foreground"
+                >
+                  {chip}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
 
           <motion.div
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ 
-              opacity: isTypingComplete ? 1 : 0, 
-              scale: isTypingComplete ? 1 : 0.8,
-              y: isTypingComplete ? 0 : 20
-            }}
-            transition={{ 
-              duration: 0.5,
-              delay: 0.4,
-              type: "spring",
-              stiffness: 100,
-              damping: 12
-            }}
+            animate={revealed ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 20 }}
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : { duration: 0.5, delay: 0.5, type: "spring", stiffness: 100, damping: 12 }
+            }
           >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="lg"
                 onClick={scrollToProjects}
@@ -269,7 +220,7 @@ export function HeroSection() {
                 <span className="relative z-10 flex items-center">
                   Explore Work
                   <motion.span
-                    initial={{ y: 0 }}
+                    aria-hidden="true"
                     animate={{ y: [0, -3, 0] }}
                     transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
                     className="ml-2"
@@ -286,20 +237,17 @@ export function HeroSection() {
               </Button>
             </motion.div>
 
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="lg"
                 variant="outline"
                 asChild
                 className="rounded-full relative overflow-hidden group border-2 hover:border-foreground/50 dark:hover:border-primary/50 bg-background/50 dark:bg-background/10 backdrop-blur-sm shadow-lg dark:shadow-none"
               >
-                <a href="mailto:sabasiddiqdev@gmail.com?subject=Let's Connect&body=Hi there,%0AI'd love to connect with you...">
+                <a href={mailto}>
                   <span className="relative z-10 flex items-center">
-                    <Mail className="mr-2 h-4 w-4" />
-                    Connect with Me
+                    <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
+                    Email me
                   </span>
                   <motion.span
                     className="absolute inset-0 bg-foreground/5 dark:bg-primary/10 z-0"
@@ -311,17 +259,6 @@ export function HeroSection() {
               </Button>
             </motion.div>
           </motion.div>
-
-          {/*<motion.div*/}
-          {/*  initial={{ opacity: 0 }}*/}
-          {/*  animate={{ opacity: isTypingComplete ? 0.7 : 0 }}*/}
-          {/*  transition={{ delay: 0.5, duration: 1 }}*/}
-          {/*  className="absolute bottom-50 left-1/2 -translate-x-1/2"*/}
-          {/*>*/}
-          {/*  <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}>*/}
-          {/*    <ArrowDown className="h-6 w-6 text-muted-foreground" />*/}
-          {/*  </motion.div>*/}
-          {/*</motion.div>*/}
         </div>
       </motion.div>
     </motion.section>
