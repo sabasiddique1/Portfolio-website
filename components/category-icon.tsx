@@ -1,15 +1,16 @@
 import { BarChart3, Bot, FlaskConical, HeartPulse, Layers, Mic, type LucideIcon } from "lucide-react"
 import type { ProjectKind } from "@/constants/projects"
+import type { ChipTone } from "@/lib/chip-tone"
 import { cn } from "@/lib/utils"
 
-/** One lucide icon + colour per category. 16px, coloured stroke, never filled. */
-export const categoryIcons: Record<ProjectKind, { Icon: LucideIcon; colorClass: string; label: string }> = {
-  agents: { Icon: Bot, colorClass: "text-cat-agents", label: "Agents and AI security" },
-  healthcare: { Icon: HeartPulse, colorClass: "text-cat-health", label: "Healthcare AI" },
-  ml: { Icon: BarChart3, colorClass: "text-cat-ml", label: "Machine learning and data" },
-  research: { Icon: FlaskConical, colorClass: "text-cat-research", label: "Research" },
-  voice: { Icon: Mic, colorClass: "text-cat-voice", label: "Voice" },
-  fullstack: { Icon: Layers, colorClass: "text-cat-fullstack", label: "Full-stack" },
+/** One lucide icon per category, coloured from the same tone palette as the chips. 16px, never filled. */
+export const categoryIcons: Record<ProjectKind, { Icon: LucideIcon; tone: ChipTone; colorClass: string; label: string }> = {
+  agents: { Icon: Bot, tone: "green", colorClass: "text-tone-green-text", label: "Agents and AI security" },
+  healthcare: { Icon: HeartPulse, tone: "orange", colorClass: "text-tone-orange-text", label: "Healthcare AI" },
+  ml: { Icon: BarChart3, tone: "blue", colorClass: "text-tone-blue-text", label: "Machine learning and data" },
+  research: { Icon: FlaskConical, tone: "purple", colorClass: "text-tone-purple-text", label: "Research" },
+  voice: { Icon: Mic, tone: "teal", colorClass: "text-tone-teal-text", label: "Voice" },
+  fullstack: { Icon: Layers, tone: "grey", colorClass: "text-tone-grey-text", label: "Full-stack" },
 }
 
 interface CategoryIconProps {

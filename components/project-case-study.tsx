@@ -72,7 +72,7 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
   }
 
   return (
-    <main className="container max-w-5xl pt-24 pb-16 md:pb-24">
+    <main className="container max-w-5xl pb-12 pt-20 md:pb-[72px]">
       <motion.div {...fade(0)}>
         <Link href="/projects" className={buttonVariants({ variant: "ghost", size: "sm" })}>
           <ArrowLeft aria-hidden="true" />

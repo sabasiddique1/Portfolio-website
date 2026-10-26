@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Briefcase } from "lucide-react"
 import { experience } from "@/constants/experience"
+import { site } from "@/constants/site"
 import { EducationBlock } from "@/components/education-block"
 import { ExpandRow } from "@/components/expand-row"
 import { SectionReveal } from "@/components/section-reveal"
@@ -13,12 +14,17 @@ export function ExperienceTable() {
   const [openId, setOpenId] = useState<string | null>(null)
 
   return (
-    <section id="experience" className="container py-16 md:py-24">
-      <SectionTitle title="Experience" icon={Briefcase} iconClassName="text-cat-ml" />
+    <section id="experience" className="container py-12 md:py-[72px]">
+      <SectionTitle
+        title="Experience"
+        icon={Briefcase}
+        iconClassName="text-tone-blue-text"
+        subtitle={site.sections.experience}
+      />
 
       <SectionReveal>
         <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <div className="grid grid-cols-[1fr_auto] border-b border-border px-4 py-2 text-2xs uppercase tracking-wider text-muted-foreground">
+          <div className="grid grid-cols-[1fr_auto] border-b border-border px-5 py-2 text-2xs uppercase tracking-wider text-muted-foreground">
             <span>Role</span>
             <span className="hidden md:block">Stack</span>
           </div>

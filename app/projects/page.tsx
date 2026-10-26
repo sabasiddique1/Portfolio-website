@@ -32,7 +32,7 @@ export default function ProjectsPage() {
   const lastUpdated = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(new Date())
 
   return (
-    <main className="container pt-24 pb-16 md:pb-24">
+    <main className="container pb-12 pt-20 md:pb-[72px]">
       <Link href="/" className={buttonVariants({ variant: "ghost", size: "sm" })}>
         <ArrowLeft aria-hidden="true" />
         Back to Home
@@ -47,12 +47,12 @@ export default function ProjectsPage() {
       </header>
 
       <section aria-labelledby="ai-work" className="mt-12">
-        <SectionTitle id="ai-work" as="h2" title="AI work" icon={Bot} iconClassName="text-cat-agents" />
+        <SectionTitle id="ai-work" as="h2" title="AI work" icon={Bot} iconClassName="text-tone-green-text" />
         <ProjectCardGroup projects={cardProjects} availableImages={availableImages} columns={2} />
       </section>
 
-      <section className="mt-16">
-        <SectionTitle as="h2" title="More projects" icon={List} iconClassName="text-cat-fullstack" />
+      <section className="mt-12">
+        <SectionTitle as="h2" title="More projects" icon={List} iconClassName="text-tone-grey-text" />
         <SectionReveal>
           <ProjectsList projects={rowProjects} />
         </SectionReveal>

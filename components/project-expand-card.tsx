@@ -36,7 +36,9 @@ export function ProjectExpandCard({ project, open, onToggle, imageAvailable }: P
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-lg border bg-card transition-colors",
+        // The 2px lime bar on the left edge only appears on hover.
+        "relative overflow-hidden rounded-lg border bg-card transition-colors hover:border-border-strong",
+        "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-lime before:opacity-0 before:transition-opacity before:duration-150 hover:before:opacity-100",
         open ? "border-border-strong" : "border-border"
       )}
     >
@@ -71,6 +73,12 @@ export function ProjectExpandCard({ project, open, onToggle, imageAvailable }: P
           </h3>
 
           <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{project.description}</p>
+
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.technologies.slice(0, 3).map((tech) => (
+              <Chip key={tech}>{tech}</Chip>
+            ))}
+          </div>
 
           {/* Visual affordance only; the heading button is the control. */}
           <span

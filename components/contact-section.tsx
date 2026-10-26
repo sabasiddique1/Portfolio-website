@@ -144,12 +144,13 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" ref={sectionRef} className="container py-16 md:py-24">
+    <section id="contact" ref={sectionRef} className="container py-12 md:py-[72px]">
       <SectionTitle
         title={site.contact.heading}
         icon={Mail}
-        iconClassName="text-cat-voice"
-        subtitle={site.contact.line}
+        iconClassName="text-tone-teal-text"
+        subtitle={site.sections.contact}
+        align="center"
       />
 
       <motion.form
@@ -158,7 +159,7 @@ export function ContactSection() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         onSubmit={handleSubmit}
-        className="max-w-2xl space-y-4 rounded-lg border border-border bg-card p-6"
+        className="mx-auto w-full max-w-[560px] space-y-4"
       >
         <motion.div variants={inputVariants} className="space-y-1.5">
           <label htmlFor="contact-name" className="block text-xs text-muted-foreground">
@@ -211,7 +212,7 @@ export function ContactSection() {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="mt-6 flex max-w-2xl flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+        className="mx-auto mt-6 flex max-w-[560px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
       >
         <a href={mailto} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
           <Mail className="h-4 w-4" aria-hidden="true" />

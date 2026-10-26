@@ -26,7 +26,7 @@ function underlinePhrases(text: string, phrases: readonly string[]): ReactNode[]
 
 export function HeroSection() {
   return (
-    <section id="home" className="container pb-16 pt-20 md:pb-24 md:pt-28">
+    <section id="home" className="container pb-12 pt-16 md:pb-[72px] md:pt-24">
       <SectionReveal className="mx-auto flex max-w-[880px] flex-col items-center text-center">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{site.hero.kicker}</p>
 
@@ -58,12 +58,12 @@ export function HeroSection() {
       </SectionReveal>
 
       <SectionReveal delay={0.1}>
-        <dl className="mx-auto mt-12 grid max-w-[880px] grid-cols-2 gap-8 text-center md:grid-cols-4">
+        <dl className="mx-auto mt-10 grid max-w-[880px] grid-cols-2 gap-y-8 text-center md:grid-cols-4 md:divide-x md:divide-border">
           {site.hero.stats.map(({ value, label }) => (
             // Bottom-aligned so a wrapping value ("Project Lead" on phones) keeps the labels on one line.
-            <div key={label} className="flex flex-col justify-end">
+            <div key={label} className="flex flex-col justify-end px-4 md:px-6">
               <dt className="order-2 mt-2 text-xs text-muted-foreground">{label}</dt>
-              <dd className="order-1 text-[32px] font-semibold leading-none">{value}</dd>
+              <dd className="order-1 text-[32px] font-semibold leading-none text-foreground">{value}</dd>
             </div>
           ))}
         </dl>

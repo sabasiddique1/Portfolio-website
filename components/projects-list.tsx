@@ -11,7 +11,7 @@ import { getProjectKind, getProjectLinks, type Project } from "@/constants/proje
 export function ProjectsList({ projects }: { projects: Project[] }) {
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-card">
-      <div className="grid grid-cols-[1fr_auto] border-b border-border px-4 py-2 text-2xs uppercase tracking-wider text-muted-foreground">
+      <div className="grid grid-cols-[1fr_auto] border-b border-border px-5 py-2 text-2xs uppercase tracking-wider text-muted-foreground">
         <span>Project</span>
         <span className="hidden md:block">Links</span>
       </div>
@@ -23,7 +23,7 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
           return (
             <li
               key={project.id}
-              className="grid grid-cols-1 items-center gap-2 px-4 py-3 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:gap-6"
+              className="grid grid-cols-1 items-center gap-2 px-5 py-4 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:gap-6"
             >
               <div className="flex min-w-0 flex-col gap-1 md:flex-row md:items-center">
                 <div className="flex shrink-0 items-center gap-2">

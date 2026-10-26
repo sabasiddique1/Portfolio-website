@@ -29,6 +29,17 @@ export const site = {
     { label: "Contact", href: "/#contact" },
   ],
 
+  /** One-line muted subtitles under each section title. */
+  sections: {
+    featured: "Two things I'd show first.",
+    alsoBuilding: "Side projects that are live.",
+    journey: "Frontend intern in 2022 to leading an AI team in 2026.",
+    experience: "Where the four years went.",
+    contact: "Email is fastest.",
+  },
+
+  footerTagline: "Production is the only benchmark I trust.",
+
   /** Footer profile links, in order. */
   footerLinks: [
     { label: "GitHub", href: "https://github.com/sabasiddique1" },

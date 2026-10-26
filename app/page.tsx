@@ -10,7 +10,7 @@ export default function Home() {
   const availableImages = getAvailableProjectImages()
 
   return (
-    <main className="min-h-screen">
+    <main>
       <HeroSection />
       <FeaturedWork availableImages={availableImages} />
       {/* DEMO — remove by deleting <AlsoBuilding /> in page.tsx */}

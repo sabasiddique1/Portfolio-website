@@ -7,6 +7,8 @@ const token = (name: string) => `hsl(var(--hsl-${name}) / <alpha-value>)`
 
 const config = {
   darkMode: ["class"],
+  // `.container` is defined once in app/globals.css (1180px, centred, 24px gutters).
+  corePlugins: { container: false },
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -15,14 +17,6 @@ const config = {
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    // 1180px max width, 24px gutters
-    container: {
-      center: true,
-      padding: "1.5rem",
-      screens: {
-        "2xl": "1180px",
-      },
-    },
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fallback],
@@ -89,6 +83,16 @@ const config = {
           research: token("cat-research"),
           voice: token("cat-voice"),
           fullstack: token("cat-fullstack"),
+        },
+        // Chip / icon tones (lib/chip-tone.ts): bg, text, 1px border per tone.
+        tone: {
+          green: { bg: "#0f1f14", text: "#7ee787", border: "#1d3a26" },
+          blue: { bg: "#0d1a2b", text: "#58a6ff", border: "#1a3356" },
+          grey: { bg: "#15191c", text: "#c9d1d9", border: "#262b2e" },
+          purple: { bg: "#1c1430", text: "#d2a8ff", border: "#35265a" },
+          orange: { bg: "#2a170c", text: "#ff9f5a", border: "#4a2a14" },
+          teal: { bg: "#0b2422", text: "#39d3c3", border: "#174843" },
+          yellow: { bg: "#2a2408", text: "#e3c341", border: "#4a3f12" },
         },
       },
       // 10px cards, 6px pills and buttons

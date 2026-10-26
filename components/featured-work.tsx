@@ -1,15 +1,21 @@
 import Link from "next/link"
 import { ArrowRight, Boxes } from "lucide-react"
 import { featuredProjects } from "@/constants/projects"
+import { site } from "@/constants/site"
 import { ProjectCardGroup } from "@/components/project-card-group"
 import { SectionReveal } from "@/components/section-reveal"
 import { SectionTitle } from "@/components/section-title"
 
 export function FeaturedWork({ availableImages }: { availableImages: string[] }) {
   return (
-    <section id="projects" className="container py-16 md:py-24">
+    <section id="projects" className="container py-12 md:py-[72px]">
       <SectionReveal>
-        <SectionTitle title="Featured work" icon={Boxes} iconClassName="text-cat-ml" />
+        <SectionTitle
+          title="Featured work"
+          icon={Boxes}
+          iconClassName="text-tone-blue-text"
+          subtitle={site.sections.featured}
+        />
       </SectionReveal>
 
       <ProjectCardGroup projects={featuredProjects} availableImages={availableImages} columns={2} />

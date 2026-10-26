@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react"
 import type { ProjectKind } from "@/constants/projects"
 import { CategoryIcon } from "@/components/category-icon"
 import { Chip } from "@/components/chip"
+import { getChipTone, toneBarClasses } from "@/lib/chip-tone"
 import { cn } from "@/lib/utils"
 
 interface ExpandRowProps {
@@ -43,6 +44,8 @@ export function ExpandRow({
   const reduceMotion = useReducedMotion()
   const panelId = `${id}-panel`
   const transition = reduceMotion ? { duration: 0 } : { duration: 0.25, ease: [0.16, 1, 0.3, 1] as const }
+  // The row's tone bar takes the colour of its first chip.
+  const barClass = toneBarClasses[chips[0] ? getChipTone(chips[0]) : "default"]
 
   const heading = (
     <>
@@ -52,10 +55,18 @@ export function ExpandRow({
   )
 
   return (
-    <li className={cn("border-b border-border last:border-b-0", open && "bg-surface")}>
+    <li className={cn("group relative border-b border-border last:border-b-0", open && "bg-surface")}>
+      {/* Tone bar: 40% at rest, full on hover */}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute bottom-0 left-0 top-0 w-[3px] opacity-40 transition-opacity duration-150 group-hover:opacity-100",
+          barClass
+        )}
+      />
       <div
         className={cn(
-          "grid grid-cols-1 gap-3 px-4 py-4 transition-colors md:grid-cols-[1fr_auto] md:items-start",
+          "grid grid-cols-1 gap-3 px-5 py-4 transition-colors md:grid-cols-[1fr_auto] md:items-start",
           !disabled && "cursor-pointer hover:bg-surface"
         )}
         onClick={disabled ? undefined : onToggle}
@@ -102,7 +113,7 @@ export function ExpandRow({
           aria-hidden={!open}
           inert={!open}
         >
-          <div className="px-4 pb-4">{children}</div>
+          <div className="px-5 pb-4">{children}</div>
         </motion.div>
       )}
     </li>

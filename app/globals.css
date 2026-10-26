@@ -91,6 +91,16 @@
   }
 }
 
+@layer components {
+  /* The one page-width wrapper: every nav, section, footer and form sits in it. */
+  .container {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+}
+
 /* Reduced motion: effectively instant animations and transitions, no smooth scrolling. */
 @media (prefers-reduced-motion: reduce) {
   html {
