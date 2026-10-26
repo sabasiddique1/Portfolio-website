@@ -27,7 +27,7 @@ export function AlsoBuilding() {
                 href={card.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full flex-col rounded-lg border border-border bg-card p-4 transition-colors hover:border-border-strong hover:bg-surface"
+                className="flex h-full flex-col rounded-lg border border-border bg-card p-4 transition-[transform,border-color,background-color] duration-150 motion-safe:hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2">

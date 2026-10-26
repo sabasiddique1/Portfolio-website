@@ -12,7 +12,7 @@ interface SectionRevealProps {
 }
 
 /**
- * Reveal-on-scroll wrapper: short fade + 14px slide, ~300ms, plays once.
+ * Reveal-on-scroll wrapper: 16px fade-up, 400ms, plays once.
  * The SSR-safe hook keeps the first client render identical to the server HTML;
  * once mounted, reduced motion makes the change instant (MotionConfig already drops the slide).
  */
@@ -22,10 +22,10 @@ export function SectionReveal({ children, className, delay = 0 }: SectionRevealP
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={reduceMotion ? { duration: 0 } : { duration: 0.3, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

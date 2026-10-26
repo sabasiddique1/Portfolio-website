@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Briefcase } from "lucide-react"
 import { experience } from "@/constants/experience"
 import { site } from "@/constants/site"
-import { EducationBlock } from "@/components/education-block"
 import { ExpandRow } from "@/components/expand-row"
 import { SectionReveal } from "@/components/section-reveal"
 import { SectionTitle } from "@/components/section-title"
@@ -15,12 +14,14 @@ export function ExperienceTable() {
 
   return (
     <section id="experience" className="container py-12 md:py-[72px]">
-      <SectionTitle
-        title="Experience"
-        icon={Briefcase}
-        iconClassName="text-tone-blue-text"
-        subtitle={site.sections.experience}
-      />
+      <SectionReveal>
+        <SectionTitle
+          title="Experience"
+          icon={Briefcase}
+          iconClassName="text-tone-blue-text"
+          subtitle={site.sections.experience}
+        />
+      </SectionReveal>
 
       <SectionReveal>
         <div className="overflow-hidden rounded-lg border border-border bg-card">
@@ -55,8 +56,6 @@ export function ExperienceTable() {
             })}
           </ul>
         </div>
-
-        <EducationBlock />
       </SectionReveal>
     </section>
   )

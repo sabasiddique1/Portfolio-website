@@ -4,7 +4,7 @@
  */
 export const site = {
   name: "Saba Siddique",
-  role: "AI Engineer",
+  role: "Full-Stack AI Engineer",
   url: "https://saba-siddique-portfolio.vercel.app",
   location: "Rawalpindi, Pakistan",
   email: "sabasiddiqdev@gmail.com",
@@ -49,7 +49,7 @@ export const site = {
   ],
 
   seo: {
-    title: "Saba Siddique | AI Engineer — Agentic AI, ML & AI Security",
+    title: "Saba Siddique | Full-Stack AI Engineer — Agentic AI, ML & AI Security",
     description:
       "AI engineer with 4 years of engineering and 3 years building and evaluating LLM systems: agentic AI, machine learning, AI security and healthcare AI. Python, FastAPI, Next.js.",
     keywords: [
@@ -66,7 +66,7 @@ export const site = {
       "React",
       "TypeScript",
     ],
-    ogImageAlt: "Saba Siddique — AI Engineer: agentic AI, machine learning and AI security",
+    ogImageAlt: "Saba Siddique, Full-Stack AI Engineer: agentic AI, machine learning and AI security",
   },
 
   hero: {
@@ -77,11 +77,9 @@ export const site = {
       "Four years of engineering, three years building and evaluating LLM systems. I build agentic AI and test how it fails.",
     chips: ["4 yrs engineering", "3 yrs AI/LLM", "Project Lead at Volmatica"],
 
-    /** Round 2 layout: muted kicker above a two-line H1, underlined phrases, two CTAs, four stats. */
-    kicker: "Saba Siddique",
-    h1Lines: ["AI Engineer — agentic AI, ML,", "and AI security for high-trust systems."],
-    /** Phrases to lime-underline wherever they occur in the subline. */
-    underline: ["agentic AI", "AI security"],
+    /** Round 3 hero: name as the H1, role line, one intro paragraph. No em dashes in visible hero copy. */
+    intro:
+      "I build AI products end to end: voice agents that answer real calls, RAG pipelines that stay accurate in production, and the security layer that stops an agent being talked out of its instructions. Four years shipping production software, the last three on LLM systems. Right now I lead an AI product team at Volmatica and contribute to NumPy, SciPy, pandas and sktime. I build agentic AI and test how it fails.",
     primaryCta: { label: "View projects", href: "/projects" },
     secondaryCta: { label: "Get in touch", href: "#contact" },
     stats: [

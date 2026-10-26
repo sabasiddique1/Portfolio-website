@@ -3,10 +3,10 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { SectionReveal } from "@/components/section-reveal"
 import { SectionTitle } from "@/components/section-title"
 import { useToast } from "@/hooks/use-toast"
 import { Mail, Send, Github, Linkedin, type LucideIcon } from "lucide-react"
@@ -39,9 +39,7 @@ export function ContactSection() {
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 })
 
   // Initialize EmailJS
   useEffect(() => {
@@ -120,54 +118,27 @@ export function ContactSection() {
   };
 
 
-  const formVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const inputVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12,
-      },
-    },
-  }
-
   return (
-    <section id="contact" ref={sectionRef} className="container py-12 md:py-[72px]">
-      <SectionTitle
-        title={site.contact.heading}
-        icon={Mail}
-        iconClassName="text-tone-teal-text"
-        subtitle={site.sections.contact}
-        align="center"
-      />
+    <section id="contact" className="container py-12 md:py-[72px]">
+      <SectionReveal>
+        <SectionTitle
+          title={site.contact.heading}
+          icon={Mail}
+          iconClassName="text-tone-teal-text"
+          subtitle={site.sections.contact}
+          align="center"
+        />
+      </SectionReveal>
 
-      <motion.form
-        ref={formRef}
-        variants={formVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        onSubmit={handleSubmit}
-        className="mx-auto w-full max-w-[560px] space-y-4"
-      >
-        <motion.div variants={inputVariants} className="space-y-1.5">
+      <SectionReveal className="mx-auto w-full max-w-[560px]">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1.5">
           <label htmlFor="contact-name" className="block text-xs text-muted-foreground">
             Your Name
           </label>
           <Input id="contact-name" name="name" autoComplete="name" value={formData.name} onChange={handleChange} required />
-        </motion.div>
-        <motion.div variants={inputVariants} className="space-y-1.5">
+        </div>
+        <div className="space-y-1.5">
           <label htmlFor="contact-email" className="block text-xs text-muted-foreground">
             Your Email
           </label>
@@ -180,8 +151,8 @@ export function ContactSection() {
             onChange={handleChange}
             required
           />
-        </motion.div>
-        <motion.div variants={inputVariants} className="space-y-1.5">
+        </div>
+        <div className="space-y-1.5">
           <label htmlFor="contact-message" className="block text-xs text-muted-foreground">
             Your Message
           </label>
@@ -193,8 +164,8 @@ export function ContactSection() {
             rows={5}
             required
           />
-        </motion.div>
-        <motion.div variants={inputVariants}>
+        </div>
+        <div>
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? (
               "Sending..."
@@ -205,13 +176,12 @@ export function ContactSection() {
               </>
             )}
           </Button>
-        </motion.div>
-      </motion.form>
+        </div>
+      </form>
+      </SectionReveal>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+      <SectionReveal
+        delay={0.1}
         className="mx-auto mt-6 flex max-w-[560px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
       >
         <a href={mailto} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
@@ -230,7 +200,7 @@ export function ContactSection() {
             {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : text}
           </a>
         ))}
-      </motion.div>
+      </SectionReveal>
     </section>
   )
 }

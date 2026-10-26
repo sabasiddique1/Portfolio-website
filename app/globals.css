@@ -68,6 +68,8 @@
     @apply border-border;
   }
   html {
+    /* Positioned so scroll-linked animations (framer useScroll) measure against it. */
+    position: relative;
     scroll-behavior: smooth;
     /* Keeps anchor targets and focused elements clear of the 56px sticky nav. */
     scroll-padding-top: 3.5rem;

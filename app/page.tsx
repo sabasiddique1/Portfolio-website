@@ -1,8 +1,9 @@
 import { HeroSection } from "@/components/hero-section"
 import { FeaturedWork } from "@/components/featured-work"
 import { AlsoBuilding } from "@/components/also-building"
-import { JourneyTable } from "@/components/journey-table"
+import { JourneyPath } from "@/components/journey-path"
 import { ExperienceTable } from "@/components/experience-table"
+import { EducationSection } from "@/components/education-section"
 import { ContactSection } from "@/components/contact-section"
 import { getAvailableProjectImages } from "@/lib/project-images"
 
@@ -15,8 +16,9 @@ export default function Home() {
       <FeaturedWork availableImages={availableImages} />
       {/* DEMO — remove by deleting <AlsoBuilding /> in page.tsx */}
       <AlsoBuilding />
-      <JourneyTable />
+      <JourneyPath />
       <ExperienceTable />
+      <EducationSection />
       <ContactSection />
     </main>
   )
