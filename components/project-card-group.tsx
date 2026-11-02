@@ -18,7 +18,7 @@ export function ProjectCardGroup({ projects, availableImages, columns = 2 }: Pro
   const [openId, setOpenId] = useState<number | null>(null)
 
   return (
-    <div className={cn("grid grid-cols-1 items-start gap-4", columns === 2 && "md:grid-cols-2")}>
+    <div className={cn("grid grid-cols-1 items-start gap-6", columns === 2 && "md:grid-cols-2")}>
       {projects.map((project, index) => (
         // Stagger only within a row so cards further down are not held back.
         <SectionReveal key={project.id} delay={(index % columns) * 0.08}>

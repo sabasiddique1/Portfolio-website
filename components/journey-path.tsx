@@ -7,6 +7,7 @@ import { journey, type JourneyStep } from "@/constants/journey"
 import { site } from "@/constants/site"
 import { CategoryIcon } from "@/components/category-icon"
 import { Chip } from "@/components/chip"
+import { SpotlightCard } from "@/components/fx/spotlight-card"
 import { SectionReveal } from "@/components/section-reveal"
 import { SectionTitle } from "@/components/section-title"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
@@ -15,12 +16,12 @@ import { cn } from "@/lib/utils"
 type Point = { x: number; y: number }
 type Side = "left" | "right"
 
-/** Desktop centre column width; must match `md:grid-cols-[1fr_48px_1fr]` below. */
-const SPINE_COLUMN = 48
-/** Desktop nodes sit ±14px off the centre line so the spine visibly zigzags. */
-const NODE_OFFSET = 14
-/** Mobile spine x: the middle of the 24px left column (`grid-cols-[24px_1fr]`). */
-const MOBILE_SPINE_X = 12
+/** Desktop centre column width; must match `md:grid-cols-[1fr_56px_1fr]` below. */
+const SPINE_COLUMN = 56
+/** Desktop nodes sit ±16px off the centre line so the spine visibly zigzags. */
+const NODE_OFFSET = 16
+/** Mobile spine x: the middle of the 28px left column (`grid-cols-[28px_1fr]`). */
+const MOBILE_SPINE_X = 14
 const DESKTOP_QUERY = "(min-width: 768px)"
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
@@ -76,7 +77,8 @@ const sideOf = (index: number): Side => (index % 2 === 0 ? "left" : "right")
 
 /**
  * "From frontend to AI": a vertical zigzag timeline. Cards alternate sides on desktop and stack on
- * mobile; an SVG spine draws itself as you scroll and each node lights up once its card is in view.
+ * mobile; an accent spine draws itself over a grey guide as you scroll, and each node lights up
+ * (with a pulse ring) once the drawn spine reaches it.
  * Node positions are measured after mount (and on resize), so the server HTML and the first client
  * render carry an empty path and no dots.
  */
@@ -93,7 +95,9 @@ export function JourneyPath() {
   const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), [])
 
   // Spine draw: scroll progress through the wrapper, smoothed; fully drawn under reduced motion.
-  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ["start 75%", "end 60%"] })
+  // Ends at 85% of the viewport (not 60%) so the spine still completes when the timeline is the
+  // last thing on the page and the footer stops it from scrolling any higher.
+  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ["start 75%", "end 85%"] })
   const spring = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.5 })
   const pathLength = useTransform(spring, (v) => (reduceMotion ? 1 : v))
 
@@ -156,11 +160,14 @@ export function JourneyPath() {
     }
   }, [measure])
 
+  const d = buildPath(nodes)
+
   return (
-    <section id="journey" className="container py-12 md:py-[72px]">
+    <section id="journey" className="section container">
       <SectionReveal>
         <SectionTitle
           title="From frontend to AI"
+          kicker="The path"
           icon={Route}
           iconClassName="text-tone-green-text"
           subtitle={site.sections.journey}
@@ -169,12 +176,14 @@ export function JourneyPath() {
 
       <div ref={wrapperRef} className="relative">
         <svg className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+          {/* Grey guide for the whole route, then the accent line that draws over it on scroll. */}
+          <path d={d} fill="none" stroke="currentColor" className="text-border-strong" strokeWidth={1.5} strokeLinecap="round" />
           <motion.path
-            d={buildPath(nodes)}
+            d={d}
             fill="none"
             stroke="currentColor"
-            className="text-border-strong"
-            strokeWidth={1.5}
+            className="text-lime"
+            strokeWidth={2}
             strokeLinecap="round"
             pathLength={1}
             style={{ pathLength }}
@@ -186,7 +195,7 @@ export function JourneyPath() {
         ))}
 
         {/* role="list": preflight's list-style:none would otherwise drop the list semantics in WebKit. */}
-        <ol role="list" className="grid grid-cols-[24px_1fr] gap-y-6 md:grid-cols-[1fr_48px_1fr]">
+        <ol role="list" className="grid grid-cols-[28px_1fr] gap-y-6 md:grid-cols-[1fr_56px_1fr] md:gap-y-10">
           {journey.map((step, index) => (
             <JourneyCard
               key={step.id}
@@ -210,19 +219,26 @@ interface JourneyNodeProps {
   lit: boolean
 }
 
-/** 10px dot on the spine; border-strong at rest, lime once the drawn spine has reached it. */
+/** 14px dot on the spine; hollow at rest, accent with a pulse ring once the drawn spine has reached it. */
 function JourneyNode({ point, lit }: JourneyNodeProps) {
   if (!point) return null
 
   return (
     <span
       aria-hidden="true"
-      className={cn(
-        "absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300",
-        lit ? "bg-lime" : "bg-border-strong"
-      )}
+      className="absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2"
       style={{ left: point.x, top: point.y }}
-    />
+    >
+      {lit && <span className="absolute inset-0 rounded-full bg-lime/60 motion-safe:animate-pulse-ring" />}
+      <span
+        className={cn(
+          "absolute inset-0 rounded-full border-2 transition-[background-color,border-color,box-shadow] duration-300",
+          lit
+            ? "border-lime bg-lime shadow-[0_0_14px_hsl(var(--hsl-accent)/0.55)]"
+            : "border-border-strong bg-background"
+        )}
+      />
+    </span>
   )
 }
 
@@ -256,6 +272,7 @@ const JourneyCard = memo(function JourneyCard({
   const inView = useInView(cardRef, { once: true, amount: 0.3 })
   const panelId = `journey-${step.id}-panel`
   const year = step.period.match(/\d{4}/)?.[0]
+  const stepIndex = String(index + 1).padStart(2, "0")
   const details = step.details ?? []
   const links = step.links ?? []
   const chips = step.chips ?? []
@@ -263,8 +280,8 @@ const JourneyCard = memo(function JourneyCard({
   // Hidden-state swaps (desktop → mobile variant) are instant; only the reveal itself animates.
   const animated = inView && !reduceMotion
   const hidden = isDesktop
-    ? { opacity: 0, x: side === "left" ? -24 : 24, y: 0 }
-    : { opacity: 0, x: 0, y: 16 }
+    ? { opacity: 0, x: side === "left" ? -28 : 28, y: 0, filter: "blur(8px)" }
+    : { opacity: 0, x: 0, y: 18, filter: "blur(8px)" }
   const panelTransition = reduceMotion ? { duration: 0 } : { duration: 0.25, ease: EASE_OUT }
 
   const heading = (
@@ -273,7 +290,7 @@ const JourneyCard = memo(function JourneyCard({
       {hasExtras && (
         <ChevronDown
           className={cn(
-            "mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300",
+            "mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300",
             open && "rotate-180"
           )}
           aria-hidden="true"
@@ -286,32 +303,35 @@ const JourneyCard = memo(function JourneyCard({
     <motion.li
       ref={cardRef}
       className={cn(
-        "col-start-2 w-full md:max-w-[440px]",
+        "col-start-2 w-full md:max-w-[480px]",
         side === "left" ? "md:col-start-1 md:justify-self-end" : "md:col-start-3 md:justify-self-start"
       )}
       style={{ gridRow: index + 1 }}
       initial={false}
-      animate={inView ? { opacity: 1, x: 0, y: 0 } : hidden}
-      transition={animated ? { duration: 0.45, ease: EASE_OUT } : { duration: 0 }}
+      animate={inView ? { opacity: 1, x: 0, y: 0, filter: "blur(0px)" } : hidden}
+      transition={animated ? { duration: 0.5, ease: EASE_OUT } : { duration: 0 }}
     >
-      <div
+      <SpotlightCard
         className={cn(
-          "rounded-lg border border-border bg-card p-5 transition-[transform,border-color] duration-150 motion-safe:hover:-translate-y-0.5 hover:border-border-strong",
+          "rounded-lg border border-border bg-card p-6 transition-[transform,border-color] duration-200 motion-safe:hover:-translate-y-1 hover:border-border-strong",
           open && "border-border-strong"
         )}
       >
         {/* A click anywhere in the header toggles; the button's keyboard activation bubbles here too. */}
         <div className={hasExtras ? "cursor-pointer" : undefined} onClick={hasExtras ? () => onToggle(step.id) : undefined}>
           <div className="flex items-center justify-between gap-3">
-            <CategoryIcon kind={step.kind} />
+            <span className="flex items-center gap-2.5">
+              <CategoryIcon kind={step.kind} />
+              <span className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Step {stepIndex}</span>
+            </span>
             {year && (
-              <span className="rounded-md bg-lime-soft px-2 py-0.5 text-[11px] font-medium leading-4 text-lime">
+              <span className="rounded-md border border-lime/20 bg-lime-soft px-2.5 py-1 text-sm font-semibold leading-4 tabular-nums text-lime">
                 {year}
               </span>
             )}
           </div>
 
-          <h3 className="mt-3 text-[15px] font-semibold">
+          <h3 className="mt-4 text-lg font-semibold leading-snug">
             {hasExtras ? (
               <button
                 type="button"
@@ -325,18 +345,18 @@ const JourneyCard = memo(function JourneyCard({
               heading
             )}
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">{step.summary}</p>
-          <p className="mt-1 text-[11px] text-muted-foreground">{step.period}</p>
+          <p className="mt-2 text-base text-text-2">{step.summary}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{step.period}</p>
 
           {chips.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-4 flex flex-wrap gap-1.5">
               {chips.map((chip, i) => (
                 <motion.span
                   key={chip}
                   className="inline-flex"
                   initial={false}
                   animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
-                  transition={animated ? { duration: 0.3, delay: i * 0.03, ease: EASE_OUT } : { duration: 0 }}
+                  transition={animated ? { duration: 0.3, delay: 0.15 + i * 0.05, ease: EASE_OUT } : { duration: 0 }}
                 >
                   <Chip>{chip}</Chip>
                 </motion.span>
@@ -355,9 +375,9 @@ const JourneyCard = memo(function JourneyCard({
             aria-hidden={!open}
             inert={!open}
           >
-            <div className="mt-4 space-y-3 border-t border-border pt-4">
+            <div className="mt-5 space-y-3 border-t border-border pt-5">
               {details.map((text) => (
-                <p key={text} className="text-sm text-muted-foreground">
+                <p key={text} className="text-base text-text-2">
                   {text}
                 </p>
               ))}
@@ -377,11 +397,11 @@ const JourneyCard = memo(function JourneyCard({
                 </ul>
               )}
 
-              {step.footnote && <p className="text-xs text-muted-foreground">{step.footnote}</p>}
+              {step.footnote && <p className="text-sm text-muted-foreground">{step.footnote}</p>}
             </div>
           </motion.div>
         )}
-      </div>
+      </SpotlightCard>
     </motion.li>
   )
 })

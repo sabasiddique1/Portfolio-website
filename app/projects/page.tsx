@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, Bot, List } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { TextReveal } from "@/components/fx/text-reveal"
 import { SectionTitle } from "@/components/section-title"
 import { SectionReveal } from "@/components/section-reveal"
 import { ProjectCardGroup } from "@/components/project-card-group"
@@ -32,27 +33,44 @@ export default function ProjectsPage() {
   const lastUpdated = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(new Date())
 
   return (
-    <main className="container pb-12 pt-20 md:pb-[72px]">
+    <main className="container pb-16 pt-24 md:pb-28">
       <Link href="/" className={buttonVariants({ variant: "ghost", size: "sm" })}>
         <ArrowLeft aria-hidden="true" />
         Back to Home
       </Link>
 
-      <header className="mt-6">
-        <h1 className="text-[32px] font-semibold">All projects</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>
-        <p className="mt-3 text-xs text-muted-foreground">
-          {aiProjects.length} projects <span aria-hidden="true">·</span> last updated {lastUpdated}
+      <header className="mt-8 max-w-3xl">
+        <h1 className="text-4xl font-semibold md:text-5xl">
+          <TextReveal text="All projects" immediate />
+        </h1>
+        <p className="mt-4 text-lg text-text-2">{subtitle}</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {cardProjects.length} AI projects <span aria-hidden="true">·</span> last updated {lastUpdated}
         </p>
       </header>
 
-      <section aria-labelledby="ai-work" className="mt-12">
-        <SectionTitle id="ai-work" as="h2" title="AI work" icon={Bot} iconClassName="text-tone-green-text" />
+      <section aria-labelledby="ai-work" className="mt-16">
+        <SectionTitle
+          id="ai-work"
+          as="h2"
+          title="AI work"
+          icon={Bot}
+          iconClassName="text-tone-green-text"
+          kicker="01"
+          subtitle="Agents, RAG, AI security, healthcare and data pipelines."
+        />
         <ProjectCardGroup projects={cardProjects} availableImages={availableImages} columns={2} />
       </section>
 
-      <section className="mt-12">
-        <SectionTitle as="h2" title="More projects" icon={List} iconClassName="text-tone-grey-text" />
+      <section className="mt-20">
+        <SectionTitle
+          as="h2"
+          title="More projects"
+          icon={List}
+          iconClassName="text-tone-grey-text"
+          kicker="02"
+          subtitle="A voice agent, then the earlier web work."
+        />
         <SectionReveal>
           <ProjectsList projects={rowProjects} />
         </SectionReveal>

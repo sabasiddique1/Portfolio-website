@@ -4,9 +4,14 @@
 
 @layer base {
   /*
-   * Design tokens, sampled from openrouter.ai. Dark only: there is no light theme.
+   * Design tokens. Dark only: there is no light theme.
    * The hex values are the source of truth; the --hsl-* twins exist so Tailwind
    * utilities (bg-card, text-muted, border-border …) can take opacity modifiers.
+   *
+   * Accent: mint-teal (#59cfa8). It is the colour already used across the project visuals
+   * (RediSense, Sift), reads as clinical/precise rather than "generic AI purple", and sits at
+   * 10:1 contrast on the page background, so dark text on an accent button stays legible.
+   * The Tailwind key is still `lime` for historical reasons; the value is the accent.
    */
   :root {
     --bg: #04080a;
@@ -18,9 +23,9 @@
     --text: #fcfcfe;
     --text-2: #a5a7a9;
     --muted: #828486;
-    --accent: #d1fb50;
-    --accent-dim: #43531f;
-    --accent-soft: #141b0f;
+    --accent: #59cfa8;
+    --accent-dim: #1e5241;
+    --accent-soft: #0e1a16;
     --pos: #488d71;
     --tag: #375495;
 
@@ -29,7 +34,7 @@
     --cat-health: #ff9f5a;
     --cat-ml: #58a6ff;
     --cat-research: #d2a8ff;
-    --cat-voice: #39d3c3;
+    --cat-voice: #45cbe6;
     --cat-fullstack: #c9d1d9;
 
     --hsl-bg: 200.0 42.9% 2.7%;
@@ -41,26 +46,33 @@
     --hsl-text: 240.0 50.0% 99.2%;
     --hsl-text-2: 210.0 2.3% 65.5%;
     --hsl-muted: 210.0 1.6% 51.8%;
-    --hsl-accent: 74.7 95.5% 64.9%;
-    --hsl-accent-dim: 78.5 45.6% 22.4%;
-    --hsl-accent-soft: 95.0 28.6% 8.2%;
+    --hsl-accent: 160.2 55.1% 58.0%;
+    --hsl-accent-dim: 160.4 46.4% 22.0%;
+    --hsl-accent-soft: 160.0 30.0% 7.8%;
     --hsl-pos: 155.7 32.4% 41.8%;
     --hsl-tag: 221.5 46.1% 40.0%;
     --hsl-cat-agents: 125.1 68.6% 70.0%;
     --hsl-cat-health: 25.1 100.0% 67.6%;
     --hsl-cat-ml: 212.0 100.0% 67.3%;
     --hsl-cat-research: 269.0 100.0% 82.9%;
-    --hsl-cat-voice: 173.8 63.6% 52.5%;
+    --hsl-cat-voice: 190.1 76.3% 58.6%;
     --hsl-cat-fullstack: 210.0 17.4% 82.0%;
     --hsl-destructive: 0 63% 31%;
 
-    --radius: 10px;
+    --radius: 12px;
     /* Headings fall back to the body font until Gordita is available (see app/layout.tsx). */
     --font-heading: var(--font-sans);
 
     /* Browser chrome (scrollbars, form controls, autofill) renders dark too. */
     color-scheme: dark;
   }
+}
+
+/* Animatable angle for the rotating border beam (components/fx/border-beam.tsx). */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
 
 @layer base {
@@ -71,13 +83,13 @@
     /* Positioned so scroll-linked animations (framer useScroll) measure against it. */
     position: relative;
     scroll-behavior: smooth;
-    /* Keeps anchor targets and focused elements clear of the 56px sticky nav. */
-    scroll-padding-top: 3.5rem;
+    /* Keeps anchor targets and focused elements clear of the 64px sticky nav. */
+    scroll-padding-top: 4rem;
   }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -89,7 +101,11 @@
   h4 {
     font-family: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: hsl(var(--hsl-accent) / 0.35);
   }
 }
 
@@ -100,6 +116,166 @@
     max-width: 1180px;
     margin-inline: auto;
     padding-inline: 24px;
+  }
+
+  /* Section rhythm: generous on desktop so the middle of the page can breathe. */
+  .section {
+    padding-block: 72px;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-block: 112px;
+    }
+  }
+
+  /* Dot grid, fading out towards the edges. Pair with `relative` on the parent. */
+  .bg-dot-grid {
+    background-image: radial-gradient(hsl(var(--hsl-border-strong)) 1px, transparent 1.5px);
+    background-size: 28px 28px;
+  }
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /*
+   * Spotlight surface: a soft accent glow and a border highlight that follow the cursor.
+   * The JS side (components/fx/spotlight-card.tsx) only writes --mx / --my.
+   * `isolation: isolate` + z-index -1 keeps the glow above the card's background but under its content.
+   */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before,
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: -1;
+  }
+  .spotlight::before {
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), hsl(var(--hsl-accent) / 0.11), transparent 62%);
+  }
+  .spotlight::after {
+    z-index: 1;
+    padding: 1px;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), hsl(var(--hsl-accent) / 0.65), transparent 65%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after,
+  .spotlight:focus-within::before,
+  .spotlight:focus-within::after {
+    opacity: 1;
+  }
+
+  /* Rotating accent beam along a border (components/fx/border-beam.tsx). */
+  .border-beam {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--beam-angle),
+      transparent 0%,
+      transparent 72%,
+      hsl(var(--hsl-accent) / 0.9) 86%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: beam-spin 7s linear infinite;
+  }
+
+  /* Accent text: the one gradient the type system allows, for a highlighted phrase in a display heading. */
+  .text-accent-gradient {
+    background-image: linear-gradient(100deg, hsl(var(--hsl-accent)) 0%, #a7f0d6 55%, hsl(var(--hsl-accent)) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+
+  /* Fine film grain over the hero so large flat areas do not band. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    mix-blend-mode: screen;
+  }
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -4%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-5%, 5%, 0) scale(0.96);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+/* Progress line under the active showcase tab (components/hero-showcase.tsx). */
+@keyframes progress-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }
 
@@ -116,5 +292,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .text-accent-gradient {
+    animation: none;
+    background-position: 0 0;
+  }
+  .border-beam {
+    display: none;
   }
 }

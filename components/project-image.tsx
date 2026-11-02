@@ -1,6 +1,6 @@
 import Image from "next/image"
 import type { Project, ProjectKind } from "@/constants/projects"
-import { CategoryIcon } from "@/components/category-icon"
+import { ProjectCover } from "@/components/project-cover"
 import { cn } from "@/lib/utils"
 
 interface ProjectImageProps {
@@ -11,33 +11,33 @@ interface ProjectImageProps {
   className?: string
 }
 
-// Slow 3% zoom while the card header (`group`) is hovered; the 160px wrapper clips it.
-const zoomClass = "transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
+// Slow 4% zoom while the card header (`group`) is hovered; the wrapper clips it.
+const zoomClass = "transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.04]"
 
 /**
- * Fixed 160px visual at the top of a feature card: the screenshot when it exists,
- * otherwise a darker block with the category icon. Never emits an <img> for a missing file.
+ * 4:3 visual at the top of a feature card, shown in full: the card images are 1600x1200, so
+ * `object-cover` crops nothing. A generated cover of the same size fills in while a file is missing,
+ * so the grid stays even. Nothing is overlaid on the image; the meta line sits under it.
+ * Never emits an <img> for a missing file.
  */
 export function ProjectImage({ project, kind, available, className }: ProjectImageProps) {
-  if (project.image && available) {
-    return (
-      <div className={cn("relative h-40 w-full overflow-hidden bg-card-2", className)}>
-        <Image
-          src={project.image}
-          alt={project.imageAlt ?? project.title}
-          fill
-          className={cn("object-cover", zoomClass)}
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-      </div>
-    )
-  }
-
   return (
-    <div aria-hidden="true" className={cn("h-40 w-full overflow-hidden bg-card-2", className)}>
-      <div className={cn("flex h-full w-full items-center justify-center", zoomClass)}>
-        <CategoryIcon kind={kind} className="h-6 w-6" />
-      </div>
+    <div className={cn("relative aspect-[4/3] w-full overflow-hidden border-b border-border bg-card-2", className)}>
+      {project.image && available ? (
+        <>
+          <Image
+            src={project.image}
+            alt={project.imageAlt ?? project.title}
+            fill
+            className={cn("object-cover", zoomClass)}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          {/* Light screenshots get a thin dark veil so they sit closer to the page background. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/15" />
+        </>
+      ) : (
+        <ProjectCover title={project.title} kind={kind} className={zoomClass} />
+      )}
     </div>
   )
 }

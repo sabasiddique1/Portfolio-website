@@ -5,13 +5,15 @@
 export const site = {
   name: "Saba Siddique",
   role: "Full-Stack AI Engineer",
+  /** Wordmark in the top-left of the nav. */
+  brand: "portfolio.",
   url: "https://saba-siddique-portfolio.vercel.app",
   location: "Rawalpindi, Pakistan",
   email: "sabasiddiqdev@gmail.com",
 
   employer: {
     name: "Volmatica",
-    title: "Full-Stack AI Engineer (Project Lead)",
+    title: "Full-Stack AI Engineer",
   },
 
   links: {
@@ -21,10 +23,10 @@ export const site = {
     orcid: "https://orcid.org/0009-0005-4851-5200",
   },
 
-  /** Top nav. "Projects" is its own page; the rest are home-page sections. */
+  /** Top nav. "Projects" and "Journey" are their own pages; the rest are home-page sections. */
   nav: [
     { label: "Projects", href: "/projects" },
-    { label: "Journey", href: "/#journey" },
+    { label: "Journey", href: "/journey" },
     { label: "Experience", href: "/#experience" },
     { label: "Contact", href: "/#contact" },
   ],
@@ -33,9 +35,23 @@ export const site = {
   sections: {
     featured: "Two things I'd show first.",
     alsoBuilding: "Side projects that are live.",
-    journey: "Frontend intern in 2022 to leading an AI team in 2026.",
+    journey: "Frontend intern in 2022 to full-stack AI engineer in 2026.",
     experience: "Where the four years went.",
+    education: "Biotechnology first, then data science and AI.",
+    research: "Areas I'd like to work on.",
     contact: "Email is fastest.",
+  },
+
+  /** Research interest only: no claims about specific or ongoing work. Topics come from the keyword list. */
+  research: {
+    title: "Research",
+    line: "I'm interested in research on AI security, agentic systems and healthcare AI.",
+    topics: [
+      { label: "AI security", tone: "purple" },
+      { label: "Agentic AI", tone: "green" },
+      { label: "Healthcare AI", tone: "orange" },
+      { label: "Machine learning", tone: "blue" },
+    ],
   },
 
   footerTagline: "Production is the only benchmark I trust.",
@@ -70,33 +86,21 @@ export const site = {
   },
 
   hero: {
-    badge: "AI Engineer · Rawalpindi, Pakistan",
-    h1: "Saba Siddique — AI Engineer",
-    line: "AI Engineer — agentic AI, ML, and AI security for high-trust systems.",
-    subline:
-      "Four years of engineering, three years building and evaluating LLM systems. I build agentic AI and test how it fails.",
-    chips: ["4 yrs engineering", "3 yrs AI/LLM", "Project Lead at Volmatica"],
-
-    /** Round 3 hero: name as the H1, role line, one intro paragraph. No em dashes in visible hero copy. */
+    /** Three short lines that rotate under the role. Each one is a thing I actually build. */
+    focus: ["Agentic AI", "AI security", "Healthcare AI", "RAG in production"],
+    /** Name as the H1, role line, one intro paragraph. No em dashes in visible hero copy. */
     intro:
-      "I build AI products end to end: voice agents that answer real calls, RAG pipelines that stay accurate in production, and the security layer that stops an agent being talked out of its instructions. Four years shipping production software, the last three on LLM systems. Right now I lead an AI product team at Volmatica and contribute to NumPy, SciPy, pandas and sktime. I build agentic AI and test how it fails.",
+      "I build AI products end to end: voice agents that answer real calls, RAG pipelines that stay accurate in production, and the security layer that stops an agent being talked out of its instructions. Four years shipping production software, the last three on LLM systems. Right now I build AI products at Volmatica and contribute to NumPy, SciPy, pandas and sktime. I build agentic AI and test how it fails.",
     primaryCta: { label: "View projects", href: "/projects" },
     secondaryCta: { label: "Get in touch", href: "#contact" },
+    /** Caption under the video showcase. */
+    showcaseLabel: "Live from the two featured projects",
     stats: [
       { value: "4 yrs", label: "Engineering" },
       { value: "3 yrs", label: "AI / LLM systems" },
-      { value: "Project Lead", label: "Volmatica" },
+      { value: "Top 14%", label: "Kaggle AI agent security" },
       { value: "6", label: "Open-source libraries" },
     ],
-  },
-
-  about: {
-    paragraphs: [
-      "I'm an AI engineer with four years of engineering experience, three of them building and evaluating LLM systems. I started on the frontend at Wanclouds in 2022, building cloud and security dashboards, moved into full-stack product work, and now lead a small team at Volmatica building an AI interview assistant with real-time speech-to-text and LLM responses.",
-      "I work across Python, FastAPI, React and Next.js, and I care about AI systems that are observable, secure and hold up in production. Outside work I contribute to open-source Python libraries and build projects in AI security, healthcare AI and computational medicine.",
-    ],
-    photo: "/ChatGPT Image Dec 23, 2025, 02_41_59 PM.png",
-    photoAlt: "Portrait of Saba Siddique, AI Engineer",
   },
 
   contact: {

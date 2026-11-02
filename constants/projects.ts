@@ -24,7 +24,7 @@ export type Project = {
   display?: ProjectDisplay
   /** Shown on the home page. Exactly two projects carry this. */
   featured?: boolean
-  /** Small label above the title, e.g. "Volmatica · Project Lead". */
+  /** Small label above the title, e.g. "Volmatica". */
   label?: string
   /** The single chip on the collapsed card. */
   highlight?: string
@@ -41,11 +41,18 @@ export type Project = {
   links?: ProjectLink[]
   githubUrl?: string
   demoUrl?: string
-  /** /projects/<slug>.png — rendered as a neutral placeholder until the file exists in public/. */
+  /** Card visual under public/ (e.g. /projects/<slug>.webp); a generated cover is shown while the file is missing. */
   image?: string
   imageAlt?: string
-  /** Screenshot carousel for earlier work. */
+  /** Screenshot carousel on the case-study page. */
   images?: string[]
+  /** Aspect ratio of `images`; default "3/2". Mixed ratios use "4/3" with object-contain. */
+  imageAspect?: "3/2" | "4/3" | "16/9"
+  /**
+   * Short silent loop under public/media for the hero showcase. Self-hosted only (never a third-party URL);
+   * the poster is the first frame so the switch from image to video is seamless.
+   */
+  video?: { src: string; poster: string; durationSeconds: number }
   color?: string
 }
 
@@ -80,20 +87,23 @@ export const projects: Project[] = [
     highlight: "LLM red-teaming",
     category: "AI security",
     projectType: "Open source · MIT",
-    technologies: ["Python", "FastAPI", "Next.js", "TypeScript", "Tailwind CSS", "Pydantic", "pytest", "GitHub Actions"],
+    technologies: ["Python", "FastAPI", "Next.js", "TypeScript", "Tailwind CSS", "Pydantic", "pytest", "GitHub Actions", "OWASP LLM Top 10"],
     problem:
       "Most tools test prompt injection by pasting the attack into the model's context. Real attacks don't get that shortcut: a poisoned document has to survive indexing and retrieval before it reaches the model at all.",
     built: [
       "Poisons the corpus instead of the context and tests whether the attack survives the real retrieval path. A canary token planted in the document showing up in the output is the evidence the whole path completed.",
       "A normalizer (NFKC, homoglyph folding, zero-width stripping, bounded base64/hex/ROT13 decoding) feeding seven detector families: instruction override, structural injection, exfiltration, PII, unauthorized action, tool poisoning and source confusion.",
-      "A scored policy engine with strict, balanced and permissive packs. Every decision carries a plain-English rationale, and uploaded documents start untrusted, so trust changes how findings are scored.",
+      "A scored policy engine with strict, balanced and permissive packs. Every decision carries a plain-English rationale, findings are mapped to the OWASP LLM Top 10, and uploaded documents start untrusted, so trust changes how findings are scored.",
       "A benign corpus measured alongside attacks, so false-positive rate is reported next to recall. A mutation engine expands 91 base cases to 1,200+ through 17 seeded evasion mutators.",
       "Red-teamed itself with blind holdouts written independently from the threat model: 25% recall at first, 88.9% after two rebuilds, and 38.5% on a second holdout with fresh wordings. Both numbers are published. 333 tests on Python 3.11, 3.12 and 3.14, with pip-audit as a CI gate.",
     ],
     githubUrl: "https://github.com/sabasiddique1/trace-guard-ai",
-    image: "/projects/trace-guard-ai.png",
-    imageAlt: "TraceGuard AI dashboard showing attack simulations, detector verdicts and the execution trace log",
-    color: "#00F5FF",
+    image: "/projects/trace-guard-ai.webp",
+    imageAlt: "TraceGuard AI: red-team harness for RAG and AI agents, with the attack table, blind-holdout recall and the trace pipeline",
+    images: ["/projects/trace-guard-ai.webp", "/projects/trace-guard-ai-2.webp"],
+    imageAspect: "4/3",
+    video: { src: "/media/trace-guard-ai.mp4", poster: "/media/trace-guard-ai-poster.webp", durationSeconds: 24 },
+    color: "#5b3df5",
   },
   {
     id: 102,
@@ -119,9 +129,59 @@ export const projects: Project[] = [
     ],
     githubUrl: "https://github.com/sabasiddique1/redi_Sense_ai",
     demoUrl: "https://redi-sense-ai.vercel.app",
-    image: "/projects/redisense.png",
-    imageAlt: "RediSense clinician dashboard with risk-prioritised reports, triage views and the copilot chat drawer",
-    color: "#B026FF",
+    image: "/projects/redisense.webp",
+    imageAlt: "RediSense: every critical value flagged, every answer cited; severity scale and a cited report analysis",
+    images: ["/projects/redisense.webp", "/projects/redisense-2.webp", "/projects/redisense-3.webp"],
+    imageAspect: "4/3",
+    video: { src: "/media/redisense.mp4", poster: "/media/redisense-poster.webp", durationSeconds: 8 },
+    color: "#1a8a7a",
+  },
+  {
+    id: 106,
+    slug: "clinical-review-intelligence",
+    title: "Clinical Review Intelligence System",
+    description: "Enterprise RAG for pharmacy policy review: every answer cited to the document and page, or an explicit abstention.",
+    group: "ai",
+    kind: "healthcare",
+    display: "card",
+    label: "Enterprise client · retail and specialty pharmacy",
+    highlight: "Enterprise RAG",
+    category: "Healthcare AI · RAG",
+    projectType: "Enterprise project",
+    technologies: [
+      "Python",
+      "LangGraph",
+      "MCP",
+      "FastAPI",
+      "React",
+      "Amazon Bedrock",
+      "Claude Sonnet",
+      "OpenSearch Serverless",
+      "Titan Embeddings",
+      "AWS Textract",
+      "DynamoDB",
+      "Amazon EKS",
+      "Argo CD",
+      "Jenkins",
+      "GitHub Actions",
+      "Langfuse",
+      "Prometheus",
+      "Grafana",
+      "pytest",
+    ],
+    problem:
+      "Pharmacists and clinical reviewers answer policy questions all day: drug interactions, dosing, prior authorization and step-therapy criteria, FDA label lookups. The sources were scattered across SharePoint, shared drives, PDFs and scans, so one answer meant searching several systems and cross-checking. The system had to answer only from approved sources, cite the exact document and page, and say clearly when the evidence does not exist. It does not dispense and does not make the clinical decision; the pharmacist does.",
+    built: [
+      "Owned the retrieval layer: the Knowledge Agent inside a LangGraph orchestrator, the MCP retrieval tools, the OpenSearch index and the evaluation harness.",
+      "Hybrid retrieval over Amazon OpenSearch Serverless: BM25 plus k-NN on Titan Text Embeddings V2, pre-filtered by line of business, document type and version, fused with Reciprocal Rank Fusion and reranked with a cross-encoder before the top chunks reach the model.",
+      "A stateless MCP server as the tool boundary. It re-validates the user's JWT on every call, intersects the requested lines of business with what that user may read, and fails closed, so an unauthorised document is never a candidate.",
+      "Offline ingestion: AWS Textract OCR with confidence thresholds and a quarantine queue, normalisation to Markdown with page markers, structural then semantic chunking with tables kept whole, drug entities normalised to RxNorm, and incremental sync that marks old versions superseded.",
+      "Grounded generation with Claude Sonnet on Amazon Bedrock at temperature 0: every claim cites a chunk, numbers are quoted verbatim, and a validation node checks each citation before the answer goes out. Otherwise the system abstains and says what it searched.",
+      "Shipped on Amazon EKS with Argo CD, Jenkins and GitHub Actions. A gold evaluation set written with pharmacists gates every retrieval and prompt change in CI; Langfuse, New Relic, Prometheus and Grafana for traces and metrics.",
+    ],
+    image: "/projects/clinical-review-intelligence.webp",
+    imageAlt: "Clinical Review Intelligence System: hybrid retrieval, MCP tool boundary and cited answers for pharmacy policy review",
+    color: "#1a8a7a",
   },
   {
     id: 103,
@@ -184,8 +244,8 @@ export const projects: Project[] = [
     group: "ai",
     kind: "fullstack",
     display: "card",
-    label: "Volmatica · Project Lead",
-    highlight: "Project Lead",
+    label: "Volmatica",
+    highlight: "Real-time STT + LLM",
     period: "Jan 2026 – Present",
     category: "AI product",
     projectType: "Company project",
@@ -194,11 +254,39 @@ export const projects: Project[] = [
       "Real-time speech-to-text pipelines with Whisper and Speechmatics feeding LLM response workflows.",
       "Backend services and a cross-platform desktop client: Python, FastAPI, Electron, React, TypeScript, Vite.",
       "End-to-end logging, tracing and metrics with OpenTelemetry, Grafana Tempo, Prometheus and Langfuse.",
-      "Established the product design system; lead a small team through task planning, code reviews and release quality.",
+      "Established the product design system, code reviews and release quality.",
     ],
     image: "/projects/cuepilot.png",
     imageAlt: "CuePilot desktop app with live interview transcript and LLM response panel",
     color: "#00F5FF",
+  },
+  {
+    id: 107,
+    slug: "sift",
+    title: "Sift",
+    description: "Job-discovery pipeline: 12 public sources in, deduped and scored for fit and eligibility, a ranked feed out every morning.",
+    group: "ai",
+    kind: "ml",
+    display: "card",
+    highlight: "Data pipeline",
+    category: "Data pipelines and automation",
+    projectType: "Personal project",
+    technologies: ["Python", "Requests", "Playwright", "SQLite", "GitHub Actions", "pytest", "REST APIs", "RSS", "Excel"],
+    problem:
+      "Finding jobs was never the bottleneck; finding the ones that can actually hire you is. Most \"remote\" postings are region-locked, so a feed that only matches on role wastes the morning on roles you are not eligible for.",
+    built: [
+      "Collects from 12 sources: Greenhouse, Lever, Ashby and Workable ATS APIs per company, plus Himalayas, We Work Remotely RSS, Jobicy, Arbeitnow, Remotive, RemoteOK and Hacker News Who is hiring. Every source runs in isolation, so one broken board never kills the run.",
+      "Normalises everything to one schema (title, company, location, salary, employment type, posted date) and dedupes with a SHA-1 fingerprint: 52k postings fetched became 5,518 unique jobs, with first-seen and last-seen history.",
+      "Scores each posting on 7 weighted signals (role fit, eligibility, niche, freshness, seniority, contractor-friendly, salary and stack). Eligibility weighs as much as fit because only 4.6% of the \"remote\" postings hire worldwide. Every score explains itself.",
+      "Exports to SQLite, JSON, XLSX and an HTML dashboard with a status dropdown, notes and CSV export. Runs unattended on GitHub Actions every morning; each run logs fetched, kept, new and error counts per source.",
+      "The same collect, normalise, dedupe and score engine runs over a company list for lead enrichment: domain, firmographics, tech and hiring signals, a fit score, CSV or Sheets out. Company-level public data only, rate-limited, robots.txt respected.",
+      "pytest covers the scoring model; a config file tunes minimum score, maximum age, stack keywords and niche weights.",
+    ],
+    image: "/projects/sift.webp",
+    imageAlt: "Sift: 600 postings in, the 17 that matter out; ranked feed with scores and a daily phone view",
+    images: ["/projects/sift.webp", "/projects/sift-2.webp", "/projects/sift-3.webp", "/projects/sift-4.webp"],
+    imageAspect: "4/3",
+    color: "#5fd4b4",
   },
 
   // ─────────────────────────── Earlier work ───────────────────────────

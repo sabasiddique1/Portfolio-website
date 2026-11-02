@@ -21,11 +21,11 @@ const sectionIds = site.nav.map(({ href }) => sectionIdOf(href)).filter((id): id
 
 /**
  * Sections the scrollspy watches, in document order, each mapped to the nav link it lights up.
- * Education has no link of its own and sits between Experience and Contact, so it keeps
- * Experience current instead of leaving a gap where the underline would unmount.
+ * Education and Research have no link of their own and sit between Experience and Contact, so
+ * they keep Experience current instead of leaving a gap where the underline would unmount.
  */
 const OBSERVED_SECTIONS: Array<[sectionId: string, navId: string]> = sectionIds.flatMap((id) =>
-  id === "experience" ? [[id, id] as [string, string], ["education", id] as [string, string]] : [[id, id] as [string, string]]
+  id === "experience" ? ([[id, id], ["education", id], ["research", id]] as Array<[string, string]>) : [[id, id] as [string, string]]
 )
 
 /** Past this scrollY the hero is gone and the bar's bottom border fades in. */
@@ -55,7 +55,7 @@ export function Navbar() {
     setOpen(false)
   }, [pathname])
 
-  // Scrollspy (home page only). The observed band is the viewport minus the 56px bar and the
+  // Scrollspy (home page only). The observed band is the viewport minus the 64px bar and the
   // bottom 60%; of the sections overlapping it, the last in document order is the one under the
   // 40% line, so that one is active. Nothing overlapping (hero, featured work) = no active link.
   useEffect(() => {
@@ -77,7 +77,7 @@ export function Navbar() {
         for (const [id, navId] of OBSERVED_SECTIONS) if (overlapping.has(id)) current = navId
         setActiveSection(current)
       },
-      { rootMargin: "-56px 0px -60% 0px" }
+      { rootMargin: "-64px 0px -60% 0px" }
     )
     targets.forEach((target) => observer.observe(target))
 
@@ -107,10 +107,10 @@ export function Navbar() {
         ? isHome && activeSection === sectionId
         : pathname === href || pathname.startsWith(`${href}/`)
       const classes = cn(
-        "text-sm transition-colors hover:text-foreground",
+        "text-[15px] transition-colors hover:text-foreground",
         active ? "text-foreground" : "text-text-2",
-        // Desktop links fill the 56px bar so the underline lands on its bottom border.
-        variant === "desktop" ? "relative inline-flex h-14 items-center py-4" : "py-2"
+        // Desktop links fill the 64px bar so the underline lands on its bottom border.
+        variant === "desktop" ? "relative inline-flex h-16 items-center py-4" : "py-2.5 text-base"
       )
       // One shared underline slides between desktop links; the mobile menu only colours the active link.
       const underline = variant === "desktop" && active && (
@@ -155,14 +155,22 @@ export function Navbar() {
     })
 
   return (
-    <header className="sticky top-0 z-50 bg-background">
-      <div className="container flex h-14 items-center justify-between gap-4">
-        <Link href="/" className="text-[15px] font-semibold text-foreground">
-          saba.
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+      <div className="container flex h-16 items-center justify-between gap-4">
+        <Link href="/" className="text-[17px] font-semibold tracking-tight text-foreground">
+          {/* The trailing full stop of the wordmark takes the accent: a small, constant visual cue. */}
+          {site.brand.endsWith(".") ? (
+            <>
+              {site.brand.slice(0, -1)}
+              <span className="text-lime">.</span>
+            </>
+          ) : (
+            site.brand
+          )}
         </Link>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <nav className="flex items-center gap-6">{renderLinks("desktop")}</nav>
+        <div className="hidden items-center gap-7 md:flex">
+          <nav className="flex items-center gap-7">{renderLinks("desktop")}</nav>
           <EmailButton />
         </div>
 
@@ -186,7 +194,7 @@ export function Navbar() {
       />
 
       <div id="mobile-nav" hidden={!open} className="border-b border-border bg-background md:hidden">
-        <nav className="container flex flex-col py-3">
+        <nav className="container flex flex-col py-4">
           {renderLinks("mobile")}
           <EmailButton className="mt-3 w-full" />
         </nav>

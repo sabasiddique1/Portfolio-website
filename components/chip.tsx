@@ -11,14 +11,14 @@ interface ChipProps {
   className?: string
 }
 
-/** Stack / highlight chip: 11px/500, 2px 8px padding, 6px radius, 1px border, toned by keyword. */
+/** Stack / highlight chip: 12px/500, 2px 8px padding, 6px radius, 1px border, toned by keyword. */
 export function Chip({ children, tone, active = false, className }: ChipProps) {
   const resolved = tone ?? (typeof children === "string" ? getChipTone(children) : "default")
 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium leading-4",
+        "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium leading-[18px]",
         active ? "border-transparent bg-lime-dim text-lime" : chipToneClasses[resolved],
         className
       )}

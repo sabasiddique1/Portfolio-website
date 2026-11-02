@@ -14,7 +14,8 @@ export type ProofCard = {
 export const proofCards: ProofCard[] = [
   {
     name: "Open-source contributions",
-    line: "NumPy · SciPy · pandas · sktime · skrub · pgmpy",
+    line: "NumPy · SciPy · pandas · sktime · skrub · pgmpy · skpro · Hive (aden-hive)",
+    meta: "Named in release notes of skrub, pgmpy, sktime, skpro and Hive",
     url: "https://github.com/sabasiddique1/oss-contributions",
     kind: "ml",
   },

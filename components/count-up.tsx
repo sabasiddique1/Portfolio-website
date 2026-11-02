@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { animate } from "framer-motion"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
 
-/** "4 yrs" → { n: 4, suffix: " yrs" }; "6" → { n: 6, suffix: "" }; "Project Lead" → null. */
+/** "4 yrs" → { n: 4, suffix: " yrs" }; "6" → { n: 6, suffix: "" }; "Top 14%" → null (rendered verbatim). */
 export function parseCountUp(value: string): { n: number; suffix: string } | null {
   const match = value.match(/^(\d+)(.*)$/)
   return match ? { n: Number(match[1]), suffix: match[2] } : null

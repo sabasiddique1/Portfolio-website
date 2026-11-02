@@ -11,7 +11,7 @@ import { getProjectKind, getProjectLinks, type Project } from "@/constants/proje
 export function ProjectsList({ projects }: { projects: Project[] }) {
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-card">
-      <div className="grid grid-cols-[1fr_auto] border-b border-border px-5 py-2 text-2xs uppercase tracking-wider text-muted-foreground">
+      <div className="grid grid-cols-[1fr_auto] border-b border-border px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
         <span>Project</span>
         <span className="hidden md:block">Links</span>
       </div>
@@ -23,23 +23,21 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
           return (
             <li
               key={project.id}
-              className="grid grid-cols-1 items-center gap-2 px-5 py-4 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:gap-6"
+              className="grid grid-cols-1 items-center gap-2 px-5 py-5 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1fr)_auto] md:gap-6"
             >
-              <div className="flex min-w-0 flex-col gap-1 md:flex-row md:items-center">
+              <div className="flex min-w-0 flex-col gap-1.5 md:flex-row md:items-center">
                 <div className="flex shrink-0 items-center gap-2">
                   <CategoryIcon kind={getProjectKind(project)} />
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="text-sm font-medium transition-colors hover:text-foreground"
+                    className="text-base font-semibold transition-colors hover:text-lime"
                   >
                     {project.title}
                     {/* Inline so the chevron stays next to the last word when the title wraps. */}
                     <ChevronRight className="ml-1 inline h-3.5 w-3.5 align-[-2px] text-muted-foreground" aria-hidden="true" />
                   </Link>
                 </div>
-                <p className="line-clamp-1 min-w-0 text-sm text-muted-foreground md:ml-2 md:flex-1">
-                  {project.description}
-                </p>
+                <p className="line-clamp-1 min-w-0 text-sm text-text-2 md:ml-2 md:flex-1">{project.description}</p>
                 <div className="hidden shrink-0 flex-wrap gap-1.5 md:flex">
                   {project.technologies.slice(0, 3).map((tech) => (
                     <Chip key={tech}>{tech}</Chip>
@@ -58,7 +56,7 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${project.title}: ${link.label}`}
-                        className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
                       >
                         <Icon className="h-4 w-4" aria-hidden="true" />
                       </a>

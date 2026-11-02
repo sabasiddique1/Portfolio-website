@@ -1,5 +1,7 @@
 import { GraduationCap } from "lucide-react"
 import { education } from "@/constants/experience"
+import { site } from "@/constants/site"
+import { SpotlightCard } from "@/components/fx/spotlight-card"
 import { SectionReveal } from "@/components/section-reveal"
 import { SectionTitle } from "@/components/section-title"
 
@@ -13,34 +15,41 @@ function initials(institution: string): string {
     .join("")
 }
 
-/** Education as its own section after Experience: one card per entry, two up on desktop. */
+/** Education as its own section: one spotlight card per entry, two up on desktop. Standalone; no neighbour assumptions. */
 export function EducationSection() {
   return (
-    <section id="education" className="container py-12 md:py-[72px]">
+    <section id="education" className="section container">
       <SectionReveal>
-        <SectionTitle title="Education" icon={GraduationCap} iconClassName="text-tone-purple-text" />
+        <SectionTitle
+          title="Education"
+          kicker="04 · Study"
+          icon={GraduationCap}
+          iconClassName="text-tone-purple-text"
+          subtitle={site.sections.education}
+        />
       </SectionReveal>
 
       <SectionReveal>
         <ul role="list" className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {education.map((entry) => (
-            <li
+            <SpotlightCard
+              as="li"
               key={entry.id}
-              className="flex gap-4 rounded-lg border border-border bg-card p-5 transition-[transform,border-color] duration-150 motion-safe:hover:-translate-y-0.5 hover:border-border-strong"
+              className="flex gap-4 rounded-lg border border-border bg-card p-6 transition-[transform,border-color] duration-200 motion-safe:hover:-translate-y-1 hover:border-border-strong"
             >
-              {/* 36px initials circle: decorative, the institution name follows in text. */}
+              {/* 44px initials disc: decorative, the institution name follows in text. */}
               <span
                 aria-hidden="true"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface text-xs font-semibold text-text-2"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border bg-surface text-sm font-semibold text-text-2"
               >
                 {initials(entry.institution)}
               </span>
               <div className="min-w-0">
-                <h3 className="text-[15px] font-semibold">{entry.title}</h3>
-                <p className="text-sm text-text-2">{entry.institution}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{entry.period}</p>
+                <h3 className="text-lg font-semibold leading-snug">{entry.title}</h3>
+                <p className="mt-1 text-base text-text-2">{entry.institution}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{entry.period}</p>
               </div>
-            </li>
+            </SpotlightCard>
           ))}
         </ul>
       </SectionReveal>

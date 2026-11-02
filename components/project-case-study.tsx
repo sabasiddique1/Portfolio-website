@@ -1,17 +1,18 @@
 "use client"
 
 import { motion, useReducedMotion } from "framer-motion"
-import { ArrowLeft, ExternalLink, Github } from "lucide-react"
+import { ArrowLeft, ArrowRight, ExternalLink, Github } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import type { ReactNode } from "react"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
-import { CategoryIcon } from "@/components/category-icon"
+import { CategoryIcon, categoryIcons } from "@/components/category-icon"
 import { Chip } from "@/components/chip"
+import { SpotlightCard } from "@/components/fx/spotlight-card"
+import { TextReveal } from "@/components/fx/text-reveal"
 import { ProjectImageCarousel } from "@/components/project-image-carousel"
-import { getProjectKind, getProjectLinks, type Project } from "@/constants/projects"
+import { cardProjects, getProjectKind, getProjectLinks, rowProjects, type Project } from "@/constants/projects"
+import { cn } from "@/lib/utils"
 
 interface ProjectCaseStudyProps {
   project: Project
@@ -21,12 +22,32 @@ interface ProjectCaseStudyProps {
 
 type Section = { key: string; title: string; body: ReactNode }
 
+const aspectClass: Record<NonNullable<Project["imageAspect"]>, string> = {
+  "3/2": "aspect-[3/2]",
+  "4/3": "aspect-[4/3]",
+  "16/9": "aspect-video",
+}
+
+const bulletClass =
+  "relative pl-5 before:absolute before:left-0 before:top-[0.72em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-lime"
+
+/** The project after this one in its own list (cards or rows), wrapping around. */
+function nextOf(project: Project): Project | null {
+  const list = cardProjects.some((p) => p.slug === project.slug) ? cardProjects : rowProjects
+  const index = list.findIndex((p) => p.slug === project.slug)
+  if (index === -1 || list.length < 2) return null
+  return list[(index + 1) % list.length]
+}
+
 export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyProps) {
   const reduceMotion = useReducedMotion()
   const links = getProjectLinks(project)
   const screenshots = project.images ?? []
+  const kind = getProjectKind(project)
+  const aspect = project.imageAspect ?? "3/2"
   const meta = [project.label, project.period].filter(Boolean).join(" · ")
   const built = project.built ?? []
+  const nextProject = nextOf(project)
 
   // Entrance is a plain fade; the delay follows the rendered order.
   const fade = (delay: number) => ({
@@ -41,7 +62,7 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
     sections.push({
       key: "problem",
       title: "Problem",
-      body: <p className="text-text-2">{project.problem}</p>,
+      body: <p className="text-base leading-relaxed text-text-2">{project.problem}</p>,
     })
   }
   if (built.length > 0) {
@@ -49,9 +70,11 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
       key: "built",
       title: "What I built",
       body: (
-        <ul className="list-disc space-y-2 pl-5 text-text-2 marker:text-muted-foreground">
+        <ul className="space-y-3 text-base leading-relaxed text-text-2">
           {built.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item} className={bulletClass}>
+              {item}
+            </li>
           ))}
         </ul>
       ),
@@ -72,7 +95,7 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
   }
 
   return (
-    <main className="container max-w-5xl pb-12 pt-20 md:pb-[72px]">
+    <main className="container max-w-5xl pb-16 pt-24 md:pb-28">
       <motion.div {...fade(0)}>
         <Link href="/projects" className={buttonVariants({ variant: "ghost", size: "sm" })}>
           <ArrowLeft aria-hidden="true" />
@@ -80,25 +103,31 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
         </Link>
       </motion.div>
 
-      <motion.div {...fade(0.05)} className="mt-6 mb-10">
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <CategoryIcon kind={getProjectKind(project)} />
-          <Badge variant="outline">{project.category}</Badge>
-          <Badge variant="outline">{project.projectType}</Badge>
+      <motion.div {...fade(0.05)} className="mb-12 mt-8">
+        <div className="mb-5 flex flex-wrap items-center gap-2">
+          <Chip tone={categoryIcons[kind].tone} className="gap-1.5">
+            <CategoryIcon kind={kind} className="h-3 w-3" />
+            {project.category}
+          </Chip>
+          <Chip>{project.projectType}</Chip>
+          {meta && <span className="text-sm text-muted-foreground">{meta}</span>}
         </div>
-        {meta && <p className="mb-2 text-xs text-muted-foreground">{meta}</p>}
-        <h1 className="text-[32px] leading-tight">{project.title}</h1>
-        <p className="mt-3 max-w-2xl text-base text-muted-foreground">{project.description}</p>
+        <h1 className="text-4xl font-semibold md:text-5xl">
+          <TextReveal text={project.title} immediate stagger={0.04} />
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-text-2">{project.description}</p>
 
         {screenshots.length > 0 ? (
           <ProjectImageCarousel
             images={screenshots}
             title={project.title}
             autoSwitchInterval={4000}
-            className="mt-8 rounded-lg border border-border"
+            aspect={aspect}
+            fit={aspect === "4/3" ? "contain" : "cover"}
+            className="mt-10 rounded-lg border border-border"
           />
         ) : project.image && imageAvailable ? (
-          <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden rounded-lg border border-border bg-card-2">
+          <div className={cn("relative mt-10 w-full overflow-hidden rounded-lg border border-border bg-card-2", aspectClass[aspect])}>
             <Image
               src={project.image}
               alt={project.imageAlt ?? project.title}
@@ -107,6 +136,7 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
               className="object-cover"
               priority
             />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/15" />
           </div>
         ) : null}
 
@@ -128,16 +158,40 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
       </motion.div>
 
       {sections.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {sections.map((section, index) => (
             <motion.section key={section.key} {...fade(0.1 + 0.05 * index)}>
-              <Card className="p-6">
-                <h2 className="mb-4 text-lg font-semibold">{section.title}</h2>
+              <SpotlightCard className="rounded-lg border border-border bg-card p-6 transition-colors hover:border-border-strong md:p-8">
+                <h2 className="mb-5 text-2xl font-semibold">{section.title}</h2>
                 {section.body}
-              </Card>
+              </SpotlightCard>
             </motion.section>
           ))}
         </div>
+      )}
+
+      {nextProject && (
+        <motion.div {...fade(0.3)} className="mt-12">
+          <SpotlightCard className="rounded-lg border border-border bg-card transition-[transform,border-color] duration-200 motion-safe:hover:-translate-y-1 hover:border-border-strong">
+            <Link
+              href={`/projects/${nextProject.slug}`}
+              className="group flex items-center justify-between gap-4 rounded-lg p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:p-8"
+            >
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Next project</p>
+                <p className="mt-2 flex items-center gap-2 text-xl font-semibold md:text-2xl">
+                  <CategoryIcon kind={getProjectKind(nextProject)} />
+                  <span className="truncate">{nextProject.title}</span>
+                </p>
+                <p className="mt-1 line-clamp-1 text-sm text-text-2">{nextProject.description}</p>
+              </div>
+              <ArrowRight
+                className="h-6 w-6 shrink-0 text-muted-foreground transition-[transform,color] group-hover:translate-x-1 group-hover:text-lime"
+                aria-hidden="true"
+              />
+            </Link>
+          </SpotlightCard>
+        </motion.div>
       )}
     </main>
   )

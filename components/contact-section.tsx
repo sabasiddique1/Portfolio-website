@@ -119,27 +119,36 @@ export function ContactSection() {
 
 
   return (
-    <section id="contact" className="container py-12 md:py-[72px]">
+    <section id="contact" className="section container">
       <SectionReveal>
         <SectionTitle
           title={site.contact.heading}
           icon={Mail}
           iconClassName="text-tone-teal-text"
+          kicker="06 · Say hello"
           subtitle={site.sections.contact}
           align="center"
         />
       </SectionReveal>
 
       <SectionReveal className="mx-auto w-full max-w-[560px]">
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
-          <label htmlFor="contact-name" className="block text-xs text-muted-foreground">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <label htmlFor="contact-name" className="block text-sm text-text-2">
             Your Name
           </label>
-          <Input id="contact-name" name="name" autoComplete="name" value={formData.name} onChange={handleChange} required />
+          <Input
+            id="contact-name"
+            name="name"
+            autoComplete="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="h-11 text-base md:text-base"
+          />
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="contact-email" className="block text-xs text-muted-foreground">
+        <div className="space-y-2">
+          <label htmlFor="contact-email" className="block text-sm text-text-2">
             Your Email
           </label>
           <Input
@@ -150,10 +159,11 @@ export function ContactSection() {
             value={formData.email}
             onChange={handleChange}
             required
+            className="h-11 text-base md:text-base"
           />
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="contact-message" className="block text-xs text-muted-foreground">
+        <div className="space-y-2">
+          <label htmlFor="contact-message" className="block text-sm text-text-2">
             Your Message
           </label>
           <Textarea
@@ -163,10 +173,11 @@ export function ContactSection() {
             onChange={handleChange}
             rows={5}
             required
+            className="text-base md:text-base"
           />
         </div>
         <div>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? (
               "Sending..."
             ) : (
@@ -182,9 +193,9 @@ export function ContactSection() {
 
       <SectionReveal
         delay={0.1}
-        className="mx-auto mt-6 flex max-w-[560px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+        className="mx-auto mt-8 flex max-w-[560px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base text-text-2"
       >
-        <a href={mailto} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+        <a href={mailto} className="inline-flex items-center gap-2 transition-colors hover:text-lime">
           <Mail className="h-4 w-4" aria-hidden="true" />
           {site.email}
         </a>
@@ -197,7 +208,7 @@ export function ContactSection() {
             rel="noopener noreferrer"
             className="inline-flex items-center transition-colors hover:text-foreground"
           >
-            {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : text}
+            {Icon ? <Icon className="h-5 w-5" aria-hidden="true" /> : text}
           </a>
         ))}
       </SectionReveal>

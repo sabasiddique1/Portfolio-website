@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import "@/app/globals.css"
 import { Plus_Jakarta_Sans } from "next/font/google"
 import { MotionProvider } from "@/components/motion-provider"
+import { ScrollProgress } from "@/components/fx/scroll-progress"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { StructuredData } from "@/components/structured-data"
@@ -65,6 +66,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <StructuredData />
         <MotionProvider>
+          <ScrollProgress />
           <Navbar />
           {children}
           <Footer />

@@ -17,15 +17,15 @@ export type ExperienceRole = {
 export const experience: ExperienceRole[] = [
   {
     id: "volmatica",
-    title: "Full-Stack AI Engineer (Project Lead)",
+    title: "Full-Stack AI Engineer",
     company: "Volmatica",
     period: "Jan 2026 – Present",
     location: "Rawalpindi, On-site",
     current: true,
-    highlight: "Leading development of an AI interview assistant desktop app.",
+    highlight: "AI interview assistant desktop app with real-time speech-to-text and LLM responses.",
     chips: ["Whisper", "FastAPI", "OpenTelemetry"],
     bullets: [
-      "Lead a small engineering team building an AI interview assistant desktop app: real-time speech-to-text (Whisper, Speechmatics) feeding LLM response workflows; Electron + React + FastAPI; OpenTelemetry, Grafana Tempo, Prometheus.",
+      "AI interview assistant desktop app: real-time speech-to-text (Whisper, Speechmatics) feeding LLM response workflows; Electron + React + FastAPI; OpenTelemetry, Grafana Tempo, Prometheus.",
       "Agentic customer-service system: multi-agent workflow with tool use, approval gates and tracing.",
       "Production scraping pipeline with scheduling, retries and monitoring.",
       "Voice agent for client operations.",

@@ -71,12 +71,24 @@ export const journey: JourneyStep[] = [
     footnote: "Also: EmergencyCare Navigator capstone (Kaggle Agents Intensive, Dec 2025).",
   },
   {
+    id: "open-source",
+    // Merged pull request dates from the contribution index (github.com/sabasiddique1/oss-contributions).
+    period: "Dec 2025 – Apr 2026",
+    kind: "ml",
+    title: "Open source",
+    summary:
+      "Contributions to NumPy, SciPy, pandas, sktime, skrub, skpro and pgmpy across the Python scientific-computing stack, plus Hive (aden-hive), a multi-agent framework.",
+    chips: ["NumPy", "pgmpy", "Hive"],
+    links: [{ label: "Open-source contributions", url: "https://github.com/sabasiddique1/oss-contributions" }],
+  },
+  {
     id: "volmatica",
     period: "Jan 2026 – Present",
     kind: "agents",
-    title: "Leading AI product work",
-    summary: "Full-Stack AI Engineer and Project Lead at Volmatica.",
-    chips: ["Project Lead", "Full-Stack AI Engineer"],
+    title: "AI product work",
+    summary:
+      "Full-Stack AI Engineer at Volmatica: an AI interview assistant desktop app, agentic customer-service workflows and a voice agent for client operations.",
+    chips: ["Agentic workflows", "Voice agent", "Desktop app"],
   },
   {
     id: "ai-security",

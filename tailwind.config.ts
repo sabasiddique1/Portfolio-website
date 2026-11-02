@@ -22,11 +22,20 @@ const config = {
         sans: ["var(--font-sans)", ...fallback],
         heading: ["var(--font-heading)", "var(--font-sans)", ...fallback],
       },
+      // Type scale: one step larger than the previous build so every section reads at a glance.
       fontSize: {
         "2xs": ["11px", { lineHeight: "1.3" }],
         xs: ["12px", { lineHeight: "1.4" }],
-        sm: ["13px", { lineHeight: "1.5" }],
-        base: ["15px", { lineHeight: "1.6" }],
+        sm: ["14px", { lineHeight: "1.5" }],
+        base: ["16px", { lineHeight: "1.6" }],
+        lg: ["18px", { lineHeight: "1.55" }],
+        xl: ["20px", { lineHeight: "1.45" }],
+        "2xl": ["24px", { lineHeight: "1.3" }],
+        "3xl": ["32px", { lineHeight: "1.2" }],
+        "4xl": ["40px", { lineHeight: "1.1" }],
+        "5xl": ["56px", { lineHeight: "1.05" }],
+        "6xl": ["72px", { lineHeight: "1.0" }],
+        "7xl": ["88px", { lineHeight: "0.98" }],
       },
       colors: {
         // shadcn semantic names, mapped onto the tokens so existing utilities keep working.
@@ -91,15 +100,21 @@ const config = {
           grey: { bg: "#15191c", text: "#c9d1d9", border: "#262b2e" },
           purple: { bg: "#1c1430", text: "#d2a8ff", border: "#35265a" },
           orange: { bg: "#2a170c", text: "#ff9f5a", border: "#4a2a14" },
-          teal: { bg: "#0b2422", text: "#39d3c3", border: "#174843" },
+          teal: { bg: "#0a1f27", text: "#45cbe6", border: "#164652" },
           yellow: { bg: "#2a2408", text: "#e3c341", border: "#4a3f12" },
         },
       },
-      // 10px cards, 6px pills and buttons
+      // 12px cards, 6px pills and buttons
       borderRadius: {
+        xl: "16px",
         lg: "var(--radius)",
         md: "6px",
         sm: "4px",
+      },
+      boxShadow: {
+        // Accent halo for the one hero frame; everything else stays flat.
+        glow: "0 0 0 1px hsl(var(--hsl-accent) / 0.25), 0 24px 80px -24px hsl(var(--hsl-accent) / 0.45)",
+        lift: "0 12px 40px -16px rgba(0, 0, 0, 0.8)",
       },
       keyframes: {
         "accordion-down": {
@@ -114,6 +129,12 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // Keyframes live in app/globals.css.
+        marquee: "marquee 42s linear infinite",
+        aurora: "aurora 22s ease-in-out infinite",
+        "aurora-slow": "aurora 34s ease-in-out infinite reverse",
+        "pulse-ring": "pulse-ring 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite",
+        float: "float-y 7s ease-in-out infinite",
       },
     },
   },

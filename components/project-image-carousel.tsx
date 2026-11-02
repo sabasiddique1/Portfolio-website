@@ -4,32 +4,47 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Pause, Play } from "lucide-react"
+import type { Project } from "@/constants/projects"
 import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import { cn } from "@/lib/utils"
+
+type ImageAspect = NonNullable<Project["imageAspect"]>
 
 interface ProjectImageCarouselProps {
   images: string[]
   title: string
   autoSwitchInterval?: number // milliseconds
   className?: string // Additional className for styling
+  /** Frame ratio; default 3:2 (the earlier-work screenshots are 1536x1024). */
+  aspect?: ImageAspect
+  /** "contain" letterboxes mixed ratios on the card-2 background instead of cropping. */
+  fit?: "cover" | "contain"
+}
+
+const aspectClass: Record<ImageAspect, string> = {
+  "3/2": "aspect-[3/2]",
+  "4/3": "aspect-[4/3]",
+  "16/9": "aspect-video",
 }
 
 /**
- * Auto-switching image carousel for project cards
- * Automatically cycles through images every few seconds
+ * Auto-switching image carousel for project pages: crossfades every few seconds, holds while
+ * hovered or focused, stops once the visitor picks an image or presses pause, never runs under
+ * reduced motion.
  */
 export function ProjectImageCarousel({
   images,
   title,
   autoSwitchInterval = 3000, // 3 seconds default
   className = "",
+  aspect = "3/2",
+  fit = "cover",
 }: ProjectImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [settled, setSettled] = useState(false) // pointer over or focus inside the carousel
   const reduceMotion = useReducedMotion()
 
-  // Auto-switch images. Stops when the visitor picks an image or presses pause, and holds while
-  // they hover or focus the carousel; never runs under reduced motion.
   const autoplay = images.length > 1 && !reduceMotion && !paused && !settled
   useEffect(() => {
     if (!autoplay) return
@@ -41,13 +56,13 @@ export function ProjectImageCarousel({
     return () => clearInterval(interval)
   }, [autoplay, images.length, autoSwitchInterval])
 
-  // Images are 1536x1024 (3:2 aspect ratio)
-  const aspectRatio = "aspect-[3/2]"
+  const frameClass = cn("relative w-full overflow-hidden bg-card-2", aspectClass[aspect])
+  const fitClass = fit === "contain" ? "object-contain" : "object-cover"
 
   if (!images || images.length === 0) {
     return (
-      <div className={`w-full ${aspectRatio} bg-card-2 rounded-lg flex items-center justify-center mb-4`}>
-        <span className="text-muted-foreground text-sm">No image</span>
+      <div className={cn(frameClass, "mb-4 flex items-center justify-center rounded-lg")}>
+        <span className="text-sm text-muted-foreground">No image</span>
       </div>
     )
   }
@@ -55,23 +70,24 @@ export function ProjectImageCarousel({
   // If only one image, show it without carousel
   if (images.length === 1) {
     return (
-      <div className={`w-full ${aspectRatio} relative overflow-hidden bg-card-2 ${className}`}>
+      <div className={cn(frameClass, className)}>
         <Image
           src={images[0]}
           alt={`${title} screenshot`}
           fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          className={fitClass}
+          sizes="(max-width: 1024px) 100vw, 1024px"
           unoptimized
           priority
         />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-background/15" />
       </div>
     )
   }
 
   return (
     <div
-      className={`w-full ${aspectRatio} relative overflow-hidden bg-card-2 group ${className}`}
+      className={cn(frameClass, "group", className)}
       onMouseEnter={() => setSettled(true)}
       onMouseLeave={() => setSettled(false)}
       onFocus={() => setSettled(true)}
@@ -84,8 +100,8 @@ export function ProjectImageCarousel({
           src={images[currentIndex]}
           alt=""
           fill
-          className="object-cover transition-opacity duration-500"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          className={cn(fitClass, "transition-opacity duration-500")}
+          sizes="(max-width: 1024px) 100vw, 1024px"
           unoptimized
           priority={currentIndex === 0}
         />
@@ -105,16 +121,19 @@ export function ProjectImageCarousel({
             src={images[currentIndex]}
             alt={`${title} screenshot ${currentIndex + 1} of ${images.length}`}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            className={fitClass}
+            sizes="(max-width: 1024px) 100vw, 1024px"
             unoptimized
           />
         </motion.div>
       </AnimatePresence>
 
+      {/* Thin dark veil over the light screenshots; painted under the controls below. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 bg-background/15" />
+
       {/* Image indicators (24px hit areas around 4px bars) and the autoplay toggle */}
       {images.length > 1 && (
-        <div className="absolute bottom-1 left-1/2 z-10 flex -translate-x-1/2 items-center">
+        <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center rounded-md bg-background/60 px-1 backdrop-blur-sm">
           {images.map((_, index) => (
             <button
               key={index}
@@ -129,7 +148,7 @@ export function ProjectImageCarousel({
             >
               <span
                 className={`block h-1 rounded-sm transition-all ${
-                  index === currentIndex ? "w-6 bg-foreground" : "w-2 bg-foreground/30 group-hover/dot:bg-foreground/50"
+                  index === currentIndex ? "w-6 bg-lime" : "w-2 bg-foreground/40 group-hover/dot:bg-foreground/60"
                 }`}
               />
             </button>
@@ -150,4 +169,3 @@ export function ProjectImageCarousel({
     </div>
   )
 }
-
