@@ -70,7 +70,7 @@ export function ProjectCaseStudy({ project, imageAvailable }: ProjectCaseStudyPr
       key: "built",
       title: "What I built",
       body: (
-        <ul className="space-y-3 text-base leading-relaxed text-text-2">
+        <ul role="list" className="space-y-3 text-base leading-relaxed text-text-2">
           {built.map((item) => (
             <li key={item} className={bulletClass}>
               {item}

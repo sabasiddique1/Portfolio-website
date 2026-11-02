@@ -17,8 +17,8 @@ export function GridBackground({ className, aurora = false }: GridBackgroundProp
       <div className="bg-dot-grid mask-radial absolute inset-0 opacity-70" />
       {aurora && (
         <>
-          <div className="absolute -left-[10%] top-[-20%] h-[60vh] w-[60vw] rounded-full bg-lime/15 blur-[120px] will-change-transform motion-safe:animate-aurora" />
-          <div className="absolute -right-[15%] top-[10%] h-[50vh] w-[50vw] rounded-full bg-tone-purple-text/10 blur-[120px] will-change-transform motion-safe:animate-aurora-slow" />
+          <div className="absolute -left-[10%] top-[-20%] hidden h-[60vh] w-[60vw] rounded-full bg-lime/15 blur-[100px] will-change-transform motion-safe:animate-aurora md:block" />
+          <div className="absolute -right-[15%] top-[10%] hidden h-[50vh] w-[50vw] rounded-full bg-tone-purple-text/10 blur-[100px] will-change-transform motion-safe:animate-aurora-slow md:block" />
         </>
       )}
       {/* Fades the whole backdrop into the page towards the bottom. */}

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react"
 import Link from "next/link"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Pause, Play } from "lucide-react"
 import type { Project, ProjectKind } from "@/constants/projects"
 import { BorderBeam } from "@/components/fx/border-beam"
 import { CategoryIcon } from "@/components/category-icon"
@@ -38,6 +38,8 @@ export function HeroShowcase({ items, label }: HeroShowcaseProps) {
   const [active, setActive] = useState(0)
   const [pageLoaded, setPageLoaded] = useState(false)
   const [inView, setInView] = useState(false)
+  // Visitor-controlled stop for the moving picture (WCAG 2.2.2); nothing plays while true.
+  const [paused, setPaused] = useState(false)
   const frameRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([])
 
@@ -61,15 +63,15 @@ export function HeroShowcase({ items, label }: HeroShowcaseProps) {
     return () => observer.disconnect()
   }, [])
 
-  const canPlay = pageLoaded && inView && !reduceMotion
+  const canPlay = pageLoaded && inView && !reduceMotion && !paused
 
-  // Play the active clip from the start; park the others.
+  // Play the active clip from the start (so the progress line under its tab starts with it); park the others.
   useEffect(() => {
     videoRefs.current.forEach((video, index) => {
       if (!video) return
       if (index === active && canPlay) {
         video.muted = true
-        if (video.ended) video.currentTime = 0
+        video.currentTime = 0
         // Autoplay can still be refused by the browser; the poster simply stays.
         video.play().catch(() => undefined)
       } else {
@@ -145,6 +147,7 @@ export function HeroShowcase({ items, label }: HeroShowcaseProps) {
               disablePictureInPicture
               onEnded={next}
               aria-label={`${item.title} demo`}
+              aria-hidden={index !== active}
               tabIndex={-1}
             />
           ))}
@@ -153,17 +156,17 @@ export function HeroShowcase({ items, label }: HeroShowcaseProps) {
         </div>
       </motion.div>
 
-      {/* Tabs + progress line for the active clip */}
+      {/* Clip switcher (toggle buttons) + pause control + progress line for the active clip */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div role="tablist" aria-label="Featured project demos" className="flex gap-1 rounded-lg border border-border bg-card p-1">
+        <div className="flex items-center gap-2">
+        <div role="group" aria-label="Featured project demos" className="flex gap-1 rounded-lg border border-border bg-card p-1">
           {items.map((item, index) => {
             const selected = index === active
             return (
               <button
                 key={item.slug}
                 type="button"
-                role="tab"
-                aria-selected={selected}
+                aria-pressed={selected}
                 onClick={() => setActive(index)}
                 className={cn(
                   "relative overflow-hidden rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
@@ -193,6 +196,18 @@ export function HeroShowcase({ items, label }: HeroShowcaseProps) {
               </button>
             )
           })}
+        </div>
+        {!reduceMotion && (
+          <button
+            type="button"
+            onClick={() => setPaused((value) => !value)}
+            aria-pressed={paused}
+            aria-label={paused ? "Play the demo" : "Pause the demo"}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-text-2 transition-colors hover:border-border-strong hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            {paused ? <Play className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
+          </button>
+        )}
         </div>
 
         <Link

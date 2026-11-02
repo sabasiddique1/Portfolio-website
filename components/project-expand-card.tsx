@@ -123,7 +123,7 @@ export function ProjectExpandCard({ project, open, onToggle, imageAvailable }: P
           {project.built && project.built.length > 0 && (
             <div>
               <h4 className={subheadingClass}>What I built</h4>
-              <ul className="space-y-2.5 text-base leading-relaxed text-text-2">
+              <ul role="list" className="space-y-2.5 text-base leading-relaxed text-text-2">
                 {project.built.map((item) => (
                   <li key={item} className={bulletClass}>
                     {item}

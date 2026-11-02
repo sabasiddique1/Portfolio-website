@@ -14,7 +14,7 @@ const intro = site.sections.journey
 // A page-level openGraph replaces the root one wholesale, so the site image is referenced explicitly.
 export const metadata: Metadata = {
   title,
-  description: `${site.name}'s path from frontend intern to ${site.role} in ${journey.length} steps, with the notebooks, contributions and writeup behind each one.`,
+  description: `${site.name}'s path from frontend intern to ${site.role} in ${journey.length} steps, with the notebooks, contributions and writeup along the way.`,
   alternates: { canonical: "/journey" },
   openGraph: {
     url: "/journey",

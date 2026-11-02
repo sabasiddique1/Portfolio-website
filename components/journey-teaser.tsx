@@ -35,7 +35,9 @@ export function JourneyTeaser() {
           {/* Timeline strip: scrolls sideways on phones, spreads out on desktop. */}
           <ol
             role="list"
-            className="-mx-6 flex snap-x snap-mandatory gap-0 overflow-x-auto px-6 pb-2 md:mx-0 md:grid md:grid-cols-7 md:overflow-visible md:px-0"
+            aria-label="Timeline preview"
+            tabIndex={0}
+            className="-mx-6 flex snap-x snap-mandatory gap-0 overflow-x-auto px-6 pb-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:mx-0 md:grid md:grid-cols-7 md:overflow-visible md:px-0"
           >
             {journey.map((step, index) => (
               <li key={step.id} className="relative w-[136px] shrink-0 snap-start md:w-auto md:shrink">
@@ -71,7 +73,7 @@ export function JourneyTeaser() {
 
           <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-base text-text-2">
-              Seven steps from frontend intern to full-stack AI engineer, with the notebooks, contributions and writeup behind each one.
+              Seven steps from frontend intern to full-stack AI engineer, with the notebooks, contributions and writeup along the way.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg" className="group">

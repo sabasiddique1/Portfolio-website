@@ -45,7 +45,7 @@ export default function ProjectsPage() {
         </h1>
         <p className="mt-4 text-lg text-text-2">{subtitle}</p>
         <p className="mt-3 text-sm text-muted-foreground">
-          {cardProjects.length} AI projects <span aria-hidden="true">·</span> last updated {lastUpdated}
+          {aiProjects.length} AI projects <span aria-hidden="true">·</span> last updated {lastUpdated}
         </p>
       </header>
 

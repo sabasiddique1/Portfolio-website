@@ -68,13 +68,6 @@
   }
 }
 
-/* Animatable angle for the rotating border beam (components/fx/border-beam.tsx). */
-@property --beam-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
 @layer base {
   * {
     @apply border-border;
@@ -180,24 +173,28 @@
     opacity: 1;
   }
 
-  /* Rotating accent beam along a border (components/fx/border-beam.tsx). */
+  /*
+   * Rotating accent beam along a border (components/fx/border-beam.tsx). The gradient sits on an
+   * oversized pseudo-element that rotates with a transform (compositor only); the mask keeps the 1px ring.
+   */
   .border-beam {
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
+    overflow: hidden;
     pointer-events: none;
-    background: conic-gradient(
-      from var(--beam-angle),
-      transparent 0%,
-      transparent 72%,
-      hsl(var(--hsl-accent) / 0.9) 86%,
-      transparent 100%
-    );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+  }
+  .border-beam::before {
+    content: "";
+    position: absolute;
+    inset: -100%;
+    background: conic-gradient(from 0deg, transparent 0%, transparent 72%, hsl(var(--hsl-accent) / 0.9) 86%, transparent 100%);
     animation: beam-spin 7s linear infinite;
+    will-change: transform;
   }
 
   /* Accent text: the one gradient the type system allows, for a highlighted phrase in a display heading. */
@@ -225,7 +222,7 @@
 
 @keyframes beam-spin {
   to {
-    --beam-angle: 360deg;
+    transform: rotate(360deg);
   }
 }
 @keyframes shimmer {

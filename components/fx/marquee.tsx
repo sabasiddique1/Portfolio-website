@@ -14,6 +14,7 @@ interface MarqueeProps {
 export function Marquee({ items, className, label = "Stack" }: MarqueeProps) {
   const row = (ariaHidden: boolean) => (
     <ul
+      role="list"
       aria-hidden={ariaHidden || undefined}
       className={cn(
         "flex shrink-0 items-center gap-3 pr-3 motion-reduce:flex-wrap motion-reduce:justify-center",
@@ -33,7 +34,7 @@ export function Marquee({ items, className, label = "Stack" }: MarqueeProps) {
   )
 
   return (
-    <div className={cn("mask-fade-x group/marquee w-full overflow-hidden", className)} aria-label={label}>
+    <div role="group" className={cn("mask-fade-x group/marquee w-full overflow-hidden", className)} aria-label={label}>
       <div className="flex w-max motion-safe:animate-marquee motion-safe:group-hover/marquee:[animation-play-state:paused] motion-reduce:w-full">
         {row(false)}
         {row(true)}

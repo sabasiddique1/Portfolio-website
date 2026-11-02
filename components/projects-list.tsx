@@ -16,7 +16,7 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
         <span className="hidden md:block">Links</span>
       </div>
 
-      <ul className="divide-y divide-border">
+      <ul role="list" className="divide-y divide-border">
         {projects.map((project) => {
           const links = getProjectLinks(project)
 

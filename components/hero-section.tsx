@@ -102,8 +102,14 @@ export function HeroSection({ showcase }: HeroSectionProps) {
               <span aria-hidden="true" className="mx-3 text-border-strong">
                 /
               </span>
-              {/* Rolling focus word: a visual cue for what the work is about. The live region stays polite. */}
-              <span className="relative inline-grid overflow-hidden align-bottom text-lime" aria-live="polite">
+              {/* Rolling focus word: a visual cue for what the work is about. Decorative for assistive tech (the static list follows). */}
+              <span className="relative inline-grid overflow-hidden align-bottom text-lime" aria-hidden="true">
+                {/* Every word is laid out invisibly in the same cell, so the slot is always as wide as the longest one and nothing below it shifts. */}
+                {site.hero.focus.map((word) => (
+                  <span key={word} className="invisible col-start-1 row-start-1 whitespace-nowrap">
+                    {word}
+                  </span>
+                ))}
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.span
                     key={site.hero.focus[focusIndex]}
@@ -117,6 +123,7 @@ export function HeroSection({ showcase }: HeroSectionProps) {
                   </motion.span>
                 </AnimatePresence>
               </span>
+              <span className="sr-only">{site.hero.focus.join(", ")}</span>
             </motion.h2>
 
             <motion.p className="mt-6 max-w-[600px] text-base leading-relaxed text-text-2 md:text-lg" {...fadeUp(0.4)}>

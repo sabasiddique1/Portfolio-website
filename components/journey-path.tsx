@@ -270,6 +270,8 @@ const JourneyCard = memo(function JourneyCard({
 }: JourneyCardProps) {
   const side = sideOf(index)
   const inView = useInView(cardRef, { once: true, amount: 0.3 })
+  // The first two cards sit in the first viewport: rendered visible on the server so the page is not JS-gated.
+  const revealed = index < 2 || inView
   const panelId = `journey-${step.id}-panel`
   const year = step.period.match(/\d{4}/)?.[0]
   const stepIndex = String(index + 1).padStart(2, "0")
@@ -278,7 +280,7 @@ const JourneyCard = memo(function JourneyCard({
   const chips = step.chips ?? []
   const hasExtras = details.length > 0 || links.length > 0 || Boolean(step.footnote)
   // Hidden-state swaps (desktop → mobile variant) are instant; only the reveal itself animates.
-  const animated = inView && !reduceMotion
+  const animated = revealed && !reduceMotion
   const hidden = isDesktop
     ? { opacity: 0, x: side === "left" ? -28 : 28, y: 0, filter: "blur(8px)" }
     : { opacity: 0, x: 0, y: 18, filter: "blur(8px)" }
@@ -308,7 +310,7 @@ const JourneyCard = memo(function JourneyCard({
       )}
       style={{ gridRow: index + 1 }}
       initial={false}
-      animate={inView ? { opacity: 1, x: 0, y: 0, filter: "blur(0px)" } : hidden}
+      animate={revealed ? { opacity: 1, x: 0, y: 0, filter: "blur(0px)" } : hidden}
       transition={animated ? { duration: 0.5, ease: EASE_OUT } : { duration: 0 }}
     >
       <SpotlightCard
@@ -355,7 +357,7 @@ const JourneyCard = memo(function JourneyCard({
                   key={chip}
                   className="inline-flex"
                   initial={false}
-                  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+                  animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
                   transition={animated ? { duration: 0.3, delay: 0.15 + i * 0.05, ease: EASE_OUT } : { duration: 0 }}
                 >
                   <Chip>{chip}</Chip>
@@ -383,7 +385,7 @@ const JourneyCard = memo(function JourneyCard({
               ))}
 
               {links.length > 0 && (
-                <ul className="flex flex-wrap gap-1.5">
+                <ul role="list" className="flex flex-wrap gap-1.5">
                   {links.map((link) => (
                     <li key={link.url}>
                       <a href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex">

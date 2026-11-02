@@ -45,11 +45,12 @@ export const site = {
   /** Research interest only: no claims about specific or ongoing work. Topics come from the keyword list. */
   research: {
     title: "Research",
-    line: "I'm interested in research on AI security, agentic systems and healthcare AI.",
+    line: "I'm interested in research on AI security, agentic systems, healthcare AI and computational medicine.",
     topics: [
       { label: "AI security", tone: "purple" },
       { label: "Agentic AI", tone: "green" },
       { label: "Healthcare AI", tone: "orange" },
+      { label: "Computational medicine", tone: "orange" },
       { label: "Machine learning", tone: "blue" },
     ],
   },
@@ -99,7 +100,7 @@ export const site = {
       { value: "4 yrs", label: "Engineering" },
       { value: "3 yrs", label: "AI / LLM systems" },
       { value: "Top 14%", label: "Kaggle AI agent security" },
-      { value: "6", label: "Open-source libraries" },
+      { value: "8", label: "Open-source libraries" },
     ],
   },
 
