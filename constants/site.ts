@@ -107,7 +107,8 @@ export const site = {
   contact: {
     heading: "Get in touch",
     line: "If you'd like to talk about any of this work, send a message here or email me directly.",
-    mailtoSubject: "Hello from your portfolio",
+    /** Pre-filled subject when someone clicks the Email button; a friendly opener, not a form label. */
+    mailtoSubject: "Hey Saba, nice to connect with you!",
   },
 } as const
 
